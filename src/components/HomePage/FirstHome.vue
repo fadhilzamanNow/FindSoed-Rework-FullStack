@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import { CodeSandboxOutlined } from "@ant-design/icons-vue";
 import { Flex } from "ant-design-vue";
-import HomeFirstPage from "./Home1Pic.jpg";
-import {UserOutlined} from "@ant-design/icons-vue";
+import HomeFirstPage from "../../assets/Home1Pic.jpg";
+import { UserOutlined } from "@ant-design/icons-vue";
 </script>
 
 <template>
@@ -10,7 +10,9 @@ import {UserOutlined} from "@ant-design/icons-vue";
     <Flex :vertical="false" justify="space-between" align="center">
       <Flex :vertical="false" align="center" gap="8" class="select-none">
         <CodeSandboxOutlined :style="{ fontSize: '64px' }" />
-        <h1 class="text-3xl font-bold">FindSoed</h1>
+        <h1 class="text-3xl font-bold">
+          <span>Find</span><span class="text-[#CFC922]">Soed</span>
+        </h1>
       </Flex>
       <Flex class="text-sm" gap="8">
         <div
@@ -39,7 +41,10 @@ import {UserOutlined} from "@ant-design/icons-vue";
     <Flex justify="space-between" align="center">
       <h1 class="flex-1 text-[100px] font-bold">Barang Hilang?</h1>
       <Flex justify="space-between" align="center" gap="8">
-        <Flex class="p-4 bg-black rounded-lg w-[223px] text-white" :vertical="true">
+        <Flex
+          class="p-4 bg-black rounded-lg w-[223px] text-white"
+          :vertical="true"
+        >
           <Flex align="center" gap="16">
             <UserOutlined :style="{ fontSize: '20px', color: 'white' }" />
             <div>imron298</div>
@@ -48,9 +53,14 @@ import {UserOutlined} from "@ant-design/icons-vue";
             Kak HP Infinix ku liat gak ya, soalnya aku lupa taruh dimana?
           </div>
         </Flex>
-        <Flex class="p-4 bg-black rounded-lg w-[223px] text-white" :vertical="true">
+        <Flex
+          class="p-4 bg-black rounded-lg w-[223px] text-white"
+          :vertical="true"
+        >
           <Flex align="center" gap="16">
-            <UserOutlined :style="{ fontSize: '20px', color: 'white', fontWeight : 'bold' }" />
+            <UserOutlined
+              :style="{ fontSize: '20px', color: 'white', fontWeight: 'bold' }"
+            />
             <div class="font-semibold">imron2981</div>
           </Flex>
           <div class="text-justify">

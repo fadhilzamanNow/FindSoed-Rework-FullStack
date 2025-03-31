@@ -1,5 +1,7 @@
 <script setup lang="ts">
 import FirstHome from '../components/HomePage/FirstHome.vue';
+import SecondHome from '../components/HomePage/SecondHome.vue';
+import ThirdHome from '../components/HomePage/ThirdHome.vue';
 
 </script>
 
@@ -7,6 +9,10 @@ import FirstHome from '../components/HomePage/FirstHome.vue';
   <div class="h-[100vh]">
     <FirstHome />
   </div>
-  <div class="h-[100vh] bg-green-500"></div>
-  <div class="h-[100vh] bg-blue-300"></div>
+  <div class="h-[100vh] bg-black">
+    <SecondHome />
+  </div>
+  <div class="h-[100vh]">
+    <ThirdHome />
+  </div>
 </template>
