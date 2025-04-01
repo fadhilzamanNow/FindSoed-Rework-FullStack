@@ -13,7 +13,6 @@ import HomeSecond from "../../assets/Home2Pic.jpg";
     >
       <img
         :src="HomeSecond"
-        alt=""
         class="w-[903px] h-[602px] object-cover"
       />
       <Flex vertical gap="50" class="border self-start pt-20">

@@ -3,12 +3,19 @@ import { pluginVue } from '@rsbuild/plugin-vue';
 
 export default defineConfig({
   plugins: [pluginVue()],
+  output : {
+    minify : true,
+    sourceMap : {
+      js : 'cheap-module-source-map'
+    }
+  },
   performance : {
     chunkSplit : {
       override : {
         chunks: 'async',
         minChunks: 1,
-        minSize : 20000,
+        minSize : 100,
+        maxSize : 25000000000,
         maxAsyncRequests: 30,
         maxInitialRequests: 30,
         cacheGroups: {
