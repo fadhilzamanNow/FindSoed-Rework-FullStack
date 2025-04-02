@@ -3,15 +3,22 @@ import { Card, Flex } from "ant-design-vue";
 import CardPic from "../../assets/CardPic.jpg";
 import { Avatar } from "ant-design-vue";
 import { CaretUpOutlined, MessageOutlined } from "@ant-design/icons-vue";
+import { RouterLink } from "vue-router";
+import { computed } from "vue";
 
 
 
 
-const {title = "", username = "", status = "Hilang", commentNum = 0, likeNum = 0} = defineProps<{title: string, status : string, username : string, commentNum : number, likeNum : number}>()
+const {title = "", username = "", status = "Hilang", commentNum = 0, likeNum = 0, id = 0} = defineProps<{title: string, status : string, username : string, commentNum : number, likeNum : number, id : number}>()
+
+const linkRef = computed<string>(() => {
+    return `detail/${id}`
+})
 </script>
 
 <template>
   <div class="w-[300px]">
+    <RouterLink :to="linkRef" >
     <Card
       class="rounded-md p-0 relative bg-gray-300"
       :bordered="true"
@@ -50,5 +57,7 @@ const {title = "", username = "", status = "Hilang", commentNum = 0, likeNum = 0
         >{{status}}</Flex
       >
     </Card>
+</RouterLink>
+
   </div>
 </template>

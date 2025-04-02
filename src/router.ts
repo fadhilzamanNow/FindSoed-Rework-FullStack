@@ -40,6 +40,12 @@ const LazySettingPage = defineAsyncComponent({
     errorComponent : Error
 })
 
+const LazyDetailPage = defineAsyncComponent({
+    loader : () => import("./pages/DetailItemPage.vue"),
+    loadingComponent : Loading,
+    errorComponent : Error
+})
+
 
 const routes = [
     {path : "/", component : LazyHomePage},
@@ -47,7 +53,8 @@ const routes = [
     {path : "/register", component : LazyRegisterPage},
     {path : "/list", component : LazyListPage},
     {path : "/add", component : LazyAddPage},
-    {path : "/setting", component : LazySettingPage}
+    {path : "/setting", component : LazySettingPage},
+    {path : "/detail/:id", component : LazyDetailPage}
 ]
 
 export const router = createRouter({

@@ -20,7 +20,7 @@ watchEffect(() => {
 <template>
     <div class="grid grid-cols-5 gap-y-5">
         <div v-for="(d) in showItemList" :key="d.id">
-            <Card :title="d.title" :username="d.username" :commentNum="d.commentNum" :likeNum="d.likeNum" :status="d.status" />
+            <Card :title="d.title" :username="d.username" :commentNum="d.commentNum" :likeNum="d.likeNum" :status="d.status" :id="d.id" />
         </div>
     </div>
     <Flex justify="center">
