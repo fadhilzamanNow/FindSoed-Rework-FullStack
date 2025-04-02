@@ -1,21 +1,33 @@
 <script setup lang="ts">
-import { Flex, Image, Avatar} from "ant-design-vue";
+import { Flex, Image, Avatar,Modal, Button, Input } from "ant-design-vue";
 import CardPic from "../../assets/CardPic.jpg";
 import Home1Pic from "../../assets/Home1Pic.jpg";
 import Home2Pic from "../../assets/Home2Pic.jpg";
 import {  ref, watchEffect } from "vue";
-import { Swiper, SwiperSlide,  } from "swiper/vue";
+import { Swiper, SwiperSlide  } from "swiper/vue";
 import 'swiper/css';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
 import 'swiper/css/scrollbar';
 import { Navigation, Scrollbar, EffectFade } from "swiper/modules";
+import CommentCard from "./CommentCard.vue";
+import { SendOutlined } from "@ant-design/icons-vue";
 
 
-const listPic = ref<any[]>([])
+const listPic = ref<any[]>([CardPic, Home1Pic, Home2Pic])
+
+const isModalOpen = ref<boolean>(false);
+
+const toggleModal = () => {
+    isModalOpen.value = !isModalOpen.value
+}
+
+const commentVal = ref<string>("");
+
+
 
 watchEffect(() => {
-    listPic.value = [CardPic, Home1Pic, Home2Pic]
+    console.log("isi comment Val : ", commentVal.value)
 })
 
 </script>
@@ -30,14 +42,39 @@ watchEffect(() => {
                     </SwiperSlide>
             </Swiper>
             </Flex>
-            <Flex vertical gap="20">
-                <Flex justify="space-between" align="center" class="max-w-[350px] ">
-                    <span class="text-base font-medium">Redmi Note 12 Pro</span>
-                    <Flex gap="8" align="center">
-                        <Avatar :size="20" >Dh</Avatar>
-                        <span class="text-[8px] text-[#D8D5D5]">Dhilz</span>
-                    </Flex>
+            <Flex vertical gap="20" >
+                <Flex gap="10" align="center" class="min-w-[400px] border-b border-b-[#D8D5D5] pb-2">
+                    <Avatar>Fa</Avatar>
+                    <span class="text-[#6b6969] text-xs">Fadhil Isfadhillah</span>
                 </Flex>
+                <div class="grid grid-cols-2">
+                    <Flex vertical gap="4">
+                        <h1 class="text-xs font-medium">Nama</h1>
+                        <span class="font-light text-xs">Redmi Note 9 Pro</span>
+                    </Flex>
+                    <Flex vertical gap="4">
+                        <h1 class="text-xs font-medium">Kategori</h1>
+                        <span class="font-light text-xs">Handphone</span>
+                    </Flex>
+                </div>
+                <Flex vertical gap="4" class="border-b border-b-[#D8D5D5] pb-4">
+                    <h1 class="text-xs font-medium">Detail</h1>
+                    <Button type="primary" class="font-light text-xs  max-w-max px-2 py-1 rounded-sm  select-none" @click="toggleModal" size="small" :style="{fontSize : '12px'}" >Lihat Detail</Button>
+                </Flex>
+                <Flex vertical gap="8" class="h-[250px] overflow-y-hidden hover:overflow-y-scroll" >
+                    <CommentCard v-for="i in 8" :key="i" />
+                </Flex>
+                <Flex>
+                    <Input placeholder="Tambah Komentar" v-model:value="commentVal">
+                        <template #suffix>
+                            <SendOutlined :style="{fontSize : '16px'}" />
+                        </template>
+                    </Input>
+                </Flex>
+            </Flex>
+    </Flex>
+    <Modal v-model:visible="isModalOpen" title="Redmi Note 9 Pro" @ok="toggleModal" :centered="true" :footer="null" >
+         <Flex vertical gap="20">
                 <div class="grid grid-cols-2">
                     <Flex vertical gap="4">
                         <h1 class="text-xs font-medium">Kategori</h1>
@@ -60,12 +97,11 @@ watchEffect(() => {
                 </div>
                 <Flex vertical gap="4">
                     <h1 class="text-xs font-medium">Deskripsi</h1>
-                    <span class="max-w-[350px] max-h-[100px] overflow-x-hidden hover:overflow-y-scroll text-xs font-light">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Tenetur fugit expedita iusto debitis, accusamus quod eveniet aliquid. Facilis consectetur dignissimos officia omnis, dolore fuga, repellat magnam, dolorum exercitationem harum dolorem!</span>
+                    <span class="max-w-[350px]  overflow-x-hidden hover:overflow-y-scroll text-xs font-light">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Tenetur fugit expedita iusto debitis, accusamus quod eveniet aliquid. Facilis consectetur dignissimos officia omnis, dolore fuga, repellat magnam, dolorum exercitationem harum dolorem!</span>
                 </Flex>
         
             </Flex>
-        
-    </Flex>
+    </Modal>
 </template>
 
 <style>
