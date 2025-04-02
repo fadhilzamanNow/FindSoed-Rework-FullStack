@@ -8,7 +8,7 @@ const showPassword = ref<boolean>(false);
 </script>
 
 <template>
-  <Flex vertical gap="20">
+  <Flex vertical gap="20" class="w-[800px]"> 
     <Flex gap="16" align="center">
         <Avatar :size="48">
             Fa

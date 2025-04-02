@@ -16,10 +16,10 @@ watchEffect(() => {
 
 <template>
     <Flex class="">
-        <Flex vertical gap="2" class="">
+        <Flex vertical gap="2" class="w-full">
             <BreadCrumbComp />
             <Flex class="pl-10.5" justify="center">
-                <Tabs  class=" w-[900px]" >
+                <Tabs class="w-full" >
                     <TabPane key="1" tab="Personalisasi Akun">
                         <PersonalisationSettings />
                     </TabPane>

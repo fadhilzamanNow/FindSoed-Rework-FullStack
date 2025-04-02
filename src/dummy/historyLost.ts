@@ -1,0 +1,27 @@
+interface myItem {
+    id : number,
+    title : string,
+    likeNum : number,
+    commentNum : number,
+    image : any,
+    status : string
+}
+
+
+const randomTitle : string[] = ["Ipad 12 Pro", "Dompet XSS", "Laptop Macbook", "Redmi Note 12 Pro"];
+const randomStatus : string[] = ["Ditemukan", "Hilang"]
+
+const myLostItem : myItem[] = Array.from({length : 53}, (_,i) => {
+    return {
+        key : i +1,
+        id : i + 1,
+        title : randomTitle[Math.floor(Math.random()*randomTitle.length)],
+        likeNum : Math.ceil(Math.random()*50),
+        commentNum : Math.ceil(Math.random()*50),
+        image : "",
+        status : randomStatus[Math.floor(Math.random()*randomStatus.length)]
+    }
+})
+
+export type {myItem};
+export {myLostItem}
