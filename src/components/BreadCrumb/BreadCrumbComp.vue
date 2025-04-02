@@ -12,7 +12,9 @@ import { Breadcrumb, BreadcrumbItem, Flex } from "ant-design-vue";
             <span>Home</span>
         </Flex>
       </RouterLink></BreadcrumbItem>
-      <BreadcrumbItem>Detail Barang</BreadcrumbItem>
+      <BreadcrumbItem><Flex align="center">
+        Detail Barang
+      </Flex></BreadcrumbItem>
     </Breadcrumb>
   </div>
 </template>
