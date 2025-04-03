@@ -4,7 +4,6 @@ import DetailItem from '../components/DetailPage/DetailItem.vue';
 import Sidebar from '../components/Sidebar/Sidebar.vue';
 import Navbar from '../components/Navbar/Navbar.vue';
 import BreadCrumbComp from '../components/BreadCrumb/BreadCrumbComp.vue';
-import DetailComment from '../components/DetailPage/DetailComment.vue';
 
 
 </script>
@@ -17,7 +16,6 @@ import DetailComment from '../components/DetailPage/DetailComment.vue';
             <BreadCrumbComp />
             <Flex class="h-full " justify="center" align="center" vertical>
                 <DetailItem />
-                
             </Flex>
         </Flex>
     </Flex>
