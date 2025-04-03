@@ -36,8 +36,10 @@ const columns =[
             },
           {
             title : 'Actions',
-            customRender : () => {
-                return h(HistoryAction)
+            customRender : ({record} : {record : any}) => {
+                return h(HistoryAction, {
+                    record : record
+                })
             }
           }
         ]

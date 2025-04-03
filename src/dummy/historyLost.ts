@@ -4,12 +4,15 @@ interface myItem {
     likeNum : number,
     commentNum : number,
     image : any,
-    status : string
+    status : string,
+    category : string
 }
 
 
 const randomTitle : string[] = ["Ipad 12 Pro", "Dompet XSS", "Laptop Macbook", "Redmi Note 12 Pro"];
-const randomStatus : string[] = ["Ditemukan", "Hilang"]
+const randomStatus : string[] = ["Ditemukan", "Hilang"];
+const randomCateogry : string[] = ["Handphone","Laptop","Dompet","Dan Lain Lain"];
+
 
 const myLostItem : myItem[] = Array.from({length : 53}, (_,i) => {
     return {
@@ -19,7 +22,9 @@ const myLostItem : myItem[] = Array.from({length : 53}, (_,i) => {
         likeNum : Math.ceil(Math.random()*50),
         commentNum : Math.ceil(Math.random()*50),
         image : "",
-        status : randomStatus[Math.floor(Math.random()*randomStatus.length)]
+        status : randomStatus[Math.floor(Math.random()*randomStatus.length)],
+        category : randomCateogry[Math.floor(Math.random()*randomCateogry.length)]
+
     }
 })
 

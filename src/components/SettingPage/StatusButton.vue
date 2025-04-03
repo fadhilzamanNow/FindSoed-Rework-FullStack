@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { Button } from 'ant-design-vue';
 
-const {text = ""} = defineProps<{someProp : string, text : string}>()
+const {text = ""} = defineProps<{ text : string }>()
 
 // If you needed props, you would define them separately:
 // const props = defineProps<{ someProp?: string }>()
