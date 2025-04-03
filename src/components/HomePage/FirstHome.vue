@@ -43,7 +43,7 @@ import { RouterLink } from "vue-router";
                         <RouterLink to="/login">
                         <Flex align="center" gap="8">
                                 <UserOutlined class="text-xs " />
-                                <span class="text-xs ">Login</span>
+                                <span class="text-xs">Login</span>
                             </Flex>
                         </RouterLink>
                     </MenuItem>
@@ -70,11 +70,11 @@ import { RouterLink } from "vue-router";
         class="h-[200px] sm:h-[444px] object-cover rounded-xl"
       />
     </Flex>
-    <Flex gap="16" >
+    <Flex gap="16" v-motion-slide-visible-right >
       <h1 class="text-5xl sm:text-[100px] font-bold">Hei</h1>
       <h1 class="text-5xl text-[#1890FF] sm:text-[100px] font-bold">Jends</h1>
     </Flex>
-    <h1 class="text-5xl flex-1 sm:text-[100px] font-bold min-h-[110px]">
+    <h1 class="text-5xl flex-1 sm:text-[100px] font-bold min-h-[110px]" v-motion-slide-visible-right>
         <VueTyping 
         :sentences="['Barang Hilang ?', 'HP apa Laptop ?','Dompet Apa Yang Lain ?']"
         :minTypeSpeed="50"
@@ -110,7 +110,7 @@ import { RouterLink } from "vue-router";
             </Flex>
           </Flex>
       </div>
-      <div class="w-[400px] max-w-max flex-1 justify-center align-center pt-10 ">
+      <div class="w-[400px] max-w-max flex-1 justify-center align-center pt-10" v-motion-slide-visible-left>
         <Swiper autoplay :slides-per-view="1" :space-between="50"  :modules="[EffectCards,Navigation,Autoplay]" effect="cards" :navigation="true" >
             <SwiperSlide>
                 <Flex justify="center" class="h-[200px]" align="center">

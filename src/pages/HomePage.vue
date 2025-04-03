@@ -13,6 +13,6 @@ import ThirdHome from '../components/HomePage/ThirdHome.vue';
     <SecondHome />
   </div>
   <div class="h-[100vh]">
-   
+    <ThirdHome />
   </div>
 </template>
