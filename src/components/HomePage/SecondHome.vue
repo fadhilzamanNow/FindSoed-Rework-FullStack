@@ -1,32 +1,35 @@
 <script setup lang="ts">
-import { Flex } from "ant-design-vue";
-import HomeSecond from "../../assets/Home2Pic.jpg";
+import { Button, Flex } from "ant-design-vue";
+import PicGroup from "../../assets/Home2PicAlt.jpg"
+import { EditOutlined } from "@ant-design/icons-vue";
 </script>
 
 <template>
   <Flex class="h-full select-none" justify="center" align="center">
     <Flex
       class="px-20 h-max max-w-max "
-      justify="start"
-      gap="36"
-      align="center"
+      gap="1"
+      vertical
     >
       <img
-        :src="HomeSecond"
-        class="w-[903px] h-[602px] object-cover"
+        :src="PicGroup"
+        class="object-cover"
       />
-      <Flex vertical gap="50" class="border self-start pt-20">
+      <Flex vertical gap="50" class="border pt-20 w-full">
         <Flex vertical>
-          <h1 class="text-white text-semibold text-5xl !font-itim motion-preset-pulse-sm">
+          <h1 class="text-white text-semibold text-xl !font-itim ">
             "Boleh Pasrah
           </h1>
-          <h1 class="text-white text-semibold text-5xl !font-itim motion-preset-pulse-sm">
+          <h1 class="text-white text-semibold text-xl !font-itim ">
             Tapi tidak dengan Usaha"
           </h1>
+          <h1 class="text-white text-semibold text-sm !font-itim pt-2 ">
+            - Fadhil Isfadhillah
+          </h1>
         </Flex>
-        <div class="bg-white max-w-max px-4 py-2 rounded-lg">
-          <span class="text-3xl text-black font-bold">CARI SEKARANG</span>
-        </div>
+        <Button type="primary" class="flex align-center justify-center !text-black !bg-white hover:!bg-gray-200 transition duration-50 max-w-max" >
+           Cari Sekarang
+        </Button>
       </Flex>
     </Flex>
   </Flex>
