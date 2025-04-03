@@ -18,7 +18,7 @@ watchEffect(() => {
 </script>
 
 <template>
-    <div class="grid grid-cols-5 gap-y-5">
+    <div class="grid md:grid-cols-2 xl:grid-cols-5 gap-y-5 gap-x-0">
         <div v-for="(d) in showItemList" :key="d.id">
             <Card :title="d.title" :username="d.username" :commentNum="d.commentNum" :likeNum="d.likeNum" :status="d.status" :id="d.id" />
         </div>

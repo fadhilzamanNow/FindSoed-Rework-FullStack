@@ -23,13 +23,16 @@ const passVal = ref<string>("");
           <Input v-model:value="passVal" placeholder="Password" id="password" />
         </div>
       </Flex>
-      <Flex
+      <RouterLink to="/list">
+        <Flex
         class="rounded-md bg-[#CFC922] text-white w-[58px] px-5 py-1.5 select-none hover:bg-[#9e9c55] transition duration-200"
         justify="center"
         align="center"
       >
         Login
       </Flex>
+      </RouterLink>
+      
       <Flex gap="4">
         <span>Belum memiliki akun?</span>
         <RouterLink to="/register">

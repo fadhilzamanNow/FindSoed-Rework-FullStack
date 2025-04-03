@@ -6,22 +6,25 @@ import {UserOutlined} from "@ant-design/icons-vue";
 </script>
 
 <template>
-  <Flex vertical :gap="16" class="px-20 pt-5">
-    <Flex :vertical="false" justify="space-between" align="center">
+  <Flex vertical :gap="16" class="px-2 sm:w-sm sm:px-2 pt-5 ">
+    <Flex :vertical="false" justify="space-between" align="center" class="w-full" >
       <Flex :vertical="false" align="center" gap="8" class="select-none">
-        <CodeSandboxOutlined :style="{ fontSize: '64px' }" />
-        <h1 class="text-3xl font-bold"><span>Find</span><span class="text-amber-300">Soed</span></h1>
+        <CodeSandboxOutlined class="text-3xl sm:text-2xl md:text-5xl" />
+        <h1 class="text-2xl font-bold"><span>Find</span><span class="text-amber-300">Soed</span></h1>
       </Flex>
       <Flex class="text-sm" gap="8">
         <div
-          class="bg-black text-white rounded-sm flex justify-center items-center h-max px-4 py-1 hover:bg-slate-700 transition duration-300 select-none cursor-pointer"
+          class="hidden bg-black text-white rounded-sm sm:flex justify-center items-center h-max px-4 py-1 hover:bg-slate-700 transition duration-300 select-none cursor-pointer"
         >
           DAFTAR
         </div>
         <div
-          class="bg-white text-black rounded-sm flex justify-center items-center h-max px-4 py-1 hover:bg-slate-200 transition duration-300 select-none cursor-pointer"
+          class="hidden bg-white text-black rounded-sm sm:flex justify-center items-center h-max px-4 py-1 hover:bg-slate-200 transition duration-300 select-none cursor-pointer"
         >
           MASUK
+        </div>
+        <div class="flex sm:hidden bg-black text-white justify-center items-center h-max px-4 py-1 hover:bg-slate-700 transition duration-300 select-none cursor-pointer rounded-md">
+            Start
         </div>
       </Flex>
     </Flex>
