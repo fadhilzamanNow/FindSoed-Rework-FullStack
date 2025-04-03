@@ -10,9 +10,9 @@ import ThirdHome from '../components/HomePage/ThirdHome.vue';
     <FirstHome />
   </div>
   <div class="h-[100vh] bg-black">
-    <SecondHome />
+    
   </div>
   <div class="h-[100vh]">
-    <ThirdHome />
+   
   </div>
 </template>
