@@ -1,6 +1,5 @@
 <script setup lang="ts">
-import { CodeSandboxOutlined, UserAddOutlined } from "@ant-design/icons-vue";
-import { Dropdown, Flex, Menu, MenuItem } from "ant-design-vue";
+import { Flex } from "ant-design-vue";
 import HomeFirstPage from "../../assets/Home1Pic.jpg";
 import { UserOutlined } from "@ant-design/icons-vue";
 import { Swiper, SwiperSlide } from "swiper/vue";
@@ -15,69 +14,14 @@ import "swiper/css/effect-cards";
 import "swiper/css/autoplay";
 import "swiper/css/effect-coverflow";
 import "swiper/css/navigation";
-import { RouterLink } from "vue-router";
 import { motion } from "motion-v";
+import Navbar from "../Navbar/Navbar.vue";
 
 </script>
 
 <template>
     <Flex vertical :gap="16" class="w-full overflow-x-hidden overflow-y-hidden ">
-        <motion.div :initial="{x : -50}" :while-in-view="{x : 0}" :transition="{duration : 0.3}">
-                <Flex align="center" class="w-full border-b border-b-gray-300 py-1 px-2">
-                    <Flex
-                        :vertical="false"
-                        justify="space-between"
-                        align="center"
-                        class="w-full"
-                    >
-                        <Flex :vertical="false" align="center" gap="8" class="select-none">
-                            <CodeSandboxOutlined class="text-3xl sm:text-2xl md:text-5xl" />
-                            <h1 class="text-2xl font-bold">
-                                <span>Find</span><span class="text-[#1890FF]">Soed</span>
-                            </h1>
-                        </Flex>
-                        <Flex class="text-sm" gap="8">
-                            <div
-                                class="hidden bg-black text-white rounded-sm sm:flex justify-center items-center h-max px-4 py-1 hover:bg-slate-700 transition duration-300 select-none cursor-pointer"
-                            >
-                                DAFTAR
-                            </div>
-                            <div
-                                class="hidden bg-white text-black rounded-sm sm:flex justify-center items-center h-max px-4 py-1 hover:bg-slate-200 transition duration-300 select-none cursor-pointer"
-                            >
-                                MASUK
-                            </div>
-                            <Dropdown>
-                                <template #overlay>
-                                    <Menu>
-                                        <MenuItem>
-                                            <RouterLink to="/login">
-                                                <Flex align="center" gap="8">
-                                                    <UserOutlined class="text-xs" />
-                                                    <span class="text-xs">Login</span>
-                                                </Flex>
-                                            </RouterLink>
-                                        </MenuItem>
-                                        <MenuItem>
-                                            <RouterLink to="/register">
-                                                <Flex align="center" gap="8">
-                                                    <UserAddOutlined class="text-xs" />
-                                                    <span class="text-xs">Daftar</span>
-                                                </Flex>
-                                            </RouterLink>
-                                        </MenuItem>
-                                    </Menu>
-                                </template>
-                                <div
-                                    class="flex sm:hidden bg-black text-white justify-center items-center h-max px-4 py-1 hover:bg-slate-700 transition duration-300 select-none cursor-pointer rounded-md"
-                                >
-                                    Mulai
-                                </div>
-                            </Dropdown>
-                        </Flex>
-                    </Flex>
-                </Flex>
-        </motion.div>
+        <Navbar />
         <motion.div :initial="{x : 200}" :while-in-view="{x : 0}" :transition="{duration : 1.05}" >
             <Flex justify="end" class="rounded-xl">
                     <img
