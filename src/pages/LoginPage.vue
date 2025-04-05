@@ -3,6 +3,7 @@ import { Flex } from 'ant-design-vue';
 import LoginBox from '../components/LoginPage/LoginBox.vue';
 import Navbar from '../components/Navbar/Navbar.vue';
 import { motion } from 'motion-v';
+import FooterWave from '../components/Footer/FooterWave.vue';
 
 
 </script>
@@ -18,6 +19,9 @@ import { motion } from 'motion-v';
             <Navbar />
             <div class="h-full flex pt-10">
                 <LoginBox class="h-max" />
+            </div>
+            <div>
+                <FooterWave />
             </div>
         </Flex>
     </motion.div>
