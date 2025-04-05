@@ -27,6 +27,6 @@ watchEffect(() => {
             <Flex class="py-2 px-3 bg-black text-white rounded-md" justify="center" align="center">
                 <FilterFilled />
             </Flex>
-        </Flex>
+        </Flex>X
     </Flex>
 </template>

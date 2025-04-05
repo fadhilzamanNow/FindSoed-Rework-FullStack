@@ -6,9 +6,6 @@ import { CaretUpOutlined, MessageOutlined } from "@ant-design/icons-vue";
 import { RouterLink } from "vue-router";
 import { computed } from "vue";
 
-
-
-
 const {title = "", username = "", status = "Hilang", commentNum = 0, likeNum = 0, id = 0} = defineProps<{title: string, status : string, username : string, commentNum : number, likeNum : number, id : number}>()
 
 const linkRef = computed<string>(() => {

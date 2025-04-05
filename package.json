@@ -10,14 +10,22 @@
   },
   "dependencies": {
     "@ant-design/icons-vue": "^7.0.1",
+    "@dmncodes/vue-typing": "^1.0.5",
     "@types/vue-writer": "^1.2.0",
+    "@vueuse/motion": "^3.0.3",
     "ant-design-vue": "^4.2.6",
     "antd": "^5.24.5",
+    "gsap": "^3.12.7",
+    "motion-v": "^1.0.0-beta.0",
     "pinia": "^3.0.1",
     "swiper": "^11.2.6",
     "vue": "^3.5.13",
+    "vue-number-animation": "^2.0.2",
     "vue-router": "^4.5.0",
-    "vue-writer": "^2.0.2"
+    "vue-typed-js": "^0.1.2",
+    "vue-typer": "^1.2.0",
+    "vue-writer": "^2.0.2",
+    "vue3-highlightjs": "^1.0.5"
   },
   "devDependencies": {
     "@rsbuild/core": "^1.2.16",

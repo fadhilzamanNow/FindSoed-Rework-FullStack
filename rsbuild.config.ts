@@ -7,6 +7,9 @@ export default defineConfig({
     minify : true,
     sourceMap : {
       js : 'cheap-module-source-map'
+    },
+    filename : {
+      js : "[name]_[hash].js"
     }
   },
   performance : {
