@@ -10,8 +10,27 @@ import { Flex, Dropdown, Menu, MenuItem } from "ant-design-vue";
 import { motion } from "motion-v";
 import { RouterLink } from "vue-router";
 import { useRoute } from "vue-router";
+import { useLoginStore } from "../../stores/loginInfo";
+import { watchEffect } from "vue";
+
+const login = useLoginStore();
 
 const {path} = useRoute();
+
+const notMain : string[] = ["/","/login","register"];
+
+const isNotMain = notMain.find((v) => v === path)
+
+console.log("is not main :", isNotMain)
+
+const isPathList : boolean = path === "/list" 
+
+watchEffect(() => {
+  console.log("User Email :", login.userEmail)
+})
+
+
+
 </script>
 
 <template>
@@ -20,7 +39,7 @@ const {path} = useRoute();
     :while-in-view="{ x: 0 }"
     :transition="{ duration: 0.3 }"
   >
-    <Flex align="center" class="w-full border-b border-b-gray-300 py-1 px-2">
+    <Flex align="center" class="w-full border-b border-b-gray-300 py-1 px-2 min-h-[50px]">
       <Flex
         :vertical="false"
         justify="space-between"
@@ -28,13 +47,14 @@ const {path} = useRoute();
         class="w-full"
       >
         <RouterLink to="/">
-          <Flex :vertical="false" align="center" gap="8" class="select-none">
+          <Flex :vertical="false" align="center" gap="8" class="select-none" v-if="!login.isLogin">
+            <CodeSandboxOutlined class="!text-black text-3xl" />
             <h1 class="text-2xl font-bold">
               <span class="text-black">Find</span><span class="text-[#1890FF]">Soed</span>
             </h1>
           </Flex>
         </RouterLink>
-        <Flex class="text-sm" gap="8" v-if="path !== '/login' && path !== '/register' ">
+        <Flex class="text-sm" gap="8" v-if="!login.isLogin">
           <div
             class="hidden bg-black text-white rounded-sm sm:flex justify-center items-center h-max px-4 py-1 hover:bg-slate-700 transition duration-300 select-none cursor-pointer"
           >
@@ -73,6 +93,33 @@ const {path} = useRoute();
             </div>
           </Dropdown>
         </Flex>
+        <div class="" v-else>
+      <Dropdown placement="bottomLeft">
+        <template #overlay>
+          <Menu>
+            <MenuItem>
+              <RouterLink to="/setting">
+                <Flex gap="8" align="center">
+                  <SettingOutlined />
+                  <span>Settings</span>
+                </Flex>
+              </RouterLink>
+            </MenuItem>
+            <MenuItem>
+              <div @click="login.logout">
+                <RouterLink to="/login">
+                  <Flex gap="8" align="center"  >
+                    <RollbackOutlined />
+                    <span>Logout</span>
+                  </Flex>
+                </RouterLink>
+              </div>
+            </MenuItem>
+          </Menu>
+        </template>
+        <UserOutlined :syle="{ fontSize: '24px' }" />
+      </Dropdown>
+    </div>
       </Flex>
     </Flex>
   </motion.div>
