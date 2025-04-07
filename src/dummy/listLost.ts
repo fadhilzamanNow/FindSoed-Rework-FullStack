@@ -13,7 +13,7 @@ const randomName : string[] = ["Rahmat Sobirin", "Ucok Ramdhani","Acep Sutarjo",
 const randomStatus : string[] = ["Ditemukan", "Hilang"];
 const randomCateogry : string[] = ["Handphone","Laptop","Dompet","Dan Lain Lain"];
 
-const listLostItem : Array<LostItem> = Array.from({length : 20}, (_,n) => {
+const listLostItem : Array<LostItem> = Array.from({length : 50}, (_,n) => {
     return {
         id : n + 1,
         title : randomTitle[Math.floor(Math.random()*randomTitle.length)],
