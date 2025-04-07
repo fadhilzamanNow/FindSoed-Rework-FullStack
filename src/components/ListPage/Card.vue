@@ -4,13 +4,30 @@ import CardPic from "../../assets/CardPic.jpg";
 import { Avatar } from "ant-design-vue";
 import { CaretUpOutlined, MessageOutlined } from "@ant-design/icons-vue";
 import { RouterLink } from "vue-router";
-import { computed } from "vue";
+import { computed, onMounted, onUnmounted, ref } from "vue";
 
 const {title = "", username = "", status = "Hilang", commentNum = 0, likeNum = 0, id = 0} = defineProps<{title: string, status : string, username : string, commentNum : number, likeNum : number, id : number}>()
 
 const linkRef = computed<string>(() => {
     return `detail/${id}`
 })
+
+
+let windowWidth = ref<number>(window.innerWidth);
+
+
+onMounted(() => {
+  window.addEventListener('resize', () => {
+    windowWidth.value = window.innerWidth
+  })
+})
+
+onUnmounted(() => {
+  window.removeEventListener('resize', () => {
+    windowWidth.value = window.innerWidth
+  })
+})
+
 </script>
 
 <template>
@@ -30,11 +47,11 @@ const linkRef = computed<string>(() => {
       </template>
 
       <div class="flex flex-col gap-1" >
-        <h1 class="text-xs text-nowrap">{{ title.slice(0,10) + "..." }}</h1>
+        <h1 class="text-xs text-nowrap overflow-x-hidden">{{ windowWidth < 400 ? title.slice(0,10) + '...' : title }}</h1>
         <Flex gap="10" align="center" justify="space-between">
           <div class="flex items-center gap-2" >
-            <Avatar>{{ username.slice(0,2) }}</Avatar>
-            <span class="text-[10px] text-[#D8D5D5] text-nowrap">{{ username.slice(0,4) + ".." }}</span>
+            <Avatar class="flex justify-center items-center " shape="square"><span class="text-xs">{{ username.slice(0,2) }}</span></Avatar>
+            <span class="text-[10px] text-[#D8D5D5] text-nowrap">{{ username.slice(0,5) + "..." }}</span>
           </div>
           <div class="gap-2 text-[#aaa8a8] hidden sm:flex">
             <Flex gap="8" justify="center" align="center">

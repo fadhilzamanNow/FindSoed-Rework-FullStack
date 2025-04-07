@@ -18,6 +18,7 @@ const newSize = () => {
 }
 
 
+
 onMounted(() => {
     window.addEventListener('resize', newSize )
 })
@@ -30,7 +31,7 @@ onUnmounted(() => {
 </script>
 
 <template>
-    <div class="scroll-smooth rounded-md  max-h-[80vh] transition-all duration-300" :class="[height > width ? 'overflow-auto' : 'overflow-hidden hover:overflow-y-scroll']" >
+    <div class="scroll-smooth rounded-md  max-h-[80vh] transition-all duration-300 p-3 border border-gray-200 shadow-sm" :class="[height > width ? 'overflow-auto' : 'overflow-hidden hover:overflow-y-scroll']" >
         <div class="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 gap-y-5 gap-x-2 justify-end  items-center mx-auto " >
             <div v-for="(d) in card.itemList" :key="d.id" class="">
                 <Card :title="d.title" :username="d.username" :commentNum="d.commentNum" :likeNum="d.likeNum" :status="d.status" :id="d.id" />

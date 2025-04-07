@@ -4,7 +4,7 @@ import { useCardStore } from '../../stores/cardInfo';
 
 
 const card = useCardStore()
-
+    
 </script>
 
 <template>

@@ -1,10 +1,8 @@
 <script setup lang="ts">
-import { Flex } from "ant-design-vue";
 import ListBox from "../components/ListPage/ListBox.vue";
 import Navbar from "../components/Navbar/Navbar.vue";
 import Sidebar from "../components/Sidebar/Sidebar.vue";
 import { useSidebarStore } from "../stores/sidebarInfo";
-import ListCardPagination from "../components/ListPage/ListCardPagination.vue";
 
 const sidebar = useSidebarStore();
 
@@ -12,7 +10,7 @@ const sidebar = useSidebarStore();
 </script>
 
 <template>
-  <div class="flex relative h-screen  ">
+  <div class="flex relative h-screen">
     <div class="h-full">
       <Sidebar active="Home" :class="[sidebar.isExpand ? 'absolute z-10 ' : '']"  />
     </div>
