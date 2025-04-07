@@ -1,13 +1,20 @@
 <script setup lang="ts">
-import { Flex } from 'ant-design-vue';
-import HeaderListPage from './HeaderListPage.vue';
-import ListCard from './ListCard.vue';
+import HeaderListPage from "./HeaderListPage.vue";
+import ListCard from "./ListCard.vue";
+
+
 
 </script>
 
 <template>
-    <Flex vertical class="p-10.5" gap="24">
-        <HeaderListPage />
-        <ListCard />
-    </Flex>
+  <div class="flex flex-col p-4 gap-6">
+    <div>
+      <HeaderListPage />
+    </div>
+    <div class="max-h-full">
+      <ListCard />
+    </div>
+  </div>
 </template>
+
+<style scoped></style>

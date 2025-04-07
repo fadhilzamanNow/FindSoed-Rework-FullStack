@@ -10,4 +10,6 @@
 @theme{
   --font-inter: "Inter", sans-serif; 
   --font-itim : "Itim", sans-serif;
+  --breakpoint-xss : 400px;
+  --breakpoint-xs : 500px;
 }

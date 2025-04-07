@@ -3,7 +3,10 @@ import { EyeInvisibleOutlined, EyeOutlined } from "@ant-design/icons-vue";
 import { Button, Input } from "ant-design-vue";
 import { ref } from "vue";
 import { RouterLink } from "vue-router";
+import { useLoginStore } from "../../stores/loginInfo";
 
+
+const login = useLoginStore();
 const emailVal = ref<string>("");
 const passVal = ref<string>("");
 const passShow = ref<boolean>(false);
@@ -38,11 +41,13 @@ const togglePass = () => {
       </div>
       <div class="flex gap-2 items-center justify-center ">
         <div class="w-[90%]">
-        <RouterLink to="/list">
-            <Button type="primary" class="!bg-black hover:!bg-slate-700">
-              <span>Login</span>
-            </Button>
-          </RouterLink>
+          <div @click="() => login.login(emailVal)">
+            <RouterLink to="/list">
+                <Button type="primary" class="!bg-black hover:!bg-slate-700">
+                  <span>Login</span>
+                </Button>
+              </RouterLink>
+          </div>
         </div>
       </div>
       <div class="flex gap-2 items-center justify-center">
