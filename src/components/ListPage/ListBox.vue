@@ -7,7 +7,7 @@ import ListCard from "./ListCard.vue";
 </script>
 
 <template>
-  <div class="flex flex-col p-4 gap-6">
+  <div class="flex flex-col p-1 gap-6">
     <div>
       <HeaderListPage />
     </div>

@@ -55,16 +55,20 @@ watchEffect(() => {
           </Flex>
         </RouterLink>
         <Flex class="text-sm" gap="8" v-if="!login.isLogin">
-          <div
-            class="hidden bg-black text-white rounded-sm sm:flex justify-center items-center h-max px-4 py-1 hover:bg-slate-700 transition duration-300 select-none cursor-pointer"
-          >
-            DAFTAR
-          </div>
-          <div
-            class="hidden bg-white text-black rounded-sm sm:flex justify-center items-center h-max px-4 py-1 hover:bg-slate-200 transition duration-300 select-none cursor-pointer"
-          >
-            MASUK
-          </div>
+          <RouterLink to="/register">
+            <div
+              class="hidden bg-black text-white rounded-sm sm:flex justify-center items-center h-max px-4 py-1 hover:bg-slate-700 transition duration-300 select-none cursor-pointer"
+            >
+              DAFTAR
+            </div>
+          </RouterLink>
+          <RouterLink to="/login">
+            <div
+              class="hidden bg-white text-black rounded-sm sm:flex justify-center items-center h-max px-4 py-1 hover:bg-slate-200 transition duration-300 select-none cursor-pointer"
+            >
+              MASUK
+            </div>
+          </RouterLink>
           <Dropdown>
             <template #overlay>
               <Menu>
