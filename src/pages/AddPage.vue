@@ -19,9 +19,9 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <div class="flex relative h-screen">
+  <div class="flex relative h-screen overflow-hidden">
     <div class="h-full">
-      <Sidebar active="Home" :class="[sidebar.isExpand ? 'absolute z-10 ' : '']"  />
+      <Sidebar active="Add" :class="[sidebar.isExpand ? 'absolute z-10 ' : '']"  />
     </div>
     <div class="h-full flex-1 flex flex-col">
       <Navbar />

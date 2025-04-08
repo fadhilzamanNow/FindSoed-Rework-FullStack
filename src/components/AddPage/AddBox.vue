@@ -23,17 +23,15 @@ const option = ["Handphone","Laptop","Dompet","Lain Lain"].map((d) => {
         value : d
     }
 })
-
-
 </script>
 
 <template>
-    <div class="flex p-1 flex-col items-center justify-center  gap-6  w-full " >
+    <div class="flex  flex-col items-center justify-center  gap-6  w-full " >
         <div class="flex items-center gap-2 text-gray-400 self-start">
             <HomeOutlined class="text-lg" />
             <span class="text-sm">Home</span>
          </div>
-        <div  class="flex flex-col gap-4 sm:border sm:max-w-[640px] sm:border-gray-200 w-full justify-center  rounded-md p-4">
+        <div  class="flex flex-col gap-4 sm:border sm:max-w-[640px] sm:border-gray-200 w-full justify-center  rounded-md sm:p-4">
            <!--  <Steps :current="0" :items="myItems.reverse()" size="small"  label-placement="vertical" direction="horizontal" type="navigation" progress-dot /> -->
             <Flex vertical class="w-full " gap="8">
                 <label for="item">Nama Barang</label>

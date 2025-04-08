@@ -1,33 +1,32 @@
 <script setup lang="ts">
-import { Flex } from 'ant-design-vue';
-import BreadCrumbComp from '../BreadCrumb/BreadCrumbComp.vue';
-import { Tabs, TabPane } from 'ant-design-vue';
-import { ref, watchEffect } from 'vue';
-import PersonalisationSettings from './PersonalisationSettings.vue';
-import HistorySettings from './HistorySettings.vue';
+import { Tabs, TabPane } from "ant-design-vue";
+import { ref, watchEffect } from "vue";
+import PersonalisationSettings from "./PersonalisationSettings.vue";
+import HistorySettings from "./HistorySettings.vue";
+import { HomeOutlined } from "@ant-design/icons-vue";
 
-const activeTab =ref<number>(1);
+const activeTab = ref<number>(1);
 
 watchEffect(() => {
-    console.log("active : ", activeTab.value)
-})
-
+  console.log("active : ", activeTab.value);
+});
 </script>
 
 <template>
-    <Flex class="">
-        <Flex vertical gap="2" class="w-full">
-            <BreadCrumbComp />
-            <Flex class="pl-10.5" justify="center">
-                <Tabs class="w-full" >
-                    <TabPane key="1" tab="Personalisasi Akun">
-                        <PersonalisationSettings />
-                    </TabPane>
-                    <TabPane key="2" tab="Daftar Barang">
-                        <HistorySettings />
-                    </TabPane>
-                </Tabs>
-            </Flex>
-        </Flex>
-    </Flex>
+  <div class="flex flex-col  overflow-x-hidden h-full">
+    <div class="flex items-center gap-2 text-gray-400">
+      <HomeOutlined class="text-lg" />
+      <span class="text-sm">Home</span>
+    </div>
+    <div class="h-full flex flex-col w-full" justify="center">
+      <Tabs class="w-full">
+        <TabPane key="1" tab="Personalisasi Akun">
+          <PersonalisationSettings />
+        </TabPane>
+        <TabPane key="2" tab="Daftar Barang">
+          <HistorySettings />
+        </TabPane>
+      </Tabs>
+    </div>
+  </div>
 </template>
