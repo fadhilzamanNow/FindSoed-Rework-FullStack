@@ -57,7 +57,7 @@ const toggleModal = () => {
       <div class="w-full flex justify-center flex-col lg:flex-row gap-3 lg:border-b border-b-[#D8D5D5] pb-3 lg:max-w-max rounded-md">
         <div class="flex justify-center items-center w-full lg:max-w-max lg:justify-start">
           <div
-            class="flex justify-center items-center w-[250px] xss:w-[300px] xs:w-[350px] sm:w-[400px] md:w-[450px] lg:w-[550px]  max-w-max bg-gray-400 rounded-md  "
+            class="flex justify-center items-center w-[230px] xss:w-[300px] xs:w-[350px] sm:w-[400px] md:w-[450px] lg:w-[550px]  max-w-max bg-gray-400 rounded-md  "
           >
             <Swiper
               autoplay

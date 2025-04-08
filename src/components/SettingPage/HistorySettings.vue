@@ -1,15 +1,16 @@
 <script setup lang="ts">
-import { Flex, Pagination, Table, TableColumnProps} from 'ant-design-vue';
-import { h, ref } from 'vue';
-import type { myItem } from '../../dummy/historyLost';
+import { Flex, Pagination, Table} from 'ant-design-vue';
+import { h, onMounted, onUnmounted, ref } from 'vue';
 import { myLostItem } from '../../dummy/historyLost';
 import HistoryAction from './HistoryAction.vue';
 import StatusButton from './StatusButton.vue';
+import { useViewPortStore } from '../../stores/viewportStore';
 
+const {view, handleViewport} = useViewPortStore()
 
 const tableDataSource = ref(myLostItem);
 const currentPage = ref<number>(1);
-const dataPerPage = ref<number>(10);
+const dataPerPage = ref<number>(5);
 
 console.log(myLostItem)
 
@@ -42,18 +43,31 @@ const columns =[
                 })
             }
           }
-        ]
+]
+
+onMounted(() => {
+  window.addEventListener('resize', handleViewport)
+})
+
+onUnmounted(() => {
+  window.removeEventListener('resize', handleViewport)
+})
+
+
 
 </script>
 
 <template>
-    <Flex vertical gap="20" class="max-w-max">
+    <Flex vertical gap="20" class="w-full ">
         <h1>Terdapat {{ tableDataSource.length }} barang yang ditemukan</h1>
-        <Flex class="w-[800px] h-[720px]" vertical >
-            <Table :columns="columns" :data-source="tableDataSource.slice(currentPage*10-10,currentPage*10)" :pagination="false" bordered />
+        <div class="w-[70vw] p-2 ">
+          <Flex class="min-w-0  lg:w-full " :class="[view.width < view.height ? 'overflow-auto h-[480px]' : 'overflow-hidden hover:overflow-scroll h-[650px]' ]" vertical >
+              <Table :columns="columns" :data-source="tableDataSource.slice(currentPage*dataPerPage-dataPerPage,currentPage*dataPerPage)" :pagination="false" bordered />
+          </Flex>
+          <Flex class="w-full pt-3 " justify="center" align="center">
+            <Pagination class="w-full  text-center" v-model:current="currentPage" :page-size="dataPerPage" :total="tableDataSource.length" :show-less-item="true"  :show-size-changer="false" />
         </Flex>
-        <Flex class="w-full" justify="center" align="center">
-            <Pagination v-model:current="currentPage" :total="tableDataSource.length" :show-less-item="true"  :show-size-changer="false" />
-        </Flex>
+        </div>
+      
     </Flex>
 </template>

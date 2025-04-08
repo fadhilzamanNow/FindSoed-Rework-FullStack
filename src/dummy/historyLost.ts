@@ -14,7 +14,7 @@ const randomStatus : string[] = ["Ditemukan", "Hilang"];
 const randomCateogry : string[] = ["Handphone","Laptop","Dompet","Dan Lain Lain"];
 
 
-const myLostItem : myItem[] = Array.from({length : 53}, (_,i) => {
+const myLostItem : myItem[] = Array.from({length : 9}, (_,i) => {
     return {
         key : i +1,
         id : i + 1,

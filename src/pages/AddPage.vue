@@ -6,22 +6,25 @@ import { onMounted, onUnmounted } from "vue";
 import AddBox from "../components/AddPage/AddBox.vue";
 import { useSidebarStore } from "../stores/sidebarInfo";
 import FooterWave from "../components/Footer/FooterWave.vue";
+import { useViewPortStore } from "../stores/viewportStore";
 
+const {view, handleViewport} = useViewPortStore();
 const sidebar = useSidebarStore()
 
 onMounted(() => {
-    console.log('Enter Add Page');
+  window.addEventListener('resize', handleViewport)
 })
 
 onUnmounted(() => {
-    console.log('Exit Add Page')
+  window.removeEventListener('resize', handleViewport)
 })
+
 </script>
 
 <template>
   <div class="flex relative h-screen overflow-hidden">
     <div class="h-full">
-      <Sidebar active="Add" :class="[sidebar.isExpand ? 'absolute z-10 ' : '']"  />
+      <Sidebar active="Home" :class="[sidebar.isExpand && (view.width < view.height) ? 'absolute z-10 ' : 'z-10']"  />
     </div>
     <div class="h-full flex-1 flex flex-col">
       <Navbar />

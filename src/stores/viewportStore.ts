@@ -1,8 +1,23 @@
 import { defineStore } from "pinia";
-import { ref } from "vue";
+import { reactive } from "vue";
 
 export const useViewPortStore = defineStore('viewport', () => {
-    const width = ref<number>(window.innerWidth);
-    const height = ref<number>(window.innerHeight);
+  
+    interface ViewType {
+        width : number,
+        height : number
+    }
+
+    const view  = reactive<ViewType>({
+        width : window.innerWidth,
+        height : window.innerHeight,
+    })
+
+    const handleViewport = () => {
+        view.width = window.innerWidth
+        view.height = window.innerHeight
+    }
+
+    return {view, handleViewport}
 
 })
