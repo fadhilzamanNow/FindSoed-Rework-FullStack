@@ -4,7 +4,7 @@ import { Breadcrumb, BreadcrumbItem, Flex } from "ant-design-vue";
 </script>
 
 <template>
-  <div class="p-10.5">
+  <div class="">
     <Breadcrumb>
       <BreadcrumbItem><RouterLink to="/list"> 
         <Flex gap="8" align="center">

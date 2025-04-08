@@ -9,15 +9,16 @@ import BreadCrumbComp from '../components/BreadCrumb/BreadCrumbComp.vue';
 </script>
 
 <template>
-    <Flex>
-        <Sidebar active="Home" />
-        <Flex vertical flex="1">
-            <Navbar />
-            <BreadCrumbComp />
-            <Flex class="h-full " justify="center" align="center" vertical>
-                <DetailItem />
-            </Flex>
-        </Flex>
-    </Flex>
+    <main class="flex relative h-screen">
+        <div class="h-full">
+            <Sidebar active="Home" />
+        </div>
+        <div class="h-full flex flex-1 flex-col">
+            <Navbar/>
+                <div class="h-full flex flex-col justify-center p-4 " >
+                    <DetailItem />
+                </div>
+        </div>
+    </main>
     
 </template>

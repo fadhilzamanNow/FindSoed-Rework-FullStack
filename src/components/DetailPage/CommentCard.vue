@@ -3,16 +3,19 @@ import { Avatar, Flex } from "ant-design-vue";
 </script>
 
 <template>
-  <Flex vertical gap="8">
-    <Flex gap="10" align="center">
-      <Avatar :size="24" class="select-none self-start">Fa</Avatar>
+  <div  class="h-full flex flex-col gap-2 p-1">
+    <div class="flex  gap-2.5 items-center">
+      <div class="text-xs self-start">
+        <Avatar shape="square" class="select-none ">Fa</Avatar>
+      </div>
       <Flex align="center" gap="6">
-        <span class="text-sm text-black font-medium self-start">Fadhil</span>
-        <p class="text-xs font-light w-[300px]">
-          Ini bagus juga nih sebenernya asdashdbaj adas adasdasdbasdadaasdajsd
-          asdadasd adasdadsa asdadasdas
-        </p>
+        <span class="text-sm text-black font-medium self-start">
+          <slot name="name"></slot>
+        </span>
       </Flex>
-    </Flex>
-  </Flex>
+    </div>
+    <p class="text-[11px] font-light w-full">
+          Lorem ipsum dolor sit amet consectetur adipisicing elit. Repellendus pariatur amet tenetur, fugiat quas quia vel adipisci nulla beatae doloremque voluptas nam dolorum, deserunt laboriosam neque laudantium? Quo, et iusto?
+    </p>
+  </div>
 </template>

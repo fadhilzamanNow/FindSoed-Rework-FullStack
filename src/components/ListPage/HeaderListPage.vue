@@ -8,7 +8,6 @@ import {
 import { Flex, Input } from "ant-design-vue";
 import { ref, watchEffect } from "vue";
 import { useCardStore } from "../../stores/cardInfo";
-import { motion } from "motion-v";
 
 const searchVal = ref<string>("");
 

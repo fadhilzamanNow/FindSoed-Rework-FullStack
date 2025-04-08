@@ -42,7 +42,7 @@ const listMenu = [
 <template>
   <aside class="h-[100vh]">
     <nav class="h-full flex flex-col bg-white border-r border-r-gray-200 shadow-sm">
-      <div class="p-4 pb-2 flex justify-between items-center ">
+      <div class="p-3 pb-2 flex justify-between items-center ">
         <div class="ml-2 overflow-hidden transition-all duration-300" :class="[sidebar.isExpand ? 'w-34' : 'w-0']">
           <div class="flex items-center gap-x-2">
             <CodeSandboxOutlined class="!text-black text-xl   "/>

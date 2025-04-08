@@ -16,7 +16,7 @@ const sidebar = useSidebarStore();
     </div>
     <div class="h-full flex-1 flex flex-col">
       <Navbar />
-      <div class="flex flex-col h-full">
+      <div class="flex flex-col h-full gap-6 p-4">
         <div class="flex-1">
           <ListBox />
         </div>
