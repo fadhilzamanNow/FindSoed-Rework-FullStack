@@ -8,6 +8,7 @@ import {
 import { Flex, Input } from "ant-design-vue";
 import { ref, watchEffect } from "vue";
 import { useCardStore } from "../../stores/cardInfo";
+import BreadCrumbComp from "../BreadCrumb/BreadCrumbComp.vue";
 
 const searchVal = ref<string>("");
 
@@ -22,10 +23,7 @@ const card = useCardStore();
 <template>
   <div class="flex flex-col gap-4 relative">
     <div class="flex justify-between">
-      <div class="flex items-center gap-2 text-gray-400">
-        <HomeOutlined class="text-lg" />
-        <span class="text-sm">Home</span>
-      </div>
+      <BreadCrumbComp title="" />
       <div
         class="max-w-max bg-[#1890FF] rounded-md flex justify-center items-center text-white p-1.5 px-5 hover:bg-[#188fffad] transition-all duration-500 "
         @click="() => (showSearchFilter = !showSearchFilter)"
