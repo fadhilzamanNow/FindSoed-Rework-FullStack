@@ -4,6 +4,7 @@ import { ref, watchEffect } from "vue";
 import PersonalisationSettings from "./PersonalisationSettings.vue";
 import HistorySettings from "./HistorySettings.vue";
 import { HomeOutlined } from "@ant-design/icons-vue";
+import BreadCrumbComp from "../BreadCrumb/BreadCrumbComp.vue";
 
 const activeTab = ref<number>(2);
 
@@ -14,10 +15,7 @@ watchEffect(() => {
 
 <template>
   <div class="flex flex-col h-full">
-    <div class="flex items-center gap-2 text-gray-400">
-      <HomeOutlined class="text-lg" />
-      <span class="text-sm">Home</span>
-    </div>
+    <BreadCrumbComp title="Pengaturan" />
     <div class="h-full flex flex-col w-full" justify="center">
       <Tabs class="w-full">
         <TabPane key="2" tab="Personalisasi Akun">

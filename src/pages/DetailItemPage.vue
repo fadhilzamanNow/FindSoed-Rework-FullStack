@@ -26,7 +26,7 @@ onUnmounted(() => {
         </div>
         <div class="h-full flex flex-1 flex-col">
             <Navbar/>
-                <div class="h-full flex flex-col justify-center p-4 " >
+                <div class="h-full flex flex-col justify-center p-3.5" >
                     <DetailItem />
                 </div>
         </div>

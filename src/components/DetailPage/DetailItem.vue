@@ -12,6 +12,7 @@ import "swiper/css/scrollbar";
 import { Navigation, Scrollbar, EffectFade, Autoplay } from "swiper/modules";
 import CommentCard from "./CommentCard.vue";
 import { HomeOutlined, SendOutlined } from "@ant-design/icons-vue";
+import BreadCrumbComp from "../BreadCrumb/BreadCrumbComp.vue";
 
 const listPic = ref<any[]>([CardPic, Home1Pic, Home2Pic]);
 
@@ -40,15 +41,14 @@ const toggleModal = () => {
 
 
 
+
+
 </script>
 
 <template>
-  <div class="flex flex-col h-full p-1 gap-4 w-full" >
-    <div class="flex justify-between">
-      <div class="flex items-center gap-2 text-gray-400">
-        <HomeOutlined class="text-lg" />
-        <span class="text-sm">Home</span>
-      </div>
+  <div class="flex flex-col h-full gap-4 w-full" >
+    <div class="flex justify-between ">
+      <BreadCrumbComp title="Detail Barang" />
     </div>
     <div class="w-full flex lg:justify-center">
       <div

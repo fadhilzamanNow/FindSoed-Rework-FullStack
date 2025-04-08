@@ -25,7 +25,7 @@ onUnmounted(() => {
     </div>
     <div class="h-full flex-1 flex flex-col">
       <Navbar />
-      <div class="flex flex-col h-full gap-6 p-4">
+      <div class="flex flex-col h-full gap-6 p-3.5">
         <div class="flex-1">
           <SettingsBox />
         </div>
