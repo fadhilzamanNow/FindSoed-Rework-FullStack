@@ -4,15 +4,14 @@ import CardPic from "../../assets/CardPic.jpg";
 import Home1Pic from "../../assets/Home1Pic.jpg";
 import Home2Pic from "../../assets/Home2Pic.jpg";
 import { onMounted, onUnmounted, ref, watchEffect } from "vue";
-import { Swiper, SwiperSlide } from "swiper/vue";
-import "swiper/css";
-import "swiper/css/navigation";
-import "swiper/css/pagination";
-import "swiper/css/scrollbar";
-import { Navigation, Scrollbar, EffectFade, Autoplay } from "swiper/modules";
+//import { Swiper, SwiperSlide } from "swiper/vue";
+
+//import { Navigation, Scrollbar, EffectFade, Autoplay } from "swiper/modules";
 import CommentCard from "./CommentCard.vue";
 import { HomeOutlined, SendOutlined } from "@ant-design/icons-vue";
 import BreadCrumbComp from "../BreadCrumb/BreadCrumbComp.vue";
+
+
 
 const listPic = ref<any[]>([CardPic, Home1Pic, Home2Pic]);
 
@@ -59,7 +58,7 @@ const toggleModal = () => {
           <div
             class="flex justify-center items-center w-[230px] xss:w-[300px] xs:w-[350px] sm:w-[400px] md:w-[450px] lg:w-[550px]  max-w-max bg-gray-400 rounded-md  "
           >
-            <Swiper
+           <!--  <Swiper
               autoplay
               :slides-per-view="1"
               :space-between="60"
@@ -72,7 +71,7 @@ const toggleModal = () => {
               <SwiperSlide v-for="item in 3" class="w-[100%]">
                 <Image :src="listPic[item - 1]" class="rounded-md object-contain" />
               </SwiperSlide>
-            </Swiper>
+            </Swiper> -->
           </div>
         </div>
         <div class="flex flex-col gap-5 w-full">
@@ -118,10 +117,6 @@ const toggleModal = () => {
                   </CommentCard>
               </div>
           </div>
-          <!-- <CommentCard v-for="i in 8" :key="i" /> -->
-          <!-- <div class="flex flex-1 gap-2  overflow-y-hidden hover:overflow-y-scroll" >
-              <CommentCard v-for="i in 8" :key="i" />
-          </div> -->
           <div class="flex ">
             <Input placeholder="Tambah Komentar" v-model:value="commentVal">
               <template #suffix>
@@ -178,4 +173,3 @@ const toggleModal = () => {
   </Modal>
 </template>
 
-<style></style>

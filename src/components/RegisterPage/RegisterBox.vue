@@ -1,8 +1,11 @@
 <script setup lang="ts">
 import { EyeInvisibleOutlined, EyeOutlined } from '@ant-design/icons-vue';
 import { Button, Input } from 'ant-design-vue';
+import { computed, watch, watchEffect } from 'vue';
 import { ref } from 'vue';
 import { RouterLink } from 'vue-router';
+import zxcvbn from 'zxcvbn';
+import { isEmail } from 'validator';
 const userVal = ref<string>("");
 const emailVal = ref<string>("");
 const passVal = ref<string>("");
@@ -10,6 +13,127 @@ const passShow = ref<boolean>(false);
 const cPassVal = ref<string>("");
 const cPassShow = ref<boolean>(false);
 
+
+
+
+
+
+const emailIndicator = computed(() => {
+  if(isEmail(emailVal.value) && emailVal.value.length > 1){
+    return {
+      text : 'Email Valid',
+      textcolor : 'text-green-500'
+    }
+  }
+  else if(!isEmail(emailVal.value) && emailVal.value.length > 1){
+    return {
+      text : 'Email Tidak Valid',
+      textcolor : 'text-red-500'
+    }
+  }
+  else{
+    return {
+      text : '',
+      textcolor : ''
+    }
+  }
+})
+
+watchEffect(() => {
+  console.log("valid ? ", )
+  console.log("valid ? ", )
+})
+
+const passwordStrength = computed(() => {
+  return zxcvbn(passVal.value)
+})
+
+const passwordIndicator = computed(() => {
+  switch(passwordStrength.value.score){
+    case 1 : {
+      return {
+        bgcolor : 'bg-red-500',
+        text : 'Masih Lemah',
+        textcolor : 'text-red-500'
+      }
+    }
+    case 2 : {
+      return {
+        bgcolor : 'bg-yellow-300',
+        text : 'Lumayan',
+        textcolor : 'text-yellow-300'
+      }
+    }
+    case 3 : {
+      return {
+        bgcolor : 'bg-blue-500',
+        text : 'Lumayan Kuat',
+        textcolor : 'text-blue-500'
+      }
+    }
+    case 4 : {
+      return {
+        bgcolor : 'bg-green-500',
+        text : 'Sangat Kuat',
+        textcolor : 'text-green-400'
+      }
+    }
+    default : {
+      return {
+        bgcolor : '',
+        text : ''
+      }
+    }
+  }
+})
+
+/* const cPasswordStrength = computed(() => {
+  return zxcvbn(cPassVal.value)
+})
+
+const cPasswordIndicator = computed(() => {
+  switch(cPasswordStrength.value.score){
+    case 1 : {
+      return {
+        bgcolor : 'bg-red-500',
+        text : 'Masih Lemah',
+        textcolor : 'text-red-500'
+      }
+    }
+    case 2 : {
+      return {
+        bgcolor : 'bg-yellow-300',
+        text : 'Lumayan',
+        textcolor : 'text-yellow-300'
+      }
+    }
+    case 3 : {
+      return {
+        bgcolor : 'bg-blue-500',
+        text : 'Lumayan Kuat',
+        textcolor : 'text-blue-500'
+      }
+    }
+    case 4 : {
+      return {
+        bgcolor : 'bg-green-500',
+        text : 'Sangat Kuat',
+        textcolor : 'text-green-400'
+      }
+    }
+    default : {
+      return {
+        bgcolor : '',
+        text : ''
+      }
+    }
+  }
+}) */
+
+
+watchEffect(() => {
+  console.log("strength : ", passwordStrength.value.score)
+})
 
 </script>
 
@@ -28,6 +152,9 @@ const cPassShow = ref<boolean>(false);
             <div class="w-[90%] " >
               <Input v-model:value="emailVal" placeholder="Email" id="email"  />
             </div>
+            <div class="w-[90%] text-xs" :class="[emailIndicator.textcolor]">
+                {{ emailIndicator.text }}
+            </div>
       </div>
       <div class="flex flex-col gap-2 items-center justify-center">
           <label for="password" class="text-xs w-[90%] ">Password</label>
@@ -40,6 +167,11 @@ const cPassShow = ref<boolean>(false);
                   </div>
                 </template>
               </Input>
+             
+            </div>
+            <div class="h-[5px] w-[90%] flex gap-x-0.5 items-center" >
+                <div v-for="(_,i) in passwordStrength.score" :key="i" class="w-[20%] h-full " :class="[passwordIndicator.bgcolor]"></div>
+                <div class="text-xs" :class="[passwordIndicator.textcolor]">{{ passwordIndicator.text }}</div>
             </div>
       </div>
       <div class="flex flex-col gap-2 items-center justify-center">
@@ -54,6 +186,10 @@ const cPassShow = ref<boolean>(false);
                 </template>
               </Input>
             </div>
+          <!--   <div class="h-[5px] w-[90%] flex gap-x-0.5 items-center" >
+                <div v-for="(_,i) in cPasswordStrength.score" :key="i" class="w-[20%] h-full " :class="[cPasswordIndicator.bgcolor]"></div>
+                <div class="text-xs" :class="[cPasswordIndicator.textcolor]">{{ cPasswordIndicator.text }}</div>
+            </div> -->
       </div>
       <div class="flex gap-2 items-center justify-center ">
         <div class="w-[90%]">

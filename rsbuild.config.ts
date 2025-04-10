@@ -5,35 +5,22 @@ export default defineConfig({
   plugins: [pluginVue()],
   output : {
     minify : true,
-    sourceMap : {
-      js : 'cheap-module-source-map'
-    },
-    filename : {
-      js : "[name]_[hash].js"
-    }
+    sourceMap : false,
   },
+
   performance : {
-    chunkSplit : {
-      override : {
-        chunks: 'async',
-        minChunks: 1,
-        minSize : 100,
-        maxSize : 25000000000,
-        maxAsyncRequests: 30,
-        maxInitialRequests: 30,
-        cacheGroups: {
-          defaultVendors: {
-            test: /[\\/]node_modules[\\/]/,
-            priority: -10,
-            reuseExistingChunk: true,
-          },
-          default: {
-            minChunks: 2,
-            priority: -20,
-            reuseExistingChunk: true,
-          },
-        },
-      }
+    /* preload : {
+      type : 'async-chunks'
+    }, */
+   chunkSplit : {
+    override : {
+      minChunks : 1,
+      maxAsyncSize : 25000000
+     /*  cacheGroups : {
+        default : false,
+        defaultVendors : false
+      } */
     }
-  }
+   }
+  },
 });

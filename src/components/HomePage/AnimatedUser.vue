@@ -5,6 +5,8 @@
   <script setup>
   import { reactive, computed, watch, onUnmounted } from 'vue';
   import { gsap } from 'gsap';
+
+  
   
   // 1. Define Props
   const props = defineProps({
@@ -60,11 +62,3 @@
   
   </script>
   
-  <style scoped>
-  /* Optional: Add styles */
-  span {
-    display: inline-block;
-    min-width: 1em; /* Helps prevent layout shifts */
-    text-align: center;
-  }
-  </style>

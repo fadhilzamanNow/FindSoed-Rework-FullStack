@@ -17,4 +17,3 @@ import ListCard from "./ListCard.vue";
   </div>
 </template>
 
-<style scoped></style>

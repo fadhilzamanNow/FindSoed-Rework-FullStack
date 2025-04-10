@@ -1,21 +1,17 @@
 <script setup lang="ts">
 import { Flex } from "ant-design-vue";
 import HomeFirstPage from "../../assets/Home1Pic.jpg";
-import { UserOutlined } from "@ant-design/icons-vue";
-import { Swiper, SwiperSlide } from "swiper/vue";
-import { EffectCards } from "swiper/modules";
-import { Navigation } from "swiper/modules";
-import { Autoplay } from "swiper/modules";
+
 // @ts-ignore
 import VueTyping from "@dmncodes/vue-typing";
 
-import "swiper/css";
-import "swiper/css/effect-cards";
-import "swiper/css/autoplay";
-import "swiper/css/effect-coverflow";
-import "swiper/css/navigation";
+
 import { motion } from "motion-v";
 import Navbar from "../Navbar/Navbar.vue";
+import { reactive } from "vue";
+
+
+
 
 </script>
 
@@ -68,93 +64,6 @@ import Navbar from "../Navbar/Navbar.vue";
                 <div
                     class="w-[400px] xl:w-[600px] max-w-max flex-1 justify-center align-center pt-10 sm:pt-0 pb-2 "
                 >
-                    <Swiper
-                        autoplay
-                        :slides-per-view="1"
-                        :space-between="50"
-                        :modules="[EffectCards, Navigation, Autoplay]"
-                        effect="cards"
-                        :navigation="true"
-                    >
-                        <SwiperSlide>
-                            <Flex
-                                justify="center"
-                                class="h-full"
-                                align="center"
-                            >
-                                <Flex
-                                    class="p-4 bg-black rounded-lg w-[203px] xl:w-[403px] xl:h-[143px] text-white"
-                                    :vertical="true"
-                                >
-                                    <Flex align="center" gap="16">
-                                        <UserOutlined
-                                            :style="{
-                                                fontSize: '20px',
-                                                color: 'white',
-                                            }"
-                                        />
-                                        <div>imron029</div>
-                                    </Flex>
-                                    <div class="text-justify">
-                                        Kak HP Infinix ku liat gak ya, soalnya
-                                        aku lupa taruh dimana?
-                                    </div>
-                                </Flex>
-                            </Flex>
-                        </SwiperSlide>
-                        <SwiperSlide>
-                            <Flex
-                                justify="center"
-                                class="h-full"
-                                align="center"
-                            >
-                                <Flex
-                                    class="p-4 bg-black rounded-lg w-[223px] xl:w-[403px] xl:h-[143px] text-white"
-                                    :vertical="true"
-                                >
-                                    <Flex align="center" gap="16">
-                                        <UserOutlined
-                                            :style="{
-                                                fontSize: '20px',
-                                                color: 'white',
-                                            }"
-                                        />
-                                        <div>naufal231</div>
-                                    </Flex>
-                                    <div class="text-justify">
-                                        Kak HP Infinix ku liat gak ya, soalnya
-                                        aku lupa taruh dimana?
-                                    </div>
-                                </Flex>
-                            </Flex>
-                        </SwiperSlide>
-                        <SwiperSlide>
-                            <Flex
-                                justify="center"
-                                class="h-full"
-                                align="center"
-                            >
-                                <Flex
-                                    class="p-4 bg-black rounded-lg w-[223px] xl:w-[403px] xl:h-[143px] text-white"
-                                    :vertical="true"
-                                >
-                                    <Flex align="center" gap="16">
-                                        <UserOutlined
-                                            :style="{
-                                                fontSize: '20px',
-                                                color: 'white',
-                                            }"
-                                        />
-                                        <div>imron352</div>
-                                    </Flex>
-                                    <div class="text-justify">
-                                        Kak HP Infinix ku liat gak ya, soalnya
-                                        aku lupa taruh dimana?
-                                    </div>
-                                </Flex>
-                            </Flex>
-                        </SwiperSlide>
-                    </Swiper>
                 </div>
             </Flex>
         </div>

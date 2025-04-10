@@ -15,10 +15,3 @@ const {text = ""} = defineProps<{ text : string }>()
     </Button>
 </template>
 
-<style scoped>
-  /* Add any specific styles for your button if needed */
-  /* Add space between slots if desired */
-  button > :deep(span + span) {
-      margin-left: 5px;
-  }
-</style>
