@@ -9,20 +9,11 @@ import DetailImages from "./DetailImages.vue"
 import { useHeroStore } from "../../stores/heroInfo"
 const hero = useHeroStore();
 
-const imgRef = ref()
 
 
 
 
-const {scrollYProgress} = useScroll({
-    target : imgRef,
-    offset : ['start end', 'end start']
-})
 
-useMotionValueEvent(scrollYProgress,'change',(l) => {
-    hero.handleScroll(l)
-    console.log("trigger : ")
-})
 
 const listImage = [
     {
