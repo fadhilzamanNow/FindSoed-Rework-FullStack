@@ -190,6 +190,7 @@ const isPasswordSame = computed(() => {
 
 
 
+
 watchEffect(() => {
   console.log("strength : ", passwordStrength.value.score)
 })
@@ -259,9 +260,9 @@ watchEffect(() => {
             <span class="w-[90%] items-center transition-all duration-200 ease-in-out text-red-500"   :class="[isPasswordSame ? 'opacity-0 invisible' : 'visible opacity-100']" >Password Tidak Sama</span>
       </div>
       <div class="flex gap-2 items-center justify-center ">
-        <div class="w-[90%]">
+        <div class="w-[90%] flex justify-end">
         <RouterLink to="/login">
-            <Button type="primary">
+            <Button type="primary" :disabled="true">
               <span>Daftar</span>
             </Button>
           </RouterLink>
