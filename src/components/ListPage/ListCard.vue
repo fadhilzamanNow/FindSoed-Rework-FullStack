@@ -42,7 +42,6 @@ onUnmounted(() => {
                 <div v-for="(d) in filteredItemList" :key="d.id" class="">
                     <Card :title="d.title" :username="d.username" :commentNum="d.commentNum" :likeNum="d.likeNum" :status="d.status" :id="d.id" />
                 </div> 
-              
         </div>
         <div  v-if="filteredItemList.length === 0" class="" >
                     <Empty />

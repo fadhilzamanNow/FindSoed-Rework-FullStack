@@ -49,21 +49,21 @@ const LazyListPage = defineAsyncComponent({
     errorComponent : Error
 }) */
 
-/* const LazyDetailPage = defineAsyncComponent({
+const LazyDetailPage = defineAsyncComponent({
     loader : () => import("./pages/DetailItemPage.vue"),
     loadingComponent : Loading,
     errorComponent : Error
-})  */
+}) 
 
 
 const routes = [
     {path : "/", component : LazyHomePage},
     {path : "/login", component : LazyLoginPage},
     {path : "/register", component : LazyRegisterPage},
-    {path : "/list", component : LazyListPage}
+    {path : "/list", component : LazyListPage},
+    {path : "/detail/:id", component : LazyDetailPage},
    /*  {path : "/setting", component : LazySettingPage} */,
-   /*  {path : "/detail/:id", component : LazyDetailPage}, */
-    /* {path : "/add", component : LazyAddPage}, */
+   /* {path : "/add", component : LazyAddPage}, */
     /* {path : "/", component : HomePage},
     {path : "/login", component : LoginPage},
     {path : "/register", component : RegisterPage},
