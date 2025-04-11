@@ -1,20 +1,17 @@
 <script setup lang="ts">
 import {
   FilterFilled,
-  HomeOutlined,
   MinusOutlined,
   SearchOutlined,
 } from "@ant-design/icons-vue";
 import { Flex, Input } from "ant-design-vue";
-import { ref, watchEffect } from "vue";
+import { ref } from "vue";
 import { useCardStore } from "../../stores/cardInfo";
 import BreadCrumbComp from "../BreadCrumb/BreadCrumbComp.vue";
+import { storeToRefs } from "pinia";
 
-const searchVal = ref<string>("");
+const {searchItem} = storeToRefs(useCardStore())
 
-watchEffect(() => {
-  console.log("isi searchVal : ", searchVal.value);
-});
 
 const showSearchFilter = ref<boolean>(false);
 const card = useCardStore();
@@ -32,8 +29,8 @@ const card = useCardStore();
       </div>
     </div>
     <div
-      class="flex flex-col shadow-md p-2 rounded-md gap-y-2 absolute w-full z-99999999999 bg-white"
-      :class="[showSearchFilter ? 'opacity-100' : ' opacity-0','overflow-hidden transition-all duration-300']"
+      class="flex flex-col shadow-md p-2 rounded-md gap-y-2 absolute w-full z-99999999999 bg-white border border-gray-200"
+      :class="[showSearchFilter ? 'opacity-100 visible' : ' opacity-0 invisible ','overflow-hidden transition-all duration-300']"
     >
       <div
         class="self-end p-2 text-gray-700 hover:bg-gray-400 bg-white justify-center items-center  rounded-md duration-200 transition-all max-w-max flex"
@@ -41,8 +38,8 @@ const card = useCardStore();
       >
         <MinusOutlined />
       </div>
-      <div class="flex gap-3 transition-all duration-200">
-        <Input.Search placeholder="Cari Barang" enter-button class="w-full" />
+      <div class="flex gap-3 transition-all duration-200"  >
+        <Input.Search placeholder="Cari Barang" enter-button class="w-full" v-model:value="searchItem" />
         <Flex
           class="py-2 px-3 bg-[#1890FF] max-w-[40px] text-white rounded-md"
           justify="center"

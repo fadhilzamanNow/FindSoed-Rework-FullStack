@@ -2,17 +2,17 @@ import { createRouter, createWebHistory } from "vue-router";
 import { defineAsyncComponent } from "vue";
 import Loading from "./Loading/Loading.vue";
 import Error from "./Loading/Error.vue";
-import HomePage from "./pages/HomePage.vue";
+/* import HomePage from "./pages/HomePage.vue";
 import LoginPage from "./pages/LoginPage.vue";
 import RegisterPage from "./pages/RegisterPage.vue";
-import SettingsPage from "./pages/SettingsPage.vue";
+import SettingsPage from "./pages/SettingsPage.vue"; */
 /* import ListPage from "./pages/ListPage.vue";
 import AddPage from "./pages/AddPage.vue";
 import DetailItemPage from "./pages/DetailItemPage.vue"; */
 
 
 
-/* 
+
 const LazyHomePage = defineAsyncComponent({
     loader : () => import("./pages/HomePage.vue"),
     loadingComponent : Loading,
@@ -29,15 +29,15 @@ const LazyRegisterPage = defineAsyncComponent({
     loader : () => import("./pages/RegisterPage.vue"),
     loadingComponent : Loading,
     errorComponent : Error
-}) */
+})
 
-/* const LazyListPage = defineAsyncComponent({
+const LazyListPage = defineAsyncComponent({
     loader : () => import("./pages/ListPage.vue"),
     loadingComponent : Loading,
     errorComponent : Error
 })
 
-const LazyAddPage = defineAsyncComponent({
+/* const LazyAddPage = defineAsyncComponent({
     loader : () => import("./pages/AddPage.vue"),
     loadingComponent : Loading,
     errorComponent : Error
@@ -53,21 +53,21 @@ const LazyAddPage = defineAsyncComponent({
     loader : () => import("./pages/DetailItemPage.vue"),
     loadingComponent : Loading,
     errorComponent : Error
-}) */
+})  */
 
 
 const routes = [
-   /*  {path : "/", component : LazyHomePage},
+    {path : "/", component : LazyHomePage},
     {path : "/login", component : LazyLoginPage},
     {path : "/register", component : LazyRegisterPage},
-    {path : "/setting", component : LazySettingPage}, */
-    /* {path : "/list", component : LazyListPage},
-    {path : "/add", component : LazyAddPage}, */
-    /* {path : "/detail/:id", component : LazyDetailPage}, */
-    {path : "/", component : HomePage},
+    {path : "/list", component : LazyListPage}
+   /*  {path : "/setting", component : LazySettingPage} */,
+   /*  {path : "/detail/:id", component : LazyDetailPage}, */
+    /* {path : "/add", component : LazyAddPage}, */
+    /* {path : "/", component : HomePage},
     {path : "/login", component : LoginPage},
     {path : "/register", component : RegisterPage},
-    {path : "/setting", component : SettingsPage},
+    {path : "/setting", component : SettingsPage}, */
     /* {path : "/list", component : ListPage},
     {path : "/add", component : AddPage}, */
     /* {path : "/detail/:id", component : DetailItemPage} */

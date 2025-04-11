@@ -55,7 +55,7 @@ onMounted(() => {
       :transition="{ duration: 0.3 }"
       
     >
-      <Flex align="center" class="w-full border-b-gray-300 py-1 px-2 min-h-[50px]">
+      <Flex align="center" class="w-full border-b-gray-300 py-1 px-2 min-h-[50px]" :class="[path !== '/' ? 'border-b-1' : 'border-b-0']">
         <Flex
           :vertical="false"
           justify="space-between"
