@@ -1,9 +1,6 @@
 <script setup lang="ts">
-import { motion, useMotionTemplate, useMotionValueEvent, useScroll, useTransform } from 'motion-v';
-import Wallet from "../../assets/wallet2.jpg"
-import { useHeroStore } from '../../stores/heroInfo';
-import { ref } from 'vue';
-import { Button } from 'ant-design-vue';
+import { motion, useMotionTemplate, useScroll, useTransform } from 'motion-v';
+
 
 
 const {scrollY} = useScroll()

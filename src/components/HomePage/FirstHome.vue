@@ -8,7 +8,6 @@ import VueTyping from "@dmncodes/vue-typing";
 
 import { motion } from "motion-v";
 import Navbar from "../Navbar/Navbar.vue";
-import { reactive } from "vue";
 
 
 
