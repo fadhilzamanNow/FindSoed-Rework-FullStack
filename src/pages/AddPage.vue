@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { Flex } from "ant-design-vue";
 import Sidebar from "../components/Sidebar/Sidebar.vue";
 import Navbar from "../components/Navbar/Navbar.vue";
 import { onMounted, onUnmounted } from "vue";
@@ -8,8 +7,10 @@ import { useSidebarStore } from "../stores/sidebarInfo";
 import FooterWave from "../components/Footer/FooterWave.vue";
 import { useViewPortStore } from "../stores/viewportStore";
 import BreadCrumbComp from "../components/BreadCrumb/BreadCrumbComp.vue";
+import { storeToRefs } from "pinia";
 
-const {view, handleViewport} = useViewPortStore();
+const { handleViewport} = useViewPortStore();
+const {view} = storeToRefs(useViewPortStore())
 const sidebar = useSidebarStore()
 
 onMounted(() => {

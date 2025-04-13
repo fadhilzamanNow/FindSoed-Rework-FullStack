@@ -37,17 +37,17 @@ const LazyListPage = defineAsyncComponent({
     errorComponent : Error
 })
 
-/* const LazyAddPage = defineAsyncComponent({
+const LazyAddPage = defineAsyncComponent({
     loader : () => import("./pages/AddPage.vue"),
     loadingComponent : Loading,
     errorComponent : Error
-}) */
+})
 
-/* const LazySettingPage = defineAsyncComponent({
+const LazySettingPage = defineAsyncComponent({
     loader : () => import("./pages/SettingsPage.vue"),
     loadingComponent : Loading,
     errorComponent : Error
-}) */
+}) 
 
 const LazyDetailPage = defineAsyncComponent({
     loader : () => import("./pages/DetailItemPage.vue"),
@@ -62,9 +62,9 @@ const routes = [
     {path : "/register", component : LazyRegisterPage},
     {path : "/list", component : LazyListPage},
     {path : "/detail/:id", component : LazyDetailPage},
-   /*  {path : "/setting", component : LazySettingPage} */,
-   /* {path : "/add", component : LazyAddPage}, */
-    /* {path : "/", component : HomePage},
+     {path : "/add", component : LazyAddPage},
+   {path : "/setting", component : LazySettingPage}
+   /*  {path : "/", component : HomePage},
     {path : "/login", component : LoginPage},
     {path : "/register", component : RegisterPage},
     {path : "/setting", component : SettingsPage}, */
@@ -75,5 +75,5 @@ const routes = [
 
 export const router = createRouter({
     history : createWebHistory(),
-    routes : routes
+    routes : routes as any
 })

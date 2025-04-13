@@ -20,9 +20,7 @@ import("swiper/css/navigation")
 import("swiper/css/effect-fade")
 
 
-
 const listPic = ref<any[]>([CardPic, Home1Pic, Home2Pic]);
-
 const isModalOpen = ref<boolean>(false);
 const width = ref<number>(window.innerWidth);
 const height = ref<number>(window.innerHeight);
