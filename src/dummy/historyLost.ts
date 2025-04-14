@@ -14,7 +14,7 @@ const randomStatus : string[] = ["Ditemukan", "Hilang"];
 const randomCateogry : string[] = ["Handphone","Laptop","Dompet","Dan Lain Lain"];
 
 
-const myLostItem : myItem[] = Array.from({length : 9}, (_,i) => {
+const myLostItem : myItem[] = Array.from({length : 23}, (_,i) => {
     return {
         key : i +1,
         id : i + 1,
@@ -24,9 +24,7 @@ const myLostItem : myItem[] = Array.from({length : 9}, (_,i) => {
         image : "",
         status : randomStatus[Math.floor(Math.random()*randomStatus.length)],
         category : randomCateogry[Math.floor(Math.random()*randomCateogry.length)]
-
     }
 })
-
 export type {myItem};
 export {myLostItem}

@@ -58,7 +58,6 @@ const handleSend = () => {
     userId : 1,
     userName : "Fadhil",
     comment : commentVal.value
-
   }]
   commentVal.value = ""
 
@@ -135,7 +134,7 @@ const handleSend = () => {
        
           <div class="flex-1 border-b border-b-[#D8D5D5] overflow-auto  " :class="[height < 800 ? 'max-h-[25vh]' : 'max-h-[35vh]']">
               <div class="h-max">
-                  <CommentCard v-for="(v,i) in commentListItem" :key="i" :comment="v.comment" :userName="v.userName">
+                  <CommentCard v-for="(v,i) in commentListItem" :key="i" :comment="v.comment" :userName="v.userName" >
                       <template v-slot:name>
                           {{ v.userName }}
                       </template>
