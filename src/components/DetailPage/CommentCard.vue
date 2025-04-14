@@ -1,12 +1,15 @@
 <script setup lang="ts">
 import { Avatar, Flex } from "ant-design-vue";
+
+const {comment = '', userName = ''} = defineProps<{comment : string, userName : string}>();
+
 </script>
 
 <template>
   <div  class="h-full flex flex-col gap-2 p-1">
     <div class="flex  gap-2.5 items-center">
       <div class="text-xs self-start">
-        <Avatar shape="square" class="select-none ">Fa</Avatar>
+        <Avatar shape="square" class="select-none ">{{ userName.slice(0,2) }}</Avatar>
       </div>
       <Flex align="center" gap="6">
         <span class="text-sm text-black font-medium self-start">
@@ -15,7 +18,7 @@ import { Avatar, Flex } from "ant-design-vue";
       </Flex>
     </div>
     <p class="text-[11px] font-light w-full">
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Repellendus pariatur amet tenetur, fugiat quas quia vel adipisci nulla beatae doloremque voluptas nam dolorum, deserunt laboriosam neque laudantium? Quo, et iusto?
+      {{ comment }}
     </p>
   </div>
 </template>

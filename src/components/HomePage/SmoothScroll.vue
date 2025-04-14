@@ -138,8 +138,8 @@ onMounted(() => {
           </div>
         </motion.div>
     </div>
-    <div ref="horizontalRef" class="relative h-[300vh] w-[100vw]">
-      <div class="sticky top-0 left-0 right-0">
+    <div ref="horizontalRef" class="relative h-[300vh] w-[100vw] ">
+      <div class="sticky top-0 left-0 right-0 overflow-hidden">
         <motion.div class="flex h-[100vh]" :style="{ x: x }">
           <div
             class="h-[100vh] min-w-[100vw] justify-center items-center flex"
@@ -273,10 +273,10 @@ onMounted(() => {
         </motion.div>
       </div>
     </div>
-        <div ref="horizontalRef2" class="relative h-[200vh] w-[100vw] bg-white">
+    <div ref="horizontalRef2" class="relative h-[200vh] w-[100vw] bg-white">
             <div class="sticky top-0 left-0 right-0">
                 <motion.div :style="{opacity : opacity20}"  class="h-[100vh]  text-center flex flex-col gap-y-2 justify-center items-center text-4xl font-bold">
-                   <motion.div :style="{x: x2}" class="flex max-w-[100vw]">
+                   <motion.div :style="{x: x2}" class="flex max-w-[100vw] overflow-hidden">
                        <div class="min-w-[100vw] "> Karya dari sebuah Komunitas Fakultas Teknik Unsoed</div>
                        <div class="min-w-[100vw] "> Tunggu Karya Kami Selanjutnya</div>
    
@@ -304,6 +304,6 @@ onMounted(() => {
                 <span class="self-center text-sm">&copy; 2025 Open Source Community Universitas Jenderal Soedirman, All Rights Reserved</span>
              </div>
          </div>
-        </div>
+    </div>
   </div>
 </template>

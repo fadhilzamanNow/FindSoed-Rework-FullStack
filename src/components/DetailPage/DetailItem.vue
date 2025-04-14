@@ -3,12 +3,14 @@ import { Flex, Image, Avatar, Modal, Button, Input } from "ant-design-vue";
 import CardPic from "../../assets/CardPic.jpg";
 import Home1Pic from "../../assets/Home1Pic.jpg";
 import Home2Pic from "../../assets/Home2Pic.jpg";
-import { onMounted, onUnmounted, ref } from "vue";
+import { onMounted, onUnmounted, ref, watchEffect } from "vue";
 import { Swiper, SwiperSlide } from "swiper/vue";
 import { Navigation, Scrollbar, EffectFade, Autoplay } from "swiper/modules";
 import CommentCard from "./CommentCard.vue";
-import { SendOutlined } from "@ant-design/icons-vue";
+import { LoadingOutlined, SendOutlined } from "@ant-design/icons-vue";
 import BreadCrumbComp from "../BreadCrumb/BreadCrumbComp.vue";
+import { listComment } from "../../dummy/commentDummy";
+import type { CommentTypes } from "../../dummy/commentDummy";
 
 //@ts-ignore
 import("swiper/css")
@@ -19,14 +21,14 @@ import("swiper/css/navigation")
 //@ts-ignore
 import("swiper/css/effect-fade")
 
-
+const commentListItem = ref<Array<CommentTypes>>(listComment())
 const listPic = ref<any[]>([CardPic, Home1Pic, Home2Pic]);
 const isModalOpen = ref<boolean>(false);
 const width = ref<number>(window.innerWidth);
 const height = ref<number>(window.innerHeight);
 const commentVal = ref<string>("");
-
-
+const isBeingSent = ref<boolean>(false);
+  
 const handleViewport = () => {
     width.value = window.innerWidth
     height.value = window.innerHeight
@@ -44,8 +46,25 @@ const toggleModal = () => {
   isModalOpen.value = !isModalOpen.value;
 };
 
+const handleSend = () => {
+  console.log(`${commentVal.value}`)
+ 
+  isBeingSent.value = true;
+  setTimeout(() => {
+    isBeingSent.value = false
+    commentListItem.value = [...commentListItem.value, {
+    id : 1,
+    postingId : 1,
+    userId : 1,
+    userName : "Fadhil",
+    comment : commentVal.value
 
+  }]
+  commentVal.value = ""
 
+  },1000)
+
+};
 
 
 </script>
@@ -116,17 +135,18 @@ const toggleModal = () => {
        
           <div class="flex-1 border-b border-b-[#D8D5D5] overflow-auto  " :class="[height < 800 ? 'max-h-[25vh]' : 'max-h-[35vh]']">
               <div class="h-max">
-                  <CommentCard v-for="i in 8" :key="i">
+                  <CommentCard v-for="(v,i) in commentListItem" :key="i" :comment="v.comment" :userName="v.userName">
                       <template v-slot:name>
-                          {{ i % 2 === 0 ? 'fadhil' : 'masndiandainsi' }}
+                          {{ v.userName }}
                       </template>
                   </CommentCard>
               </div>
           </div>
           <div class="flex ">
-            <Input placeholder="Tambah Komentar" v-model:value="commentVal">
+            <Input placeholder="Tambah Komentar" v-model:value="commentVal" @press-enter="handleSend">
               <template #suffix>
-                <SendOutlined :style="{ fontSize: '16px' }" />
+                <SendOutlined :style="{ fontSize: '16px' }" v-if="!isBeingSent" />
+                <LoadingOutlined :syle="{fontSize : '16px'}" v-else />
               </template>
             </Input>
           </div>
