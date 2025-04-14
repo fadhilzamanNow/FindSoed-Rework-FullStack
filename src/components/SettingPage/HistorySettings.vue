@@ -56,7 +56,7 @@ onUnmounted(() => {
 <template>
     <Flex vertical gap="20" class="w-full ">
         <h1>Terdapat {{ tableDataSource.length }} barang yang ditemukan</h1>
-        <div class="w-[70vw] p-2 ">
+        <div class="w-full p-2 ">
           <Flex class="min-w-0  lg:w-full overflow-auto h-[800px]" vertical >
               <Table :columns="columns" :data-source="tableDataSource.slice(currentPage*dataPerPage-dataPerPage,currentPage*dataPerPage)" :pagination="false" bordered />
           </Flex>

@@ -1,15 +1,14 @@
 <script setup lang="ts">
-import { EyeInvisibleOutlined, EyeOutlined, ItalicOutlined } from '@ant-design/icons-vue';
+import { EyeInvisibleOutlined, EyeOutlined } from '@ant-design/icons-vue';
 import { Button, Input } from 'ant-design-vue';
-import { computed, onMounted, reactive, toRaw, useTemplateRef, watchEffect } from 'vue';
+import { computed, watchEffect } from 'vue';
 import { ref } from 'vue';
 import { RouterLink } from 'vue-router';
 import zxcvbn from 'zxcvbn';
 import { isEmail } from 'validator';
 import { debounce } from 'underscore';
-import { debounce as deb } from 'lodash';
-import { isEmpty } from 'ramda';
-import intlTelInput from 'intl-tel-input';
+import { debounce as deb, isEmpty } from 'lodash';
+
 import { VueTelInput } from 'vue-tel-input';
 
 //@ts-ignore
@@ -36,14 +35,10 @@ const isPhoneValid = ref<boolean>(false);
 
 
 
-watchEffect(() => {
-  console.log('phone : ', phoneVal.value)
-})
 
 
 const debouncedEmailValidation = debounce((email : string) => {
   emailVal.value = email;
-  console.log('ok: email validation triggered', email);
 }, 500);
 
 const handleEmail = (e: Event) => {
@@ -56,29 +51,29 @@ const emailIndicator = computed(() => {
     return {
       status : true,
       text : 'Email Valid',
-      textcolor : 'text-green-500'
+      textcolor : 'text-green-500',
+      isEmpty : false
     }
   }
   else if(!isEmail(emailVal.value) && emailVal.value.length > 1){
     return {
       status : false,
       text : 'Email Tidak Valid',
-      textcolor : 'text-red-500'
+      textcolor : 'text-red-500',
+      isEmpty : false
     }
-  }
+}
   else{
     return {
-      status : true,
+      status : false,
       text : '',
-      textcolor : ''
+      textcolor : '',
+      isEmpty : true
     }
   }
 })
 
-watchEffect(() => {
-  console.log("valid ? ", )
-  console.log("valid ? ", )
-})
+
 
 const passwordStrength = computed(() => {
   return zxcvbn(passVal.value)
@@ -120,6 +115,7 @@ const passwordIndicator = computed(() => {
     }
     default : {
       return {
+        number : 0,
         bgcolor : '',
         text : ''
       }
@@ -167,6 +163,7 @@ const cPasswordIndicator = computed(() => {
     }
     default : {
       return {
+        number : 1,
         bgcolor : '',
         text : ''
       }
@@ -188,12 +185,10 @@ const isPasswordSame = computed(() => {
   }
 })
 
-
-
-
-watchEffect(() => {
-  console.log("strength : ", passwordStrength.value.score)
+const isNoError = computed(() => {
+  return !isEmpty(userVal.value) && emailIndicator.value.status && (passwordIndicator.value.number > 1) && (cPasswordIndicator.value.number > 1) && isPhoneValid.value && isPasswordSame.value
 })
+
 
 </script>
 
@@ -210,7 +205,7 @@ watchEffect(() => {
       <div class="flex flex-col gap-2 items-center justify-center" >
           <label for="email" class="text-xs w-[90%] ">Alamat Email</label>
             <div class="w-[90%] " >
-              <Input v-on:input="(e : Event) => handleEmail(e)" placeholder="Email" id="email" class="w-full" :status="emailIndicator.status ?  '' : 'error'"  />
+              <Input v-on:input="(e : Event) => handleEmail(e)" placeholder="Email" id="email" class="w-full" :status="emailIndicator.status  ?  '' : emailIndicator.isEmpty ? '' : 'error' "  />
             </div>
             <div class="w-[90%] text-xs" :class="[emailIndicator.textcolor]">
                 {{ emailIndicator.text }}
@@ -219,8 +214,8 @@ watchEffect(() => {
       <div class="flex flex-col gap-2 items-center justify-center">
           <label for="phone" class="text-xs w-[90%] ">Phone</label>
             <div class="w-[90%] " >
-              <VueTelInput v-model="phoneVal"  mode="national" :inputOptions="{showDialCode  : true}" defaultCountry="id" @validate="validatePhone" class="w-full focus:!shadow-none "  :class="[isPhoneValid ? '!border-gray-200 ' : '!border-red-500']"/>
-              <span class="transition-all duration-300 text-red-500" :class="isPhoneValid ?  'invisible' : 'visible'">Nomor telfon yang anda masukkan tidak valid</span>
+              <VueTelInput v-model="phoneVal"  mode="national" :inputOptions="{showDialCode  : true}" defaultCountry="id" @validate="validatePhone" class="w-full focus:!shadow-none "  :class="[isPhoneValid  ? '!border-gray-200 ' : phoneVal.length > 0 ? '!border-gray-200' : '!border-red-500']"/>
+              <span class="transition-all duration-300 text-red-500" :class="isPhoneValid ?  'invisible' : phoneVal.length ? 'invisible' : 'visible'">Nomor telfon yang anda masukkan tidak valid</span>
             </div>    
       </div>
       <div class="flex flex-col gap-2 items-center justify-center">
@@ -262,7 +257,7 @@ watchEffect(() => {
       <div class="flex gap-2 items-center justify-center ">
         <div class="w-[90%] flex justify-end">
         <RouterLink to="/login">
-            <Button type="primary" :disabled="true">
+            <Button type="primary" :disabled="!isNoError">
               <span>Daftar</span>
             </Button>
           </RouterLink>
