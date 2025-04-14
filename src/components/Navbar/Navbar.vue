@@ -1,30 +1,38 @@
 <script setup lang="ts">
 import {
   CodeSandboxOutlined,
+  MenuOutlined,
   RollbackOutlined,
   SettingOutlined,
   UserAddOutlined,
   UserOutlined,
+  VerticalAlignTopOutlined,
 } from "@ant-design/icons-vue";
-import { Flex, Dropdown, Menu, MenuItem } from "ant-design-vue";
-import { motion, useMotionValueEvent, useTransform } from "motion-v";
+import { Flex, Dropdown, Menu, MenuItem, Button } from "ant-design-vue";
+import { AnimatePresence, motion, useMotionValueEvent, useTransform } from "motion-v";
 import { RouterLink } from "vue-router";
 import { useRoute } from "vue-router";
 import { useLoginStore } from "../../stores/loginInfo";
 import { onMounted, watchEffect } from "vue";
 import { useHeroStore } from "../../stores/heroInfo";
+import { storeToRefs } from "pinia";
+import { useViewPortStore } from "../../stores/viewportStore";
+import { useNavbarStore } from "../../stores/navbarInfo";
 
 const login = useLoginStore();
 
 const {path} = useRoute();
 
-const notMain : string[] = ["/","/login","register"];
+const {view} = storeToRefs(useViewPortStore()) ;
+const {isNavbarOpen} = storeToRefs(useNavbarStore());
 
-const isNotMain = notMain.find((v) => v === path)
+const notMain : string[] = ["/","/login","/register"];
 
-console.log("is not main :", isNotMain)
+const isNotMain = notMain.find((v) => path === v)
 
-const isPathList : boolean = path === "/list" 
+//console.log("is not main :", isNotMain)
+
+//const isPathList : boolean = path === "/list" 
 
 
 const {scrollProgYBg} = useHeroStore();
@@ -41,6 +49,14 @@ onMounted(() => {
 })
   }
 })
+
+watchEffect(() => {
+  console.log("Is Navbar Open : ", isNavbarOpen.value)
+})
+
+const handleNavbar = () => {
+  isNavbarOpen.value = !isNavbarOpen.value
+}
 
 
 
@@ -70,19 +86,24 @@ onMounted(() => {
               </h1>
             </Flex>
           </RouterLink>
-          <Flex class="text-sm" gap="8" v-if="!login.isLogin">
+          <Flex class="text-sm" gap="8" v-if="isNotMain">
             <RouterLink to="/register">
-              <div
-                class="hidden bg-black text-white rounded-sm sm:flex justify-center items-center h-max px-4 py-1 hover:bg-slate-700 transition duration-300 select-none cursor-pointer"
-              >
-                DAFTAR
+              <div class="hidden sm:flex">
+                <Button
+                  type="primary"
+                  class="hidden bg-black text-white rounded-sm sm:flex justify-center items-center h-max px-4 py-1 hover:bg-slate-700 transition duration-300 select-none cursor-pointer"
+                >
+                  DAFTAR
+              </Button>
               </div>
             </RouterLink>
             <RouterLink to="/login">
-              <div
-                class="hidden bg-white text-black rounded-sm sm:flex justify-center items-center h-max px-4 py-1 hover:bg-slate-200 transition duration-300 select-none cursor-pointer"
-              >
-                MASUK
+              <div class="hidden sm:flex">
+                <Button
+                  class="hidden bg-white text-black rounded-sm sm:flex justify-center items-center h-max px-4 py-1 hover:bg-slate-200 transition duration-300 select-none cursor-pointer"
+                >
+                  MASUK
+              </Button>
               </div>
             </RouterLink>
             <Dropdown>
@@ -106,14 +127,17 @@ onMounted(() => {
                   </MenuItem>
                 </Menu>
               </template>
-              <div
-                class="flex sm:hidden bg-black text-white justify-center items-center h-max px-4 py-1 hover:bg-slate-700 transition duration-300 select-none cursor-pointer rounded-md"
-              >
-                Mulai
+              <div class="sm:hidden">
+                <Button
+                  type="primary"
+                  class="flex  text-white justify-center items-center h-max px-4 py-1  transition duration-300 select-none cursor-pointer rounded-md"
+                >
+                  Mulai
+              </Button>
               </div>
             </Dropdown>
           </Flex>
-          <div class="" v-else>
+          <div class="flex gap-2 items-center" v-else>
         <Dropdown placement="bottomLeft">
           <template #overlay>
             <Menu>
@@ -137,8 +161,13 @@ onMounted(() => {
               </MenuItem>
             </Menu>
           </template>
-          <UserOutlined :syle="{ fontSize: '24px' }" />
+          <div class="text-2xl">
+            <UserOutlined  />
+          </div>
         </Dropdown>
+        <div v-if="view.width < 400" @click="handleNavbar" class="text-2xl" >
+            
+        </div>
       </div>
         </Flex>
       </Flex>

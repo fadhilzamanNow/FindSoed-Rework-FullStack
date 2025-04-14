@@ -39,7 +39,7 @@ onUnmounted(() => {
 <template>
     <div class="scroll-smooth rounded-md  transition-all duration-300 p-3  border border-gray-200 shadow-sm "  :class="[height > width ? 'overflow-auto' : 'overflow-hidden hover:overflow-y-scroll']">
         <div class="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 gap-y-5 gap-x-2 justify-end  items-center mx-auto transition-all duration-300 ease-in  max-h-[78vh] "  >
-                <div v-for="(d) in filteredItemList" :key="d.id" class="">
+                <div v-for="(d) in filteredItemList" :key="d.id" class="flex justify-center">
                     <Card :title="d.title" :username="d.username" :commentNum="d.commentNum" :likeNum="d.likeNum" :status="d.status" :id="d.id" />
                 </div> 
         </div>

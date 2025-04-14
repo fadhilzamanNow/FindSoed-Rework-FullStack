@@ -13,11 +13,14 @@ import { Avatar, Flex } from "ant-design-vue";
 const { active = "" } = defineProps<{ active: string }>();
 import { RouterLink } from "vue-router";
 import Iconitem from "./Iconitem.vue";
-import { ref } from "vue";
+import { ref, watchEffect } from "vue";
 import { useSidebarStore } from "../../stores/sidebarInfo";
+import { storeToRefs } from "pinia";
+import { useViewPortStore } from "../../stores/viewportStore";
+import { vi } from "intl-tel-input/i18n";
 
 const sidebar = useSidebarStore();
-
+const {view} = storeToRefs(useViewPortStore())
 const listMenu = [
   {
     name : 'Home',
@@ -37,10 +40,11 @@ const listMenu = [
 ]
 
 
+
 </script>
 
 <template>
-  <aside class="h-[100vh]">
+  <aside class="h-[100vh]" v-if="view.width > 400">
     <nav class="h-full flex flex-col bg-white border-r border-r-gray-200 shadow-sm">
       <div class="p-3 pb-2 flex justify-between items-center ">
         <div class="ml-2 overflow-hidden transition-all duration-300" :class="[sidebar.isExpand ? 'w-34' : 'w-0']">
