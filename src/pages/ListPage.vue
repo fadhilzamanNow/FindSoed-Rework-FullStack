@@ -36,8 +36,10 @@ onUnmounted(() => {
                 <ListBox />
           </div>        
         </div>
-        <div class="h-full w-full absolute z-[3]">
-          TEST
+        <div class="absolute z-[3] transition-all duration-300 ease-in-out bg-white overflow-hidden w-full" :class="[isNavbarOpen ? 'h-full  opacity-100' : 'h-0  opacity-0']">
+          <div class="h-full w-full flex bg-green-500/20">
+
+          </div>
         </div>
       </div>
     </div>
