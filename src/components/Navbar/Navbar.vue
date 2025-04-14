@@ -166,7 +166,7 @@ const handleNavbar = () => {
                   <UserOutlined  />
                 </div>
               </Dropdown>
-          <div>
+          <div v-if="view.width < 1000">
             <HamburgerMenu />
           </div>
       </div>

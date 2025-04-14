@@ -8,6 +8,7 @@ import FooterWave from "../components/Footer/FooterWave.vue";
 import { useViewPortStore } from "../stores/viewportStore";
 import BreadCrumbComp from "../components/BreadCrumb/BreadCrumbComp.vue";
 import { storeToRefs } from "pinia";
+import MiniSideBar from "../components/Sidebar/MiniSideBar.vue";
 
 const { handleViewport} = useViewPortStore();
 const {view} = storeToRefs(useViewPortStore())
@@ -32,13 +33,16 @@ onUnmounted(() => {
       <Navbar />
       <div class="flex flex-col h-full gap-6 p-3.5">
         <BreadCrumbComp title="Tambah Barang" />
-        <div class="flex-1">
-          <AddBox />
+        <div class="relative w-full h-full">
+        <div class="absolute w-full h-full z-[2]">
+          <div class="flex flex-col h-full gap-6 p-3.5">
+                <AddBox />
+          </div>        
         </div>
+          <MiniSideBar />
+      </div>
     </div>
-    <div class="w-full">
-            <FooterWave />
-        </div>
+   
       </div>
   </div>
 </template>
