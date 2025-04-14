@@ -18,6 +18,7 @@ import { useHeroStore } from "../../stores/heroInfo";
 import { storeToRefs } from "pinia";
 import { useViewPortStore } from "../../stores/viewportStore";
 import { useNavbarStore } from "../../stores/navbarInfo";
+import HamburgerMenu from "./HamburgerMenu.vue";
 
 const login = useLoginStore();
 
@@ -137,37 +138,37 @@ const handleNavbar = () => {
               </div>
             </Dropdown>
           </Flex>
-          <div class="flex gap-2 items-center" v-else>
-        <Dropdown placement="bottomLeft">
-          <template #overlay>
-            <Menu>
-              <MenuItem>
-                <RouterLink to="/setting">
-                  <Flex gap="8" align="center">
-                    <SettingOutlined />
-                    <span>Settings</span>
-                  </Flex>
-                </RouterLink>
-              </MenuItem>
-              <MenuItem>
-                <div @click="login.logout">
-                  <RouterLink to="/login">
-                    <Flex gap="8" align="center"  >
-                      <RollbackOutlined />
-                      <span>Logout</span>
-                    </Flex>
-                  </RouterLink>
+          <div class="flex gap-1 items-center" v-else>
+              <Dropdown placement="bottomLeft">
+                <template #overlay>
+                  <Menu>
+                    <MenuItem>
+                      <RouterLink to="/setting">
+                        <Flex gap="8" align="center">
+                          <SettingOutlined />
+                          <span>Settings</span>
+                        </Flex>
+                      </RouterLink>
+                    </MenuItem>
+                    <MenuItem>
+                      <div @click="login.logout">
+                        <RouterLink to="/login">
+                          <Flex gap="8" align="center"  >
+                            <RollbackOutlined />
+                            <span>Logout</span>
+                          </Flex>
+                        </RouterLink>
+                      </div>
+                    </MenuItem>
+                  </Menu>
+                </template>
+                <div class="flex text-2xl h-[40px] w-[40px] bg-white hover:bg-gray-200 justify-center items-center rounded-md">
+                  <UserOutlined  />
                 </div>
-              </MenuItem>
-            </Menu>
-          </template>
-          <div class="text-2xl">
-            <UserOutlined  />
+              </Dropdown>
+          <div v-if="view.width < 1000">
+            <HamburgerMenu />
           </div>
-        </Dropdown>
-        <div v-if="view.width < 400" @click="handleNavbar" class="text-2xl" >
-            
-        </div>
       </div>
         </Flex>
       </Flex>

@@ -7,6 +7,7 @@ import { useSidebarStore } from "../stores/sidebarInfo";
 import { useViewPortStore } from "../stores/viewportStore";
 import { useNavbarStore } from "../stores/navbarInfo";
 import { storeToRefs } from "pinia";
+import MiniSideBar from "../components/Sidebar/MiniSideBar.vue";
 
 const sidebar = useSidebarStore();
 const {view, handleViewport} = useViewPortStore();
@@ -26,7 +27,7 @@ onUnmounted(() => {
 <template>
   <div class="flex relative h-screen">
     <div class="h-full">
-      <Sidebar active="Home" :class="[sidebar.isExpand && (view.width < view.height) ? 'absolute z-10 ' : 'z-10']"  />
+      <Sidebar active="Home" :class="[sidebar.isExpand && (view.width < view.height) ? 'z-10 ' : 'z-10']"  />
     </div>
     <div class="h-full flex-1 flex flex-col ">
       <Navbar />
@@ -36,9 +37,7 @@ onUnmounted(() => {
                 <ListBox />
           </div>        
         </div>
-        <div class="h-full w-full absolute z-[3]">
-          TEST
-        </div>
+          <MiniSideBar />
       </div>
     </div>
   </div>

@@ -5,6 +5,7 @@ import SettingsBox from "../components/SettingPage/SettingsBox.vue";
 import { useSidebarStore } from "../stores/sidebarInfo";
 import { onMounted, onUnmounted } from "vue";
 import { useViewPortStore } from "../stores/viewportStore";
+import MiniSideBar from "../components/Sidebar/MiniSideBar.vue";
 
 const {view, handleViewport} = useViewPortStore();
 const sidebar = useSidebarStore()
@@ -26,9 +27,14 @@ onUnmounted(() => {
     <div class="h-full flex-1 flex flex-col">
       <Navbar />
       <div class="flex flex-col h-full gap-6 p-3.5">
-        <div class="flex-1">
-          <SettingsBox />
+        <div class="relative w-full h-full">
+        <div class="absolute w-full h-full z-[2]">
+          <div class="flex flex-col h-full gap-6 p-3.5">
+                <SettingsBox />
+          </div>        
         </div>
+          <MiniSideBar />
+      </div>
     </div>
       </div>
   </div>

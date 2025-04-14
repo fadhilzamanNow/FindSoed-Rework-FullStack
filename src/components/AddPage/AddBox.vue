@@ -10,6 +10,7 @@ import { Upload } from 'ant-design-vue';
 import axios from "axios";
 import leaflet, { LeafletEvent, Map, Marker } from "leaflet";
 import '@geoapify/leaflet-address-search-plugin';
+
 //@ts-ignore
 import("leaflet/dist/leaflet.css");
 
