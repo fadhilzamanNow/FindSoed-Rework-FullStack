@@ -20,6 +20,7 @@ const isEmailValid = computed(() => {
   return validator.validate(emailVal.value)
 })
 
+
 </script>
 
 <template>
@@ -29,8 +30,8 @@ const isEmailValid = computed(() => {
       <div class="flex flex-col gap-2 items-center justify-center" >
           <label for="email" class="text-xs w-[90%] ">Alamat Email</label>
             <div class="w-[90%] flex flex-col " >
-              <Input v-model:value="emailVal" placeholder="Email" id="email" :status="isEmailValid ? '' : 'error'"  />
-              <span class="w-[90%] text-red-500 transition-all duration-300" :class="isEmailValid ? 'invisible opacity-0' : 'visible opacity-100'" >Email yang kamu masukkan tidak valid</span>
+              <Input v-model:value="emailVal" placeholder="Email" id="email" :status="isEmailValid ? '' : emailVal.length > 0 ? 'error' : ''"  />
+              <span class="w-[90%] text-red-500 transition-all duration-300" :class="isEmailValid ? 'invisible opacity-0' : emailVal.length > 0 ? 'visible opacity-100' : 'invisible opacity-0'"  >Email yang kamu masukkan tidak valid</span>
             </div>
       </div>
       <div class="flex flex-col gap-2 items-center justify-center">

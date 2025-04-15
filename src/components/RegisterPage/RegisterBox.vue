@@ -242,7 +242,7 @@ const isNoError = computed(() => {
               <Input v-model:value="cPassVal" placeholder="******" id="password" :type="cPassShow ? 'text' : 'password'" :status="isPasswordSame ? '' : 'error'">
                 <template #suffix>
                   <div v-on:click="() => cPassShow = !cPassShow">
-                    <EyeInvisibleOutlined v-if="cPassShow"  />
+                    <EyeInvisibleOutlined v-if="cPassShow" />
                     <EyeOutlined v-if="!cPassShow"  />
                   </div>
                 </template>

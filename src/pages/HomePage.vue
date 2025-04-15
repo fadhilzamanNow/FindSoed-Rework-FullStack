@@ -103,7 +103,12 @@ onMounted(() => {
 <template>
   <div ref="container" >
    <!--  <ParallaxZoom v-if="container" :progress="progress" /> -->
-    <SmoothScroll />
+    <div class="p-4">
+        <div class="bg-[#1890FF] text-white rounded-lg h-[80vh] w-full">
+
+        </div>
+    </div>
+    <!-- <SmoothScroll /> -->
   
    <!--  <ThirdHome /> -->
   </div>

@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import {  LoadingOutlined } from '@ant-design/icons-vue';
 import { Flex, message, Steps } from 'ant-design-vue';
-import { computed, h, onMounted, reactive, ref } from 'vue';
+import { computed, h, onMounted, reactive, ref, watchEffect } from 'vue';
 import { Input, Select, Textarea, DatePicker, Button } from 'ant-design-vue';
 import MarkerPic from "../../assets/marker.png"
 import { debounce } from 'lodash';
@@ -10,6 +10,8 @@ import { Upload } from 'ant-design-vue';
 import axios from "axios";
 import leaflet, { LeafletEvent, Map, Marker } from "leaflet";
 import '@geoapify/leaflet-address-search-plugin';
+import { isEmpty } from 'underscore';
+import { toRaw } from 'vue';
 
 //@ts-ignore
 import("leaflet/dist/leaflet.css");
@@ -27,7 +29,6 @@ const itemDate = ref<string>("");
 const searchMap = ref<string>("");
 const searchResult = ref<any>()
 const showSearhResult = ref<boolean>(false);
-
 const debounceSearch = debounce((search : string) => {
     searchMap.value = search
     console.log("CARI : ", search)
@@ -155,11 +156,18 @@ const handleSubmit = () => {
 }
 
 const isDisabled = computed(() => {
-     if(itemName.value && itemCategory.value && itemDescription.value && itemDate.value && fileList.value?.length){
-        return false;
-     }else{
-        return true
-     }
+     return !isEmpty(itemName.value && itemCategory.value)
+})
+
+
+
+watchEffect(() => {
+    console.log("is Disabled : ", isDisabled.value)
+})
+
+
+watchEffect(() => {
+    console.log("item Date : ", toRaw(itemDate.value))
 })
 
 </script>
@@ -170,19 +178,19 @@ const isDisabled = computed(() => {
            <!--  <Steps :current="0" :items="myItems.reverse()" size="small"  label-placement="vertical" direction="horizontal" type="navigation" progress-dot /> -->
             <Flex vertical class="w-full " gap="8">
                 <label for="item">Nama Barang</label>
-                <Input placeholder="Nama Barang" />
+                <Input placeholder="Nama Barang" v-model:value="itemName" />
             </Flex>
             <Flex vertical class="w-full " gap="8">
                 <label for="item">Kategori Barang</label>
-                <Select placeholder="Pilih Kategori Barang" :options="option" />
+                <Select placeholder="Pilih Kategori Barang" :options="option" v-model:value="itemCategory" />
             </Flex>
             <Flex vertical class="w-full " gap="8">
                 <label for="item">Deskripsi Barang</label>
-                <Textarea placeholder="Deskripsi Barang"  />
+                <Textarea placeholder="Deskripsi Barang" v-model:value="itemDescription"  />
             </Flex>
             <Flex vertical class="w-full " gap="8">
                 <label for="item">Tanggal Kehilangan</label>
-                <DatePicker format="YYYY-MM-DD" placement="bottomRight" />
+                <DatePicker format="YYYY-MM-DD" placement="bottomRight" v-model:value="itemDate" />
             </Flex>
             <Flex vertical class="w-full" gap="8">
                 <label for="item">Foto Barang</label>
