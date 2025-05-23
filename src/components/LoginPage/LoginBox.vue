@@ -30,7 +30,8 @@ const emailProps : InputProps = {
   value : emailVal.value,
   onInput : (e : ChangeEvent) => emailVal.value = (e.target as HTMLInputElement).value,
   status : isEmailValid.value ?  "" :emailVal.value.length > 0 ? "error" : "",
-  onPressEnter : () => handleLogin()
+  onPressEnter : () => handleLogin(),
+  placeholder : "Email"
 }
 
 const passProps : InputProps = {
@@ -93,7 +94,7 @@ const handleLogin = async () => {
       <div class="flex flex-col gap-2 items-center justify-center" >
           <label for="email" class="text-xs w-[90%] ">Alamat Email</label>
             <div class="w-[90%] flex flex-col " >
-              <Input v-bind="emailProps" />
+              <Input v-bind="emailProps"  />
               <span class="w-[90%] text-red-500 transition-all duration-300" :class="isEmailValid ? 'invisible opacity-0' : emailVal.length > 0 ? 'visible opacity-100' : 'invisible opacity-0'"  >Email yang kamu masukkan tidak valid</span>
             </div>
       </div>

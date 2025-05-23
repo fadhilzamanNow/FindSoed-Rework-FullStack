@@ -29,7 +29,7 @@ const listSide : ListSide[] = [
 
 <template>
   <div
-    class="absolute z-[3] transition-all duration-300 ease-in-out bg-white overflow-hidden w-full"
+    class="absolute z-[99999999999999999999999] transition-all duration-300 ease-in-out  overflow-hidden w-full"
     :class="[isNavbarOpen ? 'h-full  opacity-100' : 'h-0  opacity-0']"
   >
     <div class="h-full w-full flex flex-col bg-white p-2">

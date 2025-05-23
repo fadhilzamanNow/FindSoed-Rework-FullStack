@@ -1,17 +1,21 @@
 <script setup lang="ts">
 import { motion, useScroll, useSpring, useTransform } from "motion-v";
 import Lenis from "lenis";
-import { onMounted, ref, watchEffect } from "vue";
-
+import { onMounted, ref, watch, watchEffect } from "vue";
+import { jwtDecode } from "jwt-decode";
 import gsap from "gsap";
 import ScrollTrigger from "gsap/ScrollTrigger";
 import SmoothScroll from "../components/HomePage/SmoothScroll.vue";
 import ShowPics from "../components/HomePage/ShowPics.vue";
 import { useRouter } from "vue-router";
+import { useAuthStore } from "../stores/authStore";
+import { storeToRefs } from "pinia";
 
 const navigate = useRouter();
 gsap.registerPlugin(ScrollTrigger);
 const { scrollYProgress } = useScroll();
+const auth = useAuthStore();
+const {authToken} = storeToRefs(auth)
 
 navigate.push("/login")
 const scaleX = useSpring(scrollYProgress, {
@@ -60,6 +64,9 @@ onMounted(() => {
   }
 });
 
+
+
+
 const container = ref()
 
 
@@ -96,6 +103,23 @@ onMounted(() => {
     console.log("ga ada valuenya");
   }
 });
+
+
+
+watch(navigate,() => {
+  if(authToken.value){
+    const myToken = jwtDecode(authToken.value)
+    if(Number(Date.now()/ 1000) > Number(myToken.exp)){
+      localStorage.removeItem("authToken")
+      auth.setAuthToken(null)
+      navigate.push("/login")
+    }
+  }
+},{
+  immediate : true
+})
+
+
 </script>
 
 <template>

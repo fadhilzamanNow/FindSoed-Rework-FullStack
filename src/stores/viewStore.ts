@@ -8,13 +8,12 @@ type viewType = {
 
 
 export const useViewStore = defineStore('view', () => {
-    const width = ref<viewType['width']>(0);
-    const height = ref<viewType['height']>(0);
+    const width = ref<viewType['width']>(window.innerWidth);
+    const height = ref<viewType['height']>(window.innerHeight);
 
     const changeView = (viewInfo : viewType) => {
         width.value = viewInfo.width
         height.value = viewInfo.height
     }
-
     return {width,height, changeView}
 })

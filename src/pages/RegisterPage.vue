@@ -5,7 +5,21 @@ import FooterWave from '../components/Footer/FooterWave.vue';
 import Navbar from '../components/Navbar/Navbar.vue';
 import { motion } from 'motion-v';
 
-import { reactive } from 'vue';
+import { reactive, watch } from 'vue';
+import { useAuthStore } from '../stores/authStore';
+import { storeToRefs } from 'pinia';
+import { useRouter } from 'vue-router';
+const auth = useAuthStore();
+const {authToken} = storeToRefs(auth)
+const navigate = useRouter();
+
+watch(authToken, () => {
+    if(authToken.value){
+        navigate.push("/list")
+    }
+},{
+    immediate : true
+})
 
 const data = reactive({
         labels: ['January', 'February', 'March'],

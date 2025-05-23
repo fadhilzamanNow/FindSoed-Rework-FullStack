@@ -19,6 +19,7 @@ import { storeToRefs } from "pinia";
 import { useViewPortStore } from "../../stores/viewportStore";
 import { useNavbarStore } from "../../stores/navbarInfo";
 import HamburgerMenu from "./HamburgerMenu.vue";
+import { useAuthStore } from "../../stores/authStore";
 
 const login = useLoginStore();
 
@@ -26,7 +27,7 @@ const {path} = useRoute();
 
 const {view} = storeToRefs(useViewPortStore()) ;
 const {isNavbarOpen} = storeToRefs(useNavbarStore());
-
+const auth = useAuthStore()
 const notMain : string[] = ["/","/login","/register"];
 
 const isNotMain = notMain.find((v) => path === v)
@@ -59,6 +60,12 @@ const handleNavbar = () => {
   isNavbarOpen.value = !isNavbarOpen.value
 }
 
+
+const handleLogout = () => {
+  localStorage.removeItem("authToken")
+  auth.setAuthToken(null);
+  auth.setUserInfo(null);
+}
 
 
 
@@ -155,7 +162,7 @@ const handleNavbar = () => {
                         <RouterLink to="/login">
                           <Flex gap="8" align="center"  >
                             <RollbackOutlined />
-                            <span>Logout</span>
+                            <span @click="() => handleLogout()" >Logout</span>
                           </Flex>
                         </RouterLink>
                       </div>
