@@ -20,7 +20,7 @@ const listSide : ListSide[] = [
         link : "/add"
     },
     {
-        name : "SETTING",
+        name : "SETTINGSS",
         link : "/setting"
     }
 ]

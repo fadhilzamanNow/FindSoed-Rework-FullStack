@@ -12,7 +12,45 @@
   --font-itim : "Itim", sans-serif;
   --breakpoint-xss : 400px;
   --breakpoint-xs : 500px;
- 
+  /* --animate-blob : blob 0.4 infinite;
+
+  @keyframes blob{
+    0%{
+      transform : "translate(0px,0px) scale(1)";
+      
+    },
+    33%{
+      transform : "translate(30px,-50px)  scale(1.2)";
+    },
+    66%{
+      transform : "translate(-20px,20px) scale(0.8)";
+    },
+    100%{
+      transform : "translate(0px,0px) scale(1)";
+    }
+  } */
+
+  --animate-try-new: try-new 6s infinite;
+  @keyframes try-new {
+    0% {
+      opacity : 100;
+      transform : translate(0px,0px) scale(1);
+    }
+    33% {
+      opacity : 100;
+      transform: translate(30px,-50px) scale(1.2);
+    },
+    66% {
+      opacity  : 100;
+      transform: translate(-20px,20px) scale(0.8);
+    },
+    100% {
+      opacity : 100;
+      transform: translate(0px,0px) scale(1);
+    }
+  }
+
+
 } 
 
 .customImage {
@@ -24,4 +62,13 @@
   --iti-path-flags-2x: url('../node_modules/intl-tel-input/build/img/flags@2x.png');
   --iti-path-globe-1x: url('../node_modules/intl-tel-input/build/img/globe.png');
   --iti-path-globe-2x: url('../node_modules/intl-tel-input/build/img/globe@2x.png');
+}
+
+@layer utilities{
+  .animation-delay-2000{
+    animation-delay: 2s;
+  }
+  .animation-delay-4000{
+    animation-delay: 4s;
+  }
 }

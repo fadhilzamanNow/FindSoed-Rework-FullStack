@@ -1,17 +1,19 @@
 <script setup lang="ts">
 import { motion, useScroll, useSpring, useTransform } from "motion-v";
-/* import FirstHome from "../components/HomePage/FirstHome.vue"; */
-import SecondHome from "../components/HomePage/SecondHome.vue";
-import ThirdHome from "../components/HomePage/ThirdHome.vue";
 import Lenis from "lenis";
-import { onMounted, ref, useTemplateRef, watchEffect } from "vue";
-import ParallaxZoom from "../components/HomePage/ParallaxZoom.vue";
-import { getAllJSDocTagsOfKind } from "typescript";
+import { onMounted, ref, watchEffect } from "vue";
+
 import gsap from "gsap";
 import ScrollTrigger from "gsap/ScrollTrigger";
 import SmoothScroll from "../components/HomePage/SmoothScroll.vue";
+import ShowPics from "../components/HomePage/ShowPics.vue";
+import { useRouter } from "vue-router";
+
+const navigate = useRouter();
 gsap.registerPlugin(ScrollTrigger);
 const { scrollYProgress } = useScroll();
+
+navigate.push("/login")
 const scaleX = useSpring(scrollYProgress, {
   stiffness: 100,
   damping: 30,
@@ -28,7 +30,6 @@ const scrollIndicator = {
 
 const secondone = ref()
 const thirdone = ref()
-const fourthone = ref()
 
 watchEffect(() => {
   const lenis = new Lenis();
@@ -42,6 +43,7 @@ watchEffect(() => {
 
 
 onMounted(() => {
+  
   if (secondone.value && thirdone.value) {
     gsap.to(secondone.value, {
       scrollTrigger: {
@@ -54,11 +56,7 @@ onMounted(() => {
       rotate : -10,
       duration : 2
     });
-    /* gsap.from(thirdone.value, {
-      scrollTrigger: fourthone.value,
-      scale: 0.8,
-      duration: 2,
-    }); */
+
   }
 });
 
@@ -101,16 +99,24 @@ onMounted(() => {
 </script>
 
 <template>
-  <div ref="container" >
+  <div ref="container h-full w-full" >
    <!--  <ParallaxZoom v-if="container" :progress="progress" /> -->
-    <div class="p-4">
-        <div class="bg-[#1890FF] text-white rounded-lg h-[80vh] w-full">
+     <!-- <div class="w-[800px] mx-auto">
+       <div class="w-full p-4 flex gap-4">
+         <div class="text-4xl text-black font-bold flex flex-col">
+          <span>
+            Cari Barang Hilangmu
+          </span>
+          <span>menggunakan Findsoed</span>
+         </div>
+         <div>
 
-        </div>
-    </div>
-    <!-- <SmoothScroll /> -->
-  
+         </div>
+       </div>
+     </div> -->
+     <!-- <SmoothScroll /> -->
    <!--  <ThirdHome /> -->
+     <ShowPics />
   </div>
 
 </template>

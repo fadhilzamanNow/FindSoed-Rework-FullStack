@@ -13,8 +13,8 @@ import { VueTelInput } from 'vue-tel-input';
 
 //@ts-ignore
 import('vue-tel-input/vue-tel-input.css');
-
-
+import parsePhoneNumber from 'libphonenumber-js'
+import { ChangeEvent } from 'ant-design-vue/es/_util/EventInterface';
 
 
 
@@ -32,6 +32,7 @@ const cPassVal = ref<string>("");
 const cPassShow = ref<boolean>(false);
 const phoneVal =ref<string>("")
 const isPhoneValid = ref<boolean>(false);
+
 
 
 
@@ -172,9 +173,7 @@ const cPasswordIndicator = computed(() => {
 })
 
 
-const validatePhone = (i  : any ) => {
-  isPhoneValid.value = i.valid
-}
+
 
 const isPasswordSame = computed(() => {
   if(passVal.value === cPassVal.value){
@@ -185,9 +184,14 @@ const isPasswordSame = computed(() => {
   }
 })
 
+
 const isNoError = computed(() => {
   return !isEmpty(userVal.value) && emailIndicator.value.status && (passwordIndicator.value.number > 1) && (cPasswordIndicator.value.number > 1) && isPhoneValid.value && isPasswordSame.value
 })
+
+const validatePhone = () => {
+  
+}
 
 
 </script>
