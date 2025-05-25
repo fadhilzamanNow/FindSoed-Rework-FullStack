@@ -12,6 +12,12 @@ basePath.interceptors.request.use((config) => {
     return config
 })
 
+basePath.interceptors.response.use((response) => response, (error) =>  {
+    if(error.response.status = 401){
+        localStorage.removeItem("authToken")
+    }
+})
+
 export type ErrorFindSoed = {
     success : boolean,
     message : string,
