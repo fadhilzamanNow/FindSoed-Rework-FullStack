@@ -13,7 +13,7 @@ import { Avatar, AvatarProps, Flex } from "ant-design-vue";
 const { active = "" } = defineProps<{ active: string }>();
 import { RouterLink } from "vue-router";
 import Iconitem from "./Iconitem.vue";
-import { ref, useTemplateRef, watchEffect } from "vue";
+import { computed, ref, useTemplateRef, watchEffect } from "vue";
 import { useSidebarStore } from "../../stores/sidebarInfo";
 import { storeToRefs } from "pinia";
 import { useViewPortStore } from "../../stores/viewportStore";
@@ -49,12 +49,17 @@ const {userInfo} = storeToRefs(auth);
 const sidebarRef = useTemplateRef('sidebarRef')
 
 
-const profileProps : AvatarProps = {
+const profileProps = computed<AvatarProps>(() => ({
   src : `http://localhost:3500/static/images/${userInfo.value?.imageUrl}`,
   size : 36,
   shape : "square"
-}
+}))
 
+
+
+watchEffect(() => {
+  console.log("user info in sidebar is changing : ", userInfo.value)
+})
 
 
 

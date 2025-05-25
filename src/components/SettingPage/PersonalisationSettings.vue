@@ -12,14 +12,17 @@ import {
   Input,
   InputProps,
   Modal,
+  UploadProps,
+  AvatarProps,
 } from "ant-design-vue";
 import { storeToRefs } from "pinia";
-import { computed, ref, watchEffect } from "vue";
+import { computed, h, ref, watchEffect } from "vue";
 import { useAuthStore } from "../../stores/authStore";
 import parsePhoneNumber from "libphonenumber-js";
 import zxcvbn from "zxcvbn";
-import { editDataProfile } from "../../api/Auth/Auth";
+import { editDataProfile, editPhotoProfile } from "../../api/Auth/Auth";
 import { isEmpty } from "lodash";
+import { FileType } from "ant-design-vue/es/upload/interface";
  
 const auth = useAuthStore()
 const { userInfo } = storeToRefs(auth);
@@ -30,6 +33,7 @@ const cPassword = ref("");
 const showOPassword = ref(false);
 const showPassword = ref(false);
 const showCPassword = ref(false);
+const fileList = ref<UploadProps['fileList']>([]);
 
 const nameProps = computed<InputProps>(() => ({
   placeholder: userInfo.value?.username,
@@ -112,6 +116,23 @@ const cPasswordProps = computed<InputProps>(() => ({
   onInput: (e) => (cPassword.value = (e.target as HTMLInputElement).value),
   value: cPassword.value,
 }));
+
+const upProps = computed<UploadProps>(() => ({
+    onRemove : (file) => {
+        const index = fileList.value?.indexOf(file);
+        const newFileList = fileList.value?.slice();
+        newFileList?.splice(index as number,1);
+        fileList.value = newFileList
+    },
+    beforeUpload : (file) => {
+        fileList.value = [...(fileList.value || []), file];
+        handleChangeProfile(file)
+        return false
+    },
+    fileList : fileList.value,
+    maxCount : 1,
+    itemRender : () => h('div')
+}))
 
 const passwordStrength = computed(() => {
     return zxcvbn(password.value)
@@ -244,6 +265,39 @@ const handleChangeData = async (e : MouseEvent) => {
     }
 }
 
+const handleChangeProfile = async (photo : FileType) => {
+    try{
+        const sendData = new FormData();
+        
+        if(photo){
+            sendData.append("profilePhoto", photo)
+        }
+    
+        const response = await editPhotoProfile(sendData);
+        if(response){
+            auth.setUserInfo({
+                username : response.data.username,
+                userId : response.data.userId,
+                email : response.data.email,
+                imageUrl : response.data.imageUrl,
+                phoneNumber : response.data.phoneNumber
+            })
+            console.log("isi user info :" , userInfo)
+            Modal.success({
+                title : "Foto Profil Berhasil untuk diubah",
+                centered : true,
+                zIndex : 99999
+            })
+        }
+    }catch(e){
+        Modal.error({
+            title : "Foto Profil gagal untuk diubah",
+            centered : true,
+            zIndex : 99999
+        })
+    }
+}
+
 const isDisabled = computed(() => {
     if(!isEmpty(password.value) && !isEmpty(cPassword.value) && !isEmpty(oPassword.value) && isPasswordSame.value && passwordStrength.value.score > 2 && cPasswordStrength.value.score > 2 ){
         console.log("password dis")
@@ -257,6 +311,16 @@ const isDisabled = computed(() => {
     }
 })
 
+const avatarExistProps = computed<AvatarProps>(() => ({
+    size : 100,
+    src : `http://localhost:3500/static/images/${userInfo.value?.imageUrl}`
+}))
+
+const avatarNotExistProps = computed<AvatarProps>(() => ({
+    size : 100,
+    icon : userInfo.value?.username.slice(0,2)
+    
+}))
 watchEffect(()=> {
     console.log("val : ", isDisabled.value)
 })
@@ -270,8 +334,9 @@ watchEffect(()=> {
       class="w-full sm:w-[640px] sm:rounded-md sm:border-gray-200"
     >
       <Flex gap="16" align="center">
-        <Avatar :size="48"> Fa </Avatar>
-        <Upload>
+        <Avatar v-if="userInfo?.imageUrl" v-bind="avatarExistProps" />
+        <Avatar v-else v-bind="avatarNotExistProps"  />
+        <Upload v-bind="upProps">
           <Button>
             <Flex gap="8" align="center">
               <UploadOutlined />
