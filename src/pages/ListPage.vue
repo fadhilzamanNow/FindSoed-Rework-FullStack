@@ -15,6 +15,7 @@ import { Modal, ModalProps } from "ant-design-vue";
 import { Button } from "ant-design-vue";
 import { useViewStore } from "../stores/viewStore";
 import { useSideStore } from "../stores/sideStore";
+import BreadCrumbComp from "../components/BreadCrumb/BreadCrumbComp.vue";
 
 const sidebar = useSideStore();
 const {isExpand} = storeToRefs(sidebar);

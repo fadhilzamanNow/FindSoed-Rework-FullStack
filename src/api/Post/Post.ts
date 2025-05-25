@@ -8,8 +8,8 @@ export type itemCategoryType =
   | "Kartu"
   | "Lain-Lain";
 export type itemLocationType = {
-  latitude: number;
-  longitude: number;
+  latitude: number | null;
+  longitude: number | null;
   locationName : string | null
 };
 

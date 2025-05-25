@@ -40,12 +40,13 @@ onUnmounted(() => {
       </div>
       <div class="flex flex-col h-full gap-6 p-3.5">
         <div class="relative w-full h-full">
+        <BreadCrumbComp title="Tambah Barang" />
         <div class="absolute w-full h-full z-[2]">
           <div class="flex flex-col h-full gap-6 p-3.5">
                 <AddBox />
           </div>        
         </div>
-          <MiniSideBar />
+        <MiniSideBar />
       </div>
     </div>
       </div>

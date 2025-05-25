@@ -2,8 +2,12 @@
 import { storeToRefs } from 'pinia';
 import { useNavbarStore } from '../../stores/navbarInfo';
 import { RouterLink, useRoute } from 'vue-router';
+import { useViewStore } from '../../stores/viewStore';
+import { watchEffect } from 'vue';
 const {path} = useRoute();
 const {isNavbarOpen} = storeToRefs(useNavbarStore());
+const view = useViewStore();
+const {width} = storeToRefs(view)
 
 interface ListSide {
     name : string,
@@ -20,16 +24,22 @@ const listSide : ListSide[] = [
         link : "/add"
     },
     {
-        name : "SETTINGSS",
+        name : "SETTINGS",
         link : "/setting"
     }
 ]
+
+watchEffect(() => {
+  if(width.value >= 1000){
+    isNavbarOpen.value = false
+  }
+})
 </script>
 
 
 <template>
   <div
-    class="absolute z-[99999999999999999999999] transition-all duration-300 ease-in-out  overflow-hidden w-full"
+    class="absolute top-0 z-[99999999999999999999999] transition-all duration-300 ease-in-out  overflow-hidden w-full "
     :class="[isNavbarOpen ? 'h-full  opacity-100' : 'h-0  opacity-0']"
   >
     <div class="h-full w-full flex flex-col bg-white p-2">
