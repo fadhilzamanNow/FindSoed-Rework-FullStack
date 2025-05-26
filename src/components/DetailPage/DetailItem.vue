@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import { Flex, Image, Avatar, Modal, Button, Input } from "ant-design-vue";
+import { Flex, Avatar, Modal, Button, Input, Image, InputProps } from "ant-design-vue";
 import CardPic from "../../assets/CardPic.jpg";
 import Home1Pic from "../../assets/Home1Pic.jpg";
 import Home2Pic from "../../assets/Home2Pic.jpg";
-import { onMounted, onUnmounted, ref, watchEffect } from "vue";
+import { computed, onMounted, onUnmounted, ref, watchEffect } from "vue";
 import { Swiper, SwiperSlide } from "swiper/vue";
 import { Navigation, Scrollbar, EffectFade, Autoplay } from "swiper/modules";
 import CommentCard from "./CommentCard.vue";
@@ -11,6 +11,12 @@ import { LoadingOutlined, SendOutlined } from "@ant-design/icons-vue";
 import BreadCrumbComp from "../BreadCrumb/BreadCrumbComp.vue";
 import { listComment } from "../../dummy/commentDummy";
 import type { CommentTypes } from "../../dummy/commentDummy";
+import { useRoute } from "vue-router";
+import { getDetailPost } from "../../api/Post/Post";
+import { createComment, getComments } from "../../api/Comment/Comment";
+import { useViewStore } from "../../stores/viewStore";
+import { storeToRefs } from "pinia";
+
 
 //@ts-ignore
 import("swiper/css")
@@ -21,6 +27,33 @@ import("swiper/css/navigation")
 //@ts-ignore
 import("swiper/css/effect-fade")
 
+type PostType = {
+    itemName : string,
+    itemDetail : string,
+    userName : string,
+    itemCategory : string,
+    status : string,
+    images : string[],
+    likeNum : number,
+    commentNum : number,
+    id : string,
+    userProfile : string
+}
+
+interface DetailPostTypes extends PostType {
+  itemLostDate : string,
+  phoneNumber : string,
+  statusName : string
+}
+
+
+type CommentType = {
+  userName: string;
+  userProfile: string;
+  message: string;
+  created_at: string;
+};
+
 const commentListItem = ref<Array<CommentTypes>>(listComment())
 const listPic = ref<any[]>([CardPic, Home1Pic, Home2Pic]);
 const isModalOpen = ref<boolean>(false);
@@ -28,11 +61,85 @@ const width = ref<number>(window.innerWidth);
 const height = ref<number>(window.innerHeight);
 const commentVal = ref<string>("");
 const isBeingSent = ref<boolean>(false);
+const route = useRoute();
+const postDetail = ref<DetailPostTypes>();
+const isCommentLoading = ref(true);
+const postComment = ref<CommentType[]>([]);
+const view = storeToRefs(useViewStore())
+
+console.log(route.params.id)
+
+const findDetailUserPost = async (id : string) => {
+  try{
+    const response = await getDetailPost(id);
+    if(response){
+      postDetail.value = response.data
+      isBeingSent.value = true
+    }
+  }catch(e){
+    Modal.error({
+      title : "Gagal mendapatkan Informasi Detail",
+      zIndex : 99999
+    })
+  }
+}
+
+const handleGetPostComment = async () => {
+  try{
+    isCommentLoading.value = false
+    const response = await getComments(postDetail.value?.id as string)
+    if(response){
+      postComment.value = response.data
+    }
+  }catch(e){
+
+  }
+}
+
+const handleAddComment = async () => {
+  try{
+    const response = await createComment(commentVal.value, postDetail.value?.id as string)
+    if(response){
+      isBeingSent.value = true
+      commentVal.value = ""
+      
+    }
+  }catch(e){
+
+  }
+}
+
+const InputCommentProps = computed<InputProps>(() => ({
+  placeholder : "Tambah Komentar",
+  value : commentVal.value,
+  onInput : (e) => commentVal.value = (e.target as HTMLInputElement).value,
+  onPressEnter : handleAddComment
+}))
+
+watchEffect(() => {
+  if(route.params.id){
+    findDetailUserPost(route.params.id as string)
+  }
+})
+
+watchEffect(() => {
+  if(postDetail.value?.id){
+    handleGetPostComment();
+  }
+
+  if(isBeingSent.value){
+    isBeingSent.value = false
+  }
+})
   
+
+
 const handleViewport = () => {
     width.value = window.innerWidth
     height.value = window.innerHeight
 }
+
+
 
 onMounted(() => {
     window.addEventListener('resize', handleViewport)
@@ -92,8 +199,8 @@ const handleSend = () => {
               effect="slide"
               :scrollbar="{ draggable: true }"
             >
-              <SwiperSlide v-for="item in 3" class="w-[100%]">
-                <Image :src="listPic[item - 1]" class="rounded-md object-contain" />
+              <SwiperSlide v-for="i in postDetail?.images" class="w-[100%]">
+                <img :src="`http://localhost:3500/static/images/${i}`" :class="['rounded-md object-contain,', view.height > view.width ? 'h-[200px] w-[300px] text-center object-cover' : 'h-[300px] w-[400px] text-center object-cover']" />
               </SwiperSlide>
             </Swiper>
           </div>
@@ -105,16 +212,26 @@ const handleSend = () => {
               class="w-full sm:min-w-[400px] border-b border-b-[#D8D5D5] pb-2"
             >
               <Avatar>Fa</Avatar>
-              <span class="text-[#6b6969] text-xs">Fadhil Isfadhillah</span>
+              <span class="text-[#6b6969] text-xs">{{ postDetail?.userName}}</span>
             </Flex>
             <div class="grid grid-cols-2">
               <Flex vertical gap="4">
                 <h1 class="text-xs font-medium">Nama</h1>
-                <span class="font-light text-xs">Redmi Note 9 Pro</span>
+                <span class="font-light text-xs">{{postDetail?.itemName}}</span>
               </Flex>
               <Flex vertical gap="4">
                 <h1 class="text-xs font-medium">Kategori</h1>
-                <span class="font-light text-xs">Handphone</span>
+                <span class="font-light text-xs">{{postDetail?.itemCategory}}</span>
+              </Flex>
+            </div>
+            <div class="grid grid-cols-2">
+              <Flex vertical gap="4">
+                <h1 class="text-xs font-medium">Tanggal Hilang</h1>
+                <span class="font-light text-xs">{{postDetail?.itemLostDate}}</span>
+              </Flex>
+              <Flex vertical gap="4">
+                <h1 class="text-xs font-medium">Status Barang</h1>
+                <span :class="['px-2 py-0.5 rounded-md text-white  max-w-max text-xs', postDetail?.statusName === 'Hilang' ? 'bg-red-500' : 'bg-green-400']">{{postDetail?.statusName}}</span>
               </Flex>
             </div>
             <Flex vertical gap="4" class="border-b border-b-[#D8D5D5] pb-2 ">
@@ -131,10 +248,9 @@ const handleSend = () => {
         </div>
       </div>
         <Flex vertical gap="20" class="w-full flex-1">
-       
           <div class="flex-1 border-b border-b-[#D8D5D5] overflow-auto  " :class="[height < 800 ? 'max-h-[25vh]' : 'max-h-[35vh]']">
               <div class="h-max">
-                  <CommentCard v-for="(v,i) in commentListItem" :key="i" :comment="v.comment" :userName="v.userName" >
+                  <CommentCard v-for="(v,i) in postComment" :key="i" :comment="v.message" :userName="v.userName" >
                       <template v-slot:name>
                           {{ v.userName }}
                       </template>
@@ -142,7 +258,7 @@ const handleSend = () => {
               </div>
           </div>
           <div class="flex ">
-            <Input placeholder="Tambah Komentar" v-model:value="commentVal" @press-enter="handleSend">
+            <Input v-bind="InputCommentProps">
               <template #suffix>
                 <SendOutlined :style="{ fontSize: '16px' }" v-if="!isBeingSent" />
                 <LoadingOutlined :syle="{fontSize : '16px'}" v-else />
@@ -164,23 +280,23 @@ const handleSend = () => {
       <div class="grid grid-cols-2">
         <Flex vertical gap="4">
           <h1 class="text-xs font-medium">Kategori</h1>
-          <span class="font-light text-xs">Handphone</span>
+          <span class="font-light text-xs">{{postDetail?.itemCategory}}</span>
         </Flex>
         <Flex vertical gap="4">
           <h1 class="text-xs font-medium">Kontak</h1>
-          <span class="font-light text-xs">089503908873</span>
+          <span class="font-light text-xs">{{postDetail?.phoneNumber}}</span>
         </Flex>
       </div>
       <div class="grid grid-cols-2">
         <Flex vertical gap="4">
           <h1 class="text-xs font-medium">Tanggal Hilang</h1>
-          <span class="font-light text-xs">20-03-25</span>
+          <span class="font-light text-xs">{{postDetail?.itemLostDate}}</span>
         </Flex>
         <Flex vertical gap="4">
           <h1 class="text-xs font-medium">Status Barang</h1>
           <span
-            class="px-2 py-0.5 rounded-md text-white bg-red-500 max-w-max text-xs"
-            >Hilang</span
+            :class="['px-2 py-0.5 rounded-md text-white  max-w-max text-xs', postDetail?.statusName === 'Hilang' ? 'bg-red-500' : 'bg-green-400']"
+            >{{postDetail?.statusName}}</span
           >
         </Flex>
       </div>
@@ -188,10 +304,7 @@ const handleSend = () => {
         <h1 class="text-xs font-medium">Deskripsi</h1>
         <span
           class="max-w-[350px] overflow-x-hidden hover:overflow-y-scroll text-xs font-light"
-          >Lorem ipsum dolor sit amet, consectetur adipisicing elit. Tenetur
-          fugit expedita iusto debitis, accusamus quod eveniet aliquid. Facilis
-          consectetur dignissimos officia omnis, dolore fuga, repellat magnam,
-          dolorum exercitationem harum dolorem!</span
+          >{{postDetail?.itemDetail}}</span
         >
       </Flex>
     </Flex>

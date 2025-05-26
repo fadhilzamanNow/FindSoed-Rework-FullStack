@@ -3,24 +3,44 @@ import Sidebar from "../components/Sidebar/Sidebar.vue";
 import Navbar from "../components/Navbar/Navbar.vue";
 import SettingsBox from "../components/SettingPage/SettingsBox.vue";
 import { useSidebarStore } from "../stores/sidebarInfo";
-import { onMounted, onUnmounted } from "vue";
+import { onMounted, onUnmounted, watch } from "vue";
 import { useViewPortStore } from "../stores/viewportStore";
 import MiniSideBar from "../components/Sidebar/MiniSideBar.vue";
 import { useViewStore } from "../stores/viewStore";
 import { storeToRefs } from "pinia";
 import { useSideStore } from "../stores/sideStore";
+import { useAuthStore } from "../stores/authStore";
+import { jwtDecode } from "jwt-decode";
+import { useRouter } from "vue-router";
+
 
 const {view, handleViewport} = useViewPortStore();
 const sidebar = useSideStore()
 const {isExpand} = storeToRefs(sidebar);
 const views = useViewStore()
 const {width, height} = storeToRefs(views);
+const auth = useAuthStore();
+const {authToken} = storeToRefs(auth)
+const navigate = useRouter();
 onMounted(() => {
   window.addEventListener('resize', handleViewport)
 })
 
 onUnmounted(() => {
   window.removeEventListener('resize', handleViewport)
+})
+
+watch(authToken,() => {
+  if(authToken.value){
+    const myToken = jwtDecode(authToken.value)
+    if(Number(Date.now()/ 1000) > Number(myToken.exp)){
+      localStorage.removeItem("authToken")
+      auth.setAuthToken(null)
+      navigate.push("/login")
+    }
+  }
+},{
+  immediate : true
 })
 </script>
 

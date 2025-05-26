@@ -2,19 +2,26 @@
 import DetailItem from '../components/DetailPage/DetailItem.vue';
 import Sidebar from '../components/Sidebar/Sidebar.vue';
 import Navbar from '../components/Navbar/Navbar.vue';
-import { onMounted, onUnmounted } from 'vue';
+import { onMounted, onUnmounted, watch } from 'vue';
 import { useViewPortStore } from '../stores/viewportStore';
 import { useSidebarStore } from '../stores/sidebarInfo';
 import MiniSideBar from '../components/Sidebar/MiniSideBar.vue';
 import { useSideStore } from '../stores/sideStore';
 import { storeToRefs } from 'pinia';
 import { useViewStore } from '../stores/viewStore';
+import { useAuthStore } from '../stores/authStore';
+import { useRouter } from 'vue-router';
+import { jwtDecode } from "jwt-decode";
+
 
 const {view, handleViewport} = useViewPortStore();
 const sidebar = useSideStore()
 const {isExpand} = storeToRefs(sidebar);
 const views = useViewStore()
 const {width, height} = storeToRefs(views);
+const auth = useAuthStore();
+const {authToken} = storeToRefs(auth)
+const navigate = useRouter();
 
 onMounted(() => {
   window.addEventListener('resize', handleViewport)
@@ -22,6 +29,22 @@ onMounted(() => {
 
 onUnmounted(() => {
   window.removeEventListener('resize', handleViewport)
+})
+
+
+watch(authToken,() => {
+  if(authToken.value){
+    const myToken = jwtDecode(authToken.value)
+    if(Number(Date.now()/ 1000) > Number(myToken.exp)){
+      localStorage.removeItem("authToken")
+      auth.setAuthToken(null)
+      if(localStorage.getItem("authToken") || !authToken){
+        navigate.push("/login")
+      }
+    }
+  }
+},{
+  immediate : true
 })
 
 </script>

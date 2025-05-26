@@ -1,17 +1,19 @@
 import { defineStore } from "pinia";
 import { ref } from "vue";
 
-export type PostType = {
+type PostType = {
     itemName : string,
     itemDetail : string,
     userName : string,
     itemCategory : string,
-    status : string,
+    status? : string | undefined,
     images : string[],
     likeNum : number,
     commentNum : number,
     id : string,
-    userProfile : string
+    userProfile : string,
+    statusName? : string,
+    categoryName? : string
 }
 
 type postStoreState = {
@@ -21,12 +23,12 @@ type postStoreState = {
 }
 
 export const usePostStore = defineStore('post', () => {
-    const postState = ref<PostType[] | null >(null);
+    const postData = ref<PostType[] | null >(null);
     const isLoading = ref<postStoreState['isLoading']>(false);
     const detailPost = ref<postStoreState['detailPost']>({});
 
     const setPost = (posts : postStoreState['postData']) => {
-            postState.value = posts
+            postData.value = posts
     }
 
     const toggleLoading = () => {
@@ -37,7 +39,7 @@ export const usePostStore = defineStore('post', () => {
         detailPost.value = detail
     }
 
-    return {postState, isLoading, detailPost, setPost, toggleLoading, setDetailPost} 
+    return {postData, isLoading, detailPost, setPost, toggleLoading, setDetailPost} 
         
 })
 
