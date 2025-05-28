@@ -9,6 +9,7 @@ import LoginPage from "./pages/LoginPage.vue";
 import RegisterPage from "./pages/RegisterPage.vue";
 import ListPage from "./pages/ListPage.vue";
 import AddPage from "./pages/AddPage.vue";
+import SettingsPage from "./pages/SettingsPage.vue";
 
   
 
@@ -32,6 +33,11 @@ import AddPage from "./pages/AddPage.vue";
       path : "/add",
       name : "add",
       component : AddPage
+    },
+    {
+      path : "/setting",
+      name : "setting",
+      component : SettingsPage
     }
     
   ];
