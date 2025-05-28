@@ -17,7 +17,7 @@ interface ListSide {
 const listSide : ListSide[] = [
     {
         name : "HOME",
-        link : "/list"
+        link : "/home"
     },
     {
         name : "ADD",

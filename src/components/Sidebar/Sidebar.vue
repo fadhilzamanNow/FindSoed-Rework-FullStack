@@ -30,7 +30,7 @@ const listMenu = [
   {
     name : 'Home',
     icon : HomeFilled,
-    link : '/list',
+    link : '/home',
   },
   {
     name : 'Add',

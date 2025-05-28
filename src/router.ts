@@ -8,6 +8,7 @@ import {
 import LoginPage from "./pages/LoginPage.vue";
 import RegisterPage from "./pages/RegisterPage.vue";
 import ListPage from "./pages/ListPage.vue";
+import AddPage from "./pages/AddPage.vue";
 
   
 
@@ -27,6 +28,11 @@ import ListPage from "./pages/ListPage.vue";
       name: "list",
       component: ListPage,
     },
+    {
+      path : "/add",
+      name : "add",
+      component : AddPage
+    }
     
   ];
 

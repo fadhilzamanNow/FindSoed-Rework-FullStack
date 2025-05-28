@@ -71,7 +71,7 @@ const handleLogin = async () => {
         message : response.data.message,
         centered : true,
         zIndex : 99999,
-        onOk : () => router.push("/list")
+        onOk : () => router.push("/home")
       })
     }
   }catch(e){
@@ -115,7 +115,7 @@ const handleLogin = async () => {
       <div class="flex gap-2 items-center justify-center ">
         <div class="w-[90%] justify-end flex">
           <div @click="() => login.login(emailVal)">
-            <RouterLink to="/list">
+            <RouterLink to="/home">
                 <Button type="primary" :disabled="isEmailValid && passVal.length > 1 ? false : true ">
                   <span>Login</span>
                 </Button>
