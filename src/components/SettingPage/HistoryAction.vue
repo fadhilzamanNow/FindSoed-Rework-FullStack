@@ -115,7 +115,6 @@ const modalEditProps = computed<ModalProps>(() => ({
         disabled : !(!isEmpty(editStatus.value) || !isEmpty(editDate.value) || !isEmpty(editDetail.value))
     },
     mask : true,
-    zIndex : 99999
 }))
 
 const modalDeleteProps = computed<ModalProps>(() => ({

@@ -46,7 +46,7 @@ export async function startDevServer() {
 
   const serverRenderMiddleware = serverRender(rsbuildServer);
 
-  const findsoedRouter = ["/register","/login","/home","/add","/setting"] ;
+  const findsoedRouter = ["/register","/login","/home","/add","/setting","/detail/:id"] ;
 
   findsoedRouter.forEach((v) => {
     app.get(v, async (req, res, next) => {

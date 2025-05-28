@@ -10,6 +10,7 @@ import RegisterPage from "./pages/RegisterPage.vue";
 import ListPage from "./pages/ListPage.vue";
 import AddPage from "./pages/AddPage.vue";
 import SettingsPage from "./pages/SettingsPage.vue";
+import DetailItemPage from "./pages/DetailItemPage.vue";
 
   
 
@@ -38,6 +39,11 @@ import SettingsPage from "./pages/SettingsPage.vue";
       path : "/setting",
       name : "setting",
       component : SettingsPage
+    },
+    {
+      path : "/detail/:id",
+      name : "detail",
+      component : DetailItemPage
     }
     
   ];

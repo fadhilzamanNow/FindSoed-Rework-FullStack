@@ -55,10 +55,7 @@ type CommentType = {
 };
 
 const commentListItem = ref<Array<CommentTypes>>(listComment())
-const listPic = ref<any[]>([CardPic, Home1Pic, Home2Pic]);
 const isModalOpen = ref<boolean>(false);
-const width = ref<number>(window.innerWidth);
-const height = ref<number>(window.innerHeight);
 const commentVal = ref<string>("");
 const isBeingSent = ref<boolean>(false);
 const route = useRoute();
@@ -134,20 +131,11 @@ watchEffect(() => {
   
 
 
-const handleViewport = () => {
-    width.value = window.innerWidth
-    height.value = window.innerHeight
-}
 
 
 
-onMounted(() => {
-    window.addEventListener('resize', handleViewport)
-})
 
-onUnmounted(() => {
-    window.removeEventListener('resize', handleViewport)
-})
+
 
 const toggleModal = () => {
   isModalOpen.value = !isModalOpen.value;
@@ -249,7 +237,7 @@ const handleSend = () => {
         </div>
       </div>
         <Flex vertical gap="20" class="w-full flex-1">
-          <div class="flex-1 border-b border-b-[#D8D5D5] overflow-auto  " :class="[height < 800 ? 'max-h-[25vh]' : 'max-h-[35vh]']">
+          <div class="flex-1 border-b border-b-[#D8D5D5] overflow-auto  " :class="[view.height.value < 800 ? 'max-h-[25vh]' : 'max-h-[35vh]']">
               <div class="h-max">
                   <CommentCard v-for="(v,i) in postComment" :key="i" :message="v.message" :userName="v.userName" :userProfile="v.userProfile" :created_at="v.created_at" >
                       <template v-slot:name>
