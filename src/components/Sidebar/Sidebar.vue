@@ -20,12 +20,12 @@ import { useViewPortStore } from "../../stores/viewportStore";
 import { vi } from "intl-tel-input/i18n";
 import { useAuthStore } from "../../stores/authStore";
 import { useSideStore } from "../../stores/sideStore";
+import { useViewStore } from "../../stores/viewStore";
 
 
-const width = ref(0);
 const sidebar = useSideStore();
 const {isExpand} = storeToRefs(sidebar)
-const {view} = storeToRefs(useViewPortStore())
+const {width} = storeToRefs(useViewStore())
 const listMenu = [
   {
     name : 'Home',
@@ -68,7 +68,7 @@ watchEffect(() => {
 </script>
 
 <template>
-  <aside class="h-[100vh]" v-if="view.width >= 1000" ref="sidebarRef">
+  <aside class="h-[100vh]" v-if="width >= 1000" ref="sidebarRef">
     <nav class="h-full flex flex-col bg-white border-r border-r-gray-200 shadow-sm">
       <div class="p-3 pb-2 flex justify-between items-center ">
         <div class="ml-2 overflow-hidden transition-all duration-300" :class="[isExpand ? 'w-34' : 'w-0']">
@@ -99,10 +99,10 @@ watchEffect(() => {
         
         <div class="flex justify-between items-center overflow-hidden transition-all duration-300" :class="[isExpand ? 'w-52 ml-3' : 'w-0']">
           <div class="leading-4">
-            <h1 class="font-semibold">
+            <h1 class="font-semibold text-sm">
               {{ userInfo?.username }}
             </h1>
-            <h2 class="text-gray-600">{{ userInfo?.email }}</h2>
+            <h2 class="text-gray-600 text-xs">{{ userInfo?.email }}</h2>
           </div>
           <MoreOutlined class="text-lg" />
         </div>

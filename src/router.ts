@@ -1,79 +1,45 @@
-import { createRouter, createWebHistory } from "vue-router";
-import { defineAsyncComponent } from "vue";
-import Loading from "./Loading/Loading.vue";
-import Error from "./Loading/Error.vue";
-/* import HomePage from "./pages/HomePage.vue";
+import {
+    createRouter as createVueRouter,
+    createMemoryHistory,
+    createWebHistory,
+  } from "vue-router";
+
+
 import LoginPage from "./pages/LoginPage.vue";
 import RegisterPage from "./pages/RegisterPage.vue";
-import SettingsPage from "./pages/SettingsPage.vue"; */
-/* import ListPage from "./pages/ListPage.vue";
-import AddPage from "./pages/AddPage.vue";
-import DetailItemPage from "./pages/DetailItemPage.vue"; */
+import ListPage from "./pages/ListPage.vue";
 
+  
 
+  const routes = [
+    {
+      path: "/login",
+      name: "login",
+      component: LoginPage,
+    },
+    {
+      path: "/register",
+      name: "about",
+      component: RegisterPage,
+    },
+    {
+      path: "/home",
+      name: "list",
+      component: ListPage,
+    },
+    
+  ];
 
+  console.log("typeof window : ", typeof window)
+  
+  const isServer = typeof window === "undefined";
+  
 
-const LazyHomePage = defineAsyncComponent({
-    loader : () => import("./pages/HomePage.vue"),
-    loadingComponent : Loading,
-    errorComponent : Error
-})
-
-const LazyLoginPage = defineAsyncComponent({
-    loader : () => import("./pages/LoginPage.vue"),
-    loadingComponent : Loading,
-    errorComponent : Error
-})
-
-const LazyRegisterPage = defineAsyncComponent({
-    loader : () => import("./pages/RegisterPage.vue"),
-    loadingComponent : Loading,
-    errorComponent : Error
-})
-
-const LazyListPage = defineAsyncComponent({
-    loader : () => import("./pages/ListPage.vue"),
-    loadingComponent : Loading,
-    errorComponent : Error
-})
-
-const LazyAddPage = defineAsyncComponent({
-    loader : () => import("./pages/AddPage.vue"),
-    loadingComponent : Loading,
-    errorComponent : Error
-})
-
-const LazySettingPage = defineAsyncComponent({
-    loader : () => import("./pages/SettingsPage.vue"),
-    loadingComponent : Loading,
-    errorComponent : Error
-}) 
-
-const LazyDetailPage = defineAsyncComponent({
-    loader : () => import("./pages/DetailItemPage.vue"),
-    loadingComponent : Loading,
-    errorComponent : Error
-}) 
-
-
-const routes = [
-    {path : "/", component : LazyHomePage},
-    {path : "/login", component : LazyLoginPage},
-    {path : "/register", component : LazyRegisterPage},
-    {path : "/list", component : LazyListPage},
-    {path : "/detail/:id", component : LazyDetailPage},
-     {path : "/add", component : LazyAddPage},
-   {path : "/setting", component : LazySettingPage}
-   /*  {path : "/", component : HomePage},
-    {path : "/login", component : LoginPage},
-    {path : "/register", component : RegisterPage},
-    {path : "/setting", component : SettingsPage}, */
-    /* {path : "/list", component : ListPage},
-    {path : "/add", component : AddPage}, */
-    /* {path : "/detail/:id", component : DetailItemPage} */
-]
-
-export const router = createRouter({
-    history : createWebHistory(),
-    routes : routes as any
-})
+  const createRouter = () =>
+    createVueRouter({
+      history: isServer
+        ? createMemoryHistory("/")
+        : createWebHistory(process.env.BASE_URL),
+      routes,
+    });
+  export default createRouter;

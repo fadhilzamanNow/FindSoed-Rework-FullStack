@@ -1,31 +1,27 @@
 <script setup lang="ts">
 import {
   CodeSandboxOutlined,
-  MenuOutlined,
   RollbackOutlined,
   SettingOutlined,
   UserAddOutlined,
   UserOutlined,
-  VerticalAlignTopOutlined,
 } from "@ant-design/icons-vue";
 import { Flex, Dropdown, Menu, MenuItem, Button } from "ant-design-vue";
-import { AnimatePresence, motion, useMotionValueEvent, useTransform } from "motion-v";
 import { RouterLink } from "vue-router";
 import { useRoute } from "vue-router";
 import { useLoginStore } from "../../stores/loginInfo";
-import { onMounted, watchEffect } from "vue";
+import { watchEffect } from "vue";
 import { useHeroStore } from "../../stores/heroInfo";
 import { storeToRefs } from "pinia";
-import { useViewPortStore } from "../../stores/viewportStore";
 import { useNavbarStore } from "../../stores/navbarInfo";
 import HamburgerMenu from "./HamburgerMenu.vue";
 import { useAuthStore } from "../../stores/authStore";
+import { useViewStore } from "../../stores/viewStore";
 
 const login = useLoginStore();
 
 const {path} = useRoute();
-
-const {view} = storeToRefs(useViewPortStore()) ;
+const view = storeToRefs(useViewStore())
 const {isNavbarOpen} = storeToRefs(useNavbarStore());
 const auth = useAuthStore()
 const notMain : string[] = ["/","/login","/register"];
@@ -37,48 +33,52 @@ const isNotMain = notMain.find((v) => path === v)
 //const isPathList : boolean = path === "/list" 
 
 
-const {scrollProgYBg} = useHeroStore();
 
-watchEffect(() => {
+
+/* const {scrollProgYBg} = useHeroStore();
+ */
+/* watchEffect(() => {
   console.log("nilai : ", scrollProgYBg)
-})
+}) */
 
-onMounted(() => {
+/* onMounted(() => {
   if(scrollProgYBg){
 
   useMotionValueEvent(scrollProgYBg, 'change', (l) => {
   console.log("nav : ", l)
 })
   }
-})
+}) */
 
-watchEffect(() => {
+/* watchEffect(() => {
   console.log("Is Navbar Open : ", isNavbarOpen.value)
-})
+}) */
 
-const handleNavbar = () => {
+/* const handleNavbar = () => {
   isNavbarOpen.value = !isNavbarOpen.value
-}
+} */
 
 
-const handleLogout = () => {
+
+/* const handleLogout = () => {
+  localStorage.removeItem("authToken")
+  auth.setAuthToken(null);const handleLogout = () => {
   localStorage.removeItem("authToken")
   auth.setAuthToken(null);
   auth.setUserInfo(null);
 }
 
 
+  auth.setUserInfo(null);
+}
+
+ */
 
 
 </script>
 
 <template>
-    <motion.div
-      :initial="{ x: -50 }"
-      :while-in-view="{ x: 0 }"
-      :transition="{ duration: 0.3 }"
-      
-    >
+    
       <Flex align="center" class="w-full border-b-gray-300 py-1 px-2 min-h-[50px] bg-white" :class="[path !== '/' ? 'border-b-1' : 'border-b-0']">
         <Flex
           :vertical="false"
@@ -162,7 +162,7 @@ const handleLogout = () => {
                         <RouterLink to="/login">
                           <Flex gap="8" align="center"  >
                             <RollbackOutlined />
-                            <span @click="() => handleLogout()" >Logout</span>
+                            <span >Logout</span>
                           </Flex>
                         </RouterLink>
                       </div>
@@ -173,45 +173,10 @@ const handleLogout = () => {
                   <UserOutlined  />
                 </div>
               </Dropdown>
-          <div v-if="view.width < 1000">
+          <div v-if="view.width.value < 1000">
             <HamburgerMenu />
           </div>
       </div>
         </Flex>
-      </Flex>
-    </motion.div>
-  <!-- <Flex class="px-10 py-4 border-b border-b-[#D8D5D5]">
-    <Flex gap="16" flex="1">
-      <CodeSandboxOutlined :style="{ fontSize: '24px' }" />
-      <Flex>
-        <span class="text-black text-base font-bold">Find</span>
-        <span class="text-[#CFC922] text-base font-bold">Soed</span>
-      </Flex>
-    </Flex>
-    <div>
-      <Dropdown placement="bottomLeft">
-        <template #overlay>
-          <Menu>
-            <MenuItem>
-              <RouterLink to="/setting">
-                <Flex gap="8" align="center">
-                  <SettingOutlined />
-                  <span>Settings</span>
-                </Flex>
-              </RouterLink>
-            </MenuItem>
-            <MenuItem>
-              <RouterLink to="/login">
-                <Flex gap="8" align="center">
-                  <RollbackOutlined />
-                  <span>Logout</span>
-                </Flex>
-              </RouterLink>
-            </MenuItem>
-          </Menu>
-        </template>
-        <UserOutlined :syle="{ fontSize: '24px' }" />
-      </Dropdown>
-    </div>
-  </Flex> -->
+      </Flex> 
 </template>

@@ -9,8 +9,8 @@ export const useViewPortStore = defineStore('viewport', () => {
     }
 
     const view  = reactive<ViewType>({
-        width : window.innerWidth,
-        height : window.innerHeight,
+        width : 0,
+        height : 0,
     })
 
     const handleViewport = () => {

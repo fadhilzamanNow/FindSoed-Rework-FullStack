@@ -39,7 +39,7 @@ watchEffect(() => {
 
 <template>
   <div
-    class="absolute top-0 z-[99999999999999999999999] transition-all duration-300 ease-in-out  overflow-hidden w-full "
+    class="fixed mt-[50px] top-0 z-[99999999999999999999999] transition-all duration-300 ease-in-out  overflow-hidden w-full "
     :class="[isNavbarOpen ? 'h-full  opacity-100' : 'h-0  opacity-0']"
   >
     <div class="h-full w-full flex flex-col bg-white p-2">

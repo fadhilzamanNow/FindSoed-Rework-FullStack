@@ -1,17 +1,38 @@
 <script setup lang="ts">
-import { onMounted, watchEffect } from "vue";
-import { RouterView } from "vue-router";
-import { useAuthStore } from "./stores/authStore";
-import { storeToRefs } from "pinia";
-import { findUserInfo } from "./api/Auth/Auth";
-import { useViewStore } from "./stores/viewStore";
+// This starter template is using Vue 3 <script setup> SFCs
+// Check out https://vuejs.org/api/sfc-script-setup.html#script-setup
+import { onMounted, watchEffect } from 'vue';
+import { RouterView,RouterLink } from 'vue-router';
+import { useViewStore } from './stores/viewStore';
+import { useAuthStore } from './stores/authStore';
+import { findUserInfo } from './api/Auth/Auth';
+import { storeToRefs } from 'pinia';
 
 const auth = useAuthStore();
-const {authToken} = storeToRefs(auth);
-const view = useViewStore();
+const {authToken} = storeToRefs(auth)
 
+onMounted(() => {
+  const view = useViewStore();
 
+  view.changeView({
+    height : window.innerHeight,
+    width : window.innerWidth
+  })
 
+  window.addEventListener('resize',() => {
+    view.changeView({
+      height : window.innerHeight,
+      width : window.innerWidth
+    })
+  })
+
+  watchEffect(() => {
+  if(authToken){
+    auth.setAuthToken(localStorage.getItem("authToken"))
+    findInfo()
+  }
+})
+})
 
 const findInfo = async () => {
   try{
@@ -31,32 +52,14 @@ const findInfo = async () => {
   }
 }
 
-watchEffect(() => {
-  if(localStorage.getItem("authToken")){
-    auth.setAuthToken(localStorage.getItem("authToken"))
-    findInfo()
-  }
-})
-
-watchEffect(() => {
- 
-})
-
-onMounted(() => {
-  console.log("testing resize")
-  window.addEventListener('resize', () => {
-    view.changeView({
-      width : window.innerWidth,
-      height : window.innerHeight
-    })
-  })
-})
-
-
 
 </script>
 
-<template>
+<template>  
+
   <RouterView />
 </template>
 
+<style scoped>
+
+</style>

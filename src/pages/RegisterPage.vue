@@ -33,12 +33,7 @@ const options = reactive({
 </script>
 
 <template>
-    <motion.div
-        :initial="{x : 200, opacity : 0}"
-        :animate="{x: 0, opacity : 1}"
-        :exit="{x : -200, opacity : 0}"
-        :transition="{type : 'spring', stiffness : 260, damping : 20}"
-    >
+    
         <Flex vertical gap="2" class="h-[100vh] ">
             <Navbar />
             <div class="h-full flex pt-10">
@@ -49,5 +44,4 @@ const options = reactive({
                 <FooterWave />
             </div>
         </Flex>
-    </motion.div>
 </template>

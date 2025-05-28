@@ -211,7 +211,8 @@ const handleSend = () => {
               align="center"
               class="w-full sm:min-w-[400px] border-b border-b-[#D8D5D5] pb-2"
             >
-              <Avatar>Fa</Avatar>
+              <Avatar v-if="postDetail?.userProfile" :src="`http://localhost:3500/static/images/${postDetail.userProfile}`" shape="square" />
+              <Avatar v-else>{{ postDetail?.userName.slice(0,2) }}</Avatar>
               <span class="text-[#6b6969] text-xs">{{ postDetail?.userName}}</span>
             </Flex>
             <div class="grid grid-cols-2">
@@ -250,7 +251,7 @@ const handleSend = () => {
         <Flex vertical gap="20" class="w-full flex-1">
           <div class="flex-1 border-b border-b-[#D8D5D5] overflow-auto  " :class="[height < 800 ? 'max-h-[25vh]' : 'max-h-[35vh]']">
               <div class="h-max">
-                  <CommentCard v-for="(v,i) in postComment" :key="i" :comment="v.message" :userName="v.userName" >
+                  <CommentCard v-for="(v,i) in postComment" :key="i" :message="v.message" :userName="v.userName" :userProfile="v.userProfile" :created_at="v.created_at" >
                       <template v-slot:name>
                           {{ v.userName }}
                       </template>

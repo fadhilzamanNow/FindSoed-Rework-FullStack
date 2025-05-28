@@ -7,11 +7,34 @@
   font-family: "Inter", sans-serif ;
 }
 
+@layer utilities {
+  .full-green {
+    @apply text-lime-500 bg-lime-500 
+  }
+}
+
+@layer base{
+  h6 {
+    @apply text-green-500 font-bold
+  }
+}
+
+@layer components{
+  .card {
+    @apply h-[30px] w-[30px] ring-1 ring-lime-400 border
+  }
+}
+
+@utility test{
+  @apply shadow-2xl shadow-amber-300
+}
 @theme{
   --font-inter: "Inter", sans-serif; 
   --font-itim : "Itim", sans-serif;
   --breakpoint-xss : 400px;
   --breakpoint-xs : 500px;
+  
+
   /* --animate-blob : blob 0.4 infinite;
 
   @keyframes blob{
@@ -30,25 +53,7 @@
     }
   } */
 
-  --animate-try-new: try-new 6s infinite;
-  @keyframes try-new {
-    0% {
-      opacity : 100;
-      transform : translate(0px,0px) scale(1);
-    }
-    33% {
-      opacity : 100;
-      transform: translate(30px,-50px) scale(1.2);
-    },
-    66% {
-      opacity  : 100;
-      transform: translate(-20px,20px) scale(0.8);
-    },
-    100% {
-      opacity : 100;
-      transform: translate(0px,0px) scale(1);
-    }
-  }
+
 
 
 } 
@@ -62,6 +67,10 @@
   --iti-path-flags-2x: url('../node_modules/intl-tel-input/build/img/flags@2x.png');
   --iti-path-globe-1x: url('../node_modules/intl-tel-input/build/img/globe.png');
   --iti-path-globe-2x: url('../node_modules/intl-tel-input/build/img/globe@2x.png');
+}
+
+@layer base{
+
 }
 
 @layer utilities{

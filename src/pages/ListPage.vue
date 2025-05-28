@@ -71,6 +71,8 @@ watch(width,() => {
 
 
 <template>
+
+  asda
   <div class="flex relative h-screen">
     <div v-if="!authToken">
       <div className="w-full h-full absolute z-[100] bg-black/10 flex items-center justify-center text-5xl text-[#1899FF]">
@@ -83,13 +85,14 @@ watch(width,() => {
         </div>
     </div>
     <div class="fixed h-full left-0 z-[9999] top-0">
-      <Sidebar active="Home" :class="[isExpand && (width < height) ? 'z-10 ' : 'z-10']"  />
+      <Sidebar active="Home"  />
     </div>
+    <div class="h-full w-full relative">
     <div class="h-full flex-1 flex flex-col" :class="width >= 1000 ? 'ml-16' : ''">
-      <div class="sticky top-0 z-999">
+      <div :class="['fixed top-0 z-999 w-full', width >= 1000 ? 'pr-16' : '']">
         <Navbar />
       </div>
-      <div class="relative w-full h-full">
+      <div class="relative w-full h-full mt-[50px]">
         <div class="absolute w-full h-full z-[2]">
           <div class="flex flex-col h-full gap-6 p-3.5">
                 <ListBox />
@@ -98,5 +101,6 @@ watch(width,() => {
           <MiniSideBar />
       </div>
     </div>
+  </div>
   </div>
 </template>

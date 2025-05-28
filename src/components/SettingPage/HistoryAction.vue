@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import { DeleteOutlined, EditOutlined, EyeOutlined, InboxOutlined, WarningFilled, WarningOutlined } from '@ant-design/icons-vue';
 import { Button, ButtonProps, DatePicker, DatePickerProps, Dropdown, Flex, Input, InputProps, Menu, Modal, ModalProps, Select, Textarea, TextAreaProps, UploadDragger } from 'ant-design-vue';
-import { computed, h, isReactive, reactive, ref, toRaw, toRef, toRefs, watch, watchEffect } from 'vue';
+import { computed, h, isReactive, onMounted, reactive, ref, toRaw, toRef, toRefs, useTemplateRef, watch, watchEffect } from 'vue';
 import { myItem } from '../../dummy/historyLost';
 import { storeToRefs } from 'pinia';
 import { useAuthStore } from '../../stores/authStore';
@@ -41,7 +41,6 @@ type actionPropsType = {
 const {record, postData, onDetail, onDelete, onEdit} = defineProps<actionPropsType>();
 const {userInfo} = storeToRefs(useAuthStore())
 
-const reactiveRecord = toRefs(record);
 
 const isModalOpen = ref<boolean>(false);
 const isEditOpen = ref<boolean>(false);
@@ -50,17 +49,16 @@ const isDeleteOpen = ref<boolean>(false);
 const editDate = ref("");
 const editStatus = ref("");
 const editDetail = ref("");
-
-const oldData = reactive({
-    title : record.itemName,
-    status : record.status,
-    category : record.category
-})
+const editModalRef = ref<HTMLElement | null>(null)
 
 watchEffect(() => {
     if(isModalOpen.value || isEditOpen.value || isDeleteOpen.value){
         onDetail(record.postId)
     }
+})
+
+onMounted(() => {
+    editModalRef.value = document.getElementById("editModal")
 })
 
 
@@ -115,7 +113,9 @@ const modalEditProps = computed<ModalProps>(() => ({
     },
     okButtonProps : {
         disabled : !(!isEmpty(editStatus.value) || !isEmpty(editDate.value) || !isEmpty(editDetail.value))
-    }
+    },
+    mask : true,
+    zIndex : 99999
 }))
 
 const modalDeleteProps = computed<ModalProps>(() => ({
@@ -143,7 +143,8 @@ const optionProps = computed<SelectProps>(() => ({
     onChange : (v) => editStatus.value = v as string,
     ...(postData?.itemStatus && {    placeholder : postData?.itemStatus
     }),
-    ...(editStatus.value && { value : editStatus.value})
+    ...(editStatus.value && { value : editStatus.value}),
+    getPopupContainer : () => editModalRef.value as HTMLElement
 }))
 
 const descProps = computed<TextAreaProps>(() => ({
@@ -192,7 +193,7 @@ const deleteButtonProps = computed<ButtonProps>(() => ({
             </Flex>
         </Button>
     </Flex>
-    <Modal v-bind="modalDetailProps">
+    <Modal v-bind="modalDetailProps" >
         <Flex vertical gap="20" ">
         <div class="grid grid-cols-2">
                     <Flex vertical gap="4">
@@ -237,7 +238,7 @@ const deleteButtonProps = computed<ButtonProps>(() => ({
            
     </Modal>
 
-    <Modal v-bind="modalEditProps">
+    <Modal v-bind="modalEditProps" ref="editModal" id="editModal">
         <Flex vertical gap="16" justify="center" class="w-full">
             <Flex vertical class="w-full" gap="8">
                 <label for="item">Nama Barang</label>

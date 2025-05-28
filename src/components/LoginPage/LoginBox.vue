@@ -6,7 +6,6 @@ import { RouterLink, useRouter } from "vue-router";
 import { useLoginStore } from "../../stores/loginInfo";
 import validator from "email-validator"
 import { findUserInfo, loginUser } from "../../api/Auth/Auth";
-import { errorPrefix } from "@tsparticles/engine";
 import { ChangeEvent } from "ant-design-vue/es/_util/EventInterface";
 import { useAuthStore } from "../../stores/authStore";
 
@@ -42,6 +41,8 @@ const passProps : InputProps = {
   placeholder : "*****"
 }
 
+
+ 
 
 const handleLogin = async () => {
   try{
