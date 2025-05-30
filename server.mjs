@@ -4,6 +4,8 @@ import { createRsbuild, loadConfig, logger } from "@rsbuild/core";
 import { createSSRApp } from 'vue'
 // Vue's server-rendering API is exposed under `vue/server-renderer`.
 import { renderToString } from 'vue/server-renderer'
+import { transformHtmlTemplate } from "@unhead/vue/server";
+
 
 const serverRender = (serverAPI) => async (_req, res) => {
   console.log("isi req test : ", _req.url);
@@ -22,8 +24,10 @@ const serverRender = (serverAPI) => async (_req, res) => {
   const markup = await indexModule.render(_req.url);
 
   const template = await serverAPI.environments.web.getTransformedHtml("index");
-
-  const html = template.replace("<!--app-content-->", markup );
+  
+  console.log("isi markup : ", markup.html)
+  /* const html = template.replace("<!--app-content-->", markup ); */
+  const html = await transformHtmlTemplate(markup.head, template.replace("<!--app-content-->", markup.html ))
 
   res.writeHead(200, {
     "Content-Type": "text/html",
@@ -46,7 +50,7 @@ export async function startDevServer() {
 
   const serverRenderMiddleware = serverRender(rsbuildServer);
 
-  const findsoedRouter = ["/register","/login","/home","/add","/setting","/detail/:id"] ;
+  const findsoedRouter = ["/","/register","/login","/home","/add","/setting","/detail/:id"] ;
 
   findsoedRouter.forEach((v) => {
     app.get(v, async (req, res, next) => {

@@ -8,6 +8,15 @@ import { watch } from 'vue';
 import { useAuthStore } from '../stores/authStore';
 import { useRouter } from 'vue-router';
 import { storeToRefs } from 'pinia';
+import { useHead } from '@unhead/vue';
+
+useHead({
+    title : "LoginPage",
+    titleTemplate : "%s | FindSoed Rework",
+    meta : [
+        {name : 'description', content : "Pada aplikasi ini kamu akan melakukan autentikasi pengguna untuk melihat pengguna"}
+    ]
+})
 
 const auth = useAuthStore();
 const {authToken} = storeToRefs(auth);

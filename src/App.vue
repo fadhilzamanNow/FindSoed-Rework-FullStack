@@ -7,11 +7,25 @@ import { useViewStore } from './stores/viewStore';
 import { useAuthStore } from './stores/authStore';
 import { findUserInfo } from './api/Auth/Auth';
 import { storeToRefs } from 'pinia';
+import { useHead } from '@unhead/vue'
+
+useHead({
+  title: 'Findsoed Rework'
+})
 
 const auth = useAuthStore();
 const {authToken} = storeToRefs(auth)
 
 onMounted(() => {
+
+  const appElement = document.getElementById("root");
+  if(appElement){
+    console.log("isi appElement : ", appElement)
+    appElement.classList.remove("app-loading");
+    appElement.classList.add("app-loaded")
+/*     appElement.classList.add("app-loaded");
+ */  }
+
   const view = useViewStore();
 
   view.changeView({

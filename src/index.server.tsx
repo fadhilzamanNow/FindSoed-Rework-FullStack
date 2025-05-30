@@ -3,20 +3,28 @@ import createRouter from './router';
 import { createSSRApp } from 'vue';
 import App from './App.vue';
 import { createPinia } from 'pinia';
+import { createHead } from '@unhead/vue/server';
+import { useSeoMeta } from '@unhead/vue'
 
 export async function render(_url: string) {
   
   const app = createSSRApp(App);
+  const head = createHead()
   const pinia = createPinia();
   const router = createRouter();
-  app.use(pinia).use(router)
+  app.use(head).use(pinia).use(router)
   await router.push(_url)
   await router.isReady();
 
+  useSeoMeta({
+    title: 'Findsoed Rework',
+    description: `Aplikasi Pencarian Barang Hilang : ${_url}`,
+  }, { head })
+
   const context = {};
-  const content = await renderToString(app, context);
+  const html = await renderToString(app, context);
 
   // return application content and state for server-side rendering
-  return content ;
+  return {html, head} ;
 
 }

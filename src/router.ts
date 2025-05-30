@@ -11,10 +11,16 @@ import ListPage from "./pages/ListPage.vue";
 import AddPage from "./pages/AddPage.vue";
 import SettingsPage from "./pages/SettingsPage.vue";
 import DetailItemPage from "./pages/DetailItemPage.vue";
+import LandingPage from "./pages/LandingPage.vue";
 
   
 
   const routes = [
+    {
+      path : "/",
+      name : "landing",
+      component : LandingPage
+    },
     {
       path: "/login",
       name: "login",

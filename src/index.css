@@ -1,15 +1,23 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Itim&display=swap');
+
 @import 'tailwindcss';
 
 
-*{
-  font-family: "Inter", sans-serif ;
+html {
+  scroll-behavior: smooth;
 }
 
 @layer utilities {
   .full-green {
     @apply text-lime-500 bg-lime-500 
+  }
+
+  .animate-infinity{
+    animation : infinity 25s linear infinite;
+  }
+
+
+  .custom-clip {
+      clip-path: polygon(20% 0%, 100% 0, 100% 100%, 0% 100%);
   }
 }
 
@@ -58,9 +66,7 @@
 
 } 
 
-.customImage {
-  background-image: url('./assets/wallet2.jpg');
-}
+
 
 .iti {
   --iti-path-flags-1x: url('../node_modules/intl-tel-input/build/img/flags.png');
@@ -73,6 +79,16 @@
 
 }
 
+@keyframes infinity{
+  0%{
+      transform: translateX(30%);
+  }
+  100%{
+      transform: translateX(-100%);
+  }
+}
+
+
 @layer utilities{
   .animation-delay-2000{
     animation-delay: 2s;
@@ -80,4 +96,21 @@
   .animation-delay-4000{
     animation-delay: 4s;
   }
+}
+
+.own-swiper{
+  padding: 10px 0;
+}
+
+.own-swiper .swiper-slide {
+  height: auto;
+}
+
+.swiper-button-disabled {
+  opacity : 0.5;
+  cursor: not-allowed;
+}
+
+.swiper-button-disabled:hover {
+  background-color: white;
 }
