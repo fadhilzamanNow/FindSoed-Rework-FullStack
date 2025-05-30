@@ -1,8 +1,9 @@
 <script setup lang="ts">
 import { FileSearchOutlined, ReconciliationOutlined, UserAddOutlined } from '@ant-design/icons-vue'
-import { h, VNode } from 'vue'
+import gsap from 'gsap';
+import { h, onMounted, ref, useTemplateRef, VNode } from 'vue'
 
-
+const gridRef = ref<HTMLDivElement[]>([]);
 
 type statisticType = {
     category: string,
@@ -10,6 +11,86 @@ type statisticType = {
     count: number,
     description: string
 }
+
+onMounted(() => {
+    if (gridRef.value[0]) {
+            const observer1 = new IntersectionObserver((e) => {
+                e.forEach(entry => {
+                    if (entry.isIntersecting && entry.target === gridRef.value[0]) {
+                        gsap.fromTo(gridRef.value[0], {
+                            textContent: 0,
+                            snap: {
+                                textContent: 1
+                            },
+                            stagger: 1,
+                            duration: 2
+                        },
+                            {
+                                textContent: 50,
+                                snap: {
+                                    textContent: 1
+                                },
+                                stagger: 1,
+                                duration: 2,
+                                onUpdate: () => console.log("update")
+                            }
+                        )
+                    }
+                })
+            })
+            const observer2 = new IntersectionObserver((e) => {
+                e.forEach(entry => {
+                    if (entry.isIntersecting && entry.target === gridRef.value[1]) {
+                        gsap.fromTo(gridRef.value[1], {
+                            textContent: 0,
+                            snap: {
+                                textContent: 1
+                            },
+                            stagger: 1,
+                            duration: 2
+                        },
+                            {
+                                textContent: 25,
+                                snap: {
+                                    textContent: 1
+                                },
+                                stagger: 1,
+                                duration: 2,
+                                onUpdate: () => console.log("update 2")
+                            }
+                        )
+                    }
+                })
+            })
+            const observer3 = new IntersectionObserver((e) => {
+                e.forEach(entry => {
+                    if (entry.isIntersecting && entry.target === gridRef.value[2]) {
+                        gsap.fromTo(gridRef.value[2], {
+                            textContent: 0,
+                            snap: {
+                                textContent: 1
+                            },
+                            stagger: 1,
+                            duration: 2
+                        },
+                            {
+                                textContent: 10,
+                                snap: {
+                                    textContent: 1
+                                },
+                                stagger: 1,
+                                duration: 2,
+                                onUpdate: () => console.log("update 3")
+                            }
+                        )
+                    }
+                })
+            })
+            observer1.observe(gridRef.value[0])
+            observer2.observe(gridRef.value[1])
+            observer3.observe(gridRef.value[2])
+        }
+})
 
 const statisticList: statisticType[] = [
         {
@@ -46,7 +127,12 @@ const statisticList: statisticType[] = [
                         <div v-for="(v,i) in statisticList" class="bg-white text-center flex flex-col gap-3 shadow-md rounded-xl py-6 sm:py-8 md:py-10 px-4  " :key="i"
                         >
                             <div class="text-5xl font-semibold text-blue-600 flex justify-center">
-                                <h1 :ref="`item-${i}`" >{{v.count}}</h1>
+                                <h1 :ref="(el) => {
+                                    if(el){
+                                        /* @ts-ignore */
+                                        gridRef[i] = el
+                                    }
+                                }" >{{v.count}}</h1>
                                 <span> +</span>
 
                             </div>
