@@ -1,17 +1,17 @@
 <script setup lang="ts">
 import { computed, defineAsyncComponent, ref } from "vue";
 import logo from "../../assets/icon.png";
-import { UserAddOutlined, UserOutlined } from "@ant-design/icons-vue";
+import { RollbackOutlined, SettingOutlined, UserAddOutlined, UserOutlined } from "@ant-design/icons-vue";
 import HamburgerMenu from "../Navbar/HamburgerMenu.vue";
-import { Button, Dropdown, Menu, MenuItem } from "ant-design-vue";
+import { Button, Dropdown, Flex, Menu, MenuItem } from "ant-design-vue";
 import { RouterLink, useRoute, useRouter } from "vue-router";
 import { useNavStore } from "../../stores/navStore";
 import { storeToRefs } from "pinia";
 import { useNavbarStore } from "../../stores/navbarInfo";
+import { useAuthStore } from "../../stores/authStore";
 
 const LazyHamburgerMenu = defineAsyncComponent(() => import("../Navbar/HamburgerMenu.vue"))
-const {isNavbarOpen} = storeToRefs(useNavbarStore());
-const navigate = useRouter();
+
 
 type navType = {
     href: string;
@@ -52,9 +52,28 @@ const gabungOption : GabungType[] = [
     }
 ]
 
+const authNavItems : navType[] = [
+    {
+        href : "/home",
+        label : "Home"
+    },
+    {
+        href : "/add",
+        label : "Add"
+    },
+    {
+        href : "/setting",
+        label : "Setting"
+    }
+]
+
 const isMenuOpen = ref(false);
 const activeLink = ref<navType["href"]>("#home");
 const path = useRoute()
+const {isNavbarOpen} = storeToRefs(useNavbarStore());
+const navigate = useRouter();
+const auth = useAuthStore()
+const {authToken} = storeToRefs(auth)
 
 const navItemFilter = computed<navType[]>(() => {
     if(path.path === "/"){
@@ -76,19 +95,40 @@ const handleChooseNav = (item: navType["href"]) => {
     activeLink.value = item;
 };
 
-const handleChooseNav2 = (item : GabungType['link']) => {
-    console.log("isi item : ", item)
+const handleChooseNav2 = (item : GabungType['link'] | navType['href']) => {
     isNavbarOpen.value = !isNavbarOpen.value
     navigate.push(item)
 }
 
 
+const authNav = computed(() => {
+    const notAuth = ["/","/login","/register"]
+    if(notAuth.find((v) => path.path === v )){
+        return false
+    }else{
+        return true;
+    }
+})
+
+const handleLogout = () => {
+    auth.setUserInfo(null);
+    auth.setAuthToken(null);
+    localStorage.removeItem("authToken")
+    navigate.push("/")
+}
+
+const handleSetting = () => {
+    navigate.push("/setting")
+}
+
+
+
 </script>
 
 <template>
-    <nav class="fixed top-0 left-0 right-0 bg-white/90 backdrop-blur-sm  z-50 border-b border-b-gray-100 shadow-sm">
+    <nav :class="`fixed top-0 left-0 right-0 ${authNav ? 'md:ml-16 bg-white/30 ' : ' bg-white/30'} backdrop-blur-md  z-50 border-b border-b-gray-100 shadow-sm `">
         <!--  {/* DESKTOP DESIGN */} -->
-        <div class="w-full container mx-auto flex items-center justify-between px-4 sm:px-6 lg:px-8 h-16 ">
+        <div :class="`w-full ${authNav ? '' : 'container mx-auto '}   flex items-center justify-between h-16 px-4 sm:px-6 md:px-8 `">
             <!-- {/* LOGO */} -->
                  <div class="flex items-center gap-2" @click="handleChooseLanding">
                      <div class="size-10">
@@ -113,7 +153,7 @@ const handleChooseNav2 = (item : GabungType['link']) => {
 
             <!-- {/* GABUNG SEKARANG */} -->
           
-            <Dropdown >
+            <Dropdown v-if="!authNav"  >
               <template #overlay>
                 <Menu>
                   <MenuItem>
@@ -145,35 +185,70 @@ const handleChooseNav2 = (item : GabungType['link']) => {
             </Dropdown>
 
             <!-- /* HAMBURGER MENU */} -->
-            <button class="md:hidden p-2" >
-                <LazyHamburgerMenu />
+            <button class="p-2 flex gap-2 items-center"  >
+                <Dropdown placement="bottomCenter" v-if="authToken && authNav"  >
+                <template #overlay>
+                  <Menu>
+                    <MenuItem>
+                        <div @click="handleSetting">
+                            <Flex gap="8" align="center" >
+                              <SettingOutlined />
+                              <span>Settings</span>
+                            </Flex>
+                        </div>
+                    </MenuItem>
+                    <MenuItem>
+                        <div @click="handleLogout">
+                            <Flex gap="8" align="center" >
+                              <RollbackOutlined />
+                              <span >Logout</span>
+                            </Flex>
+                        </div>
+                    </MenuItem>
+                  </Menu>
+                </template>
+                <div class="flex text-2xl size-[40px] bg-white hover:bg-gray-200 justify-center items-center rounded-md">
+                  <UserOutlined  />
+                </div>
+              </Dropdown>
+                <div class="md:hidden">
+                    <LazyHamburgerMenu />
+                </div>
             </button>
+
+
         </div>
         <!-- {/* MOBILE DESIGN */} -->
          <div :class="['w-full opacity-20', isNavbarOpen ? 'visible h-screen bg-black' : 'invisible  h-0']" @click="() => isNavbarOpen = !isNavbarOpen">
         </div>
         <div :class="['fixed top-0 left-0 right-0 mt-16 md:hidden bg-white border-t border-t-gray-400  transition-all duration-300 flex flex-col justify-between px-4', isNavbarOpen ? 'py-4 h-[50vh] visible opacity-100' : 'h-0 py-0 invisible opacity-0' ]" >
             <div class="container mx-auto flex flex-col justify-between ">
-                <ul class="px-4 space-y-4">
-                <li v-for="(l, i) in navItems" :key="i" :class="[
-                    'block text-sm font-medium py-2',
-                    activeLink === l.href
-                        ? 'text-blue-600'
-                        : 'text-gray-600 hover:text-gray-900',
-                    'cursor-pointer',
-                ]" @click="() => handleChooseNav(l.href)">
-                    {{ l.label }}
-                </li>
-            </ul>
+                <ul v-if="!authNav" class="px-4 space-y-4">
+                    <li  v-for="(l, i) in navItems" :key="i" :class="[
+                        'block text-sm font-medium py-2',
+                        activeLink === l.href
+                            ? 'text-blue-600'
+                            : 'text-gray-600 hover:text-gray-900',
+                        'cursor-pointer',
+                    ]" @click="() => handleChooseNav2(l.href)">
+                        {{ l.label }}
+                    </li>
+                 </ul>
+                 <ul v-else class="px-4 space-y-4">
+                    <li v-for="(l,i) in authNavItems" :key="i" :class="[
+                        'block text-sm font-medium py-2',
+                        path.path === l.href
+                            ? 'text-blue-600'
+                            : 'text-gray-600 hover:text-gray-900',
+                        'cursor-pointer',
+                    ]" @click="() => handleChooseNav2(l.href)" >{{ l.label }}</li>
+                 </ul>
         </div> 
-        <ul class="container mx-auto px-4 flex justify-between items-center ">
-            <li v-for="(v,i) in gabungOption" :key="`list-${i}`" :class="['text-gray-600 hover:text-gray-900 text-sm font-medium py-2']" @click="() => handleChooseNav2(v.link)">
+        <ul class="container mx-auto px-4 flex justify-between items-center" v-if="authNav && !authToken" >
+            <li  v-for="(v,i) in gabungOption" :key="`list-${i}`" :class="['text-gray-600 hover:text-gray-900 text-sm font-medium py-2']" @click="() => handleChooseNav2(v.link)">
                    {{ v.label }}
             </li>
-        </ul>
-
-
-           
+        </ul>    
         </div>
     </nav>
 </template>

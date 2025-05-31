@@ -29,12 +29,10 @@ watchEffect(() => {
 </script>
 
 <template>
-  <div class="flex flex-col  gap-6">
-    <div>
-      <HeaderListPage />
-    </div>
-    <div class="max-h-full">
-      <ListCard />
+  <div class="md:ml-16 mt-16 pt-5.5 px-4 sm:px-6 md:px-8">
+    <div class="flex flex-col  gap-6 ">
+        <HeaderListPage />
+        <ListCard />
     </div>
   </div>
 </template>

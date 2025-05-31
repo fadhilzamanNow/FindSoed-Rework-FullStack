@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { h, onMounted, onUnmounted, watch, watchEffect } from "vue";
 import ListBox from "../components/ListPage/ListBox.vue";
-import Navbar from "../components/Navbar/Navbar.vue";
 import Sidebar from "../components/Sidebar/Sidebar.vue";
 import { useSidebarStore } from "../stores/sidebarInfo";
 import { useViewPortStore } from "../stores/viewportStore";
@@ -16,6 +15,8 @@ import { Button } from "ant-design-vue";
 import { useViewStore } from "../stores/viewStore";
 import { useSideStore } from "../stores/sideStore";
 import BreadCrumbComp from "../components/BreadCrumb/BreadCrumbComp.vue";
+import Navbar from "../components/LandingPage/Navbar.vue";
+import AddBox from "../components/AddPage/AddBox.vue";
 
 const sidebar = useSideStore();
 const {isExpand} = storeToRefs(sidebar);
@@ -72,9 +73,17 @@ watch(width,() => {
 
 <template>
 
-  asda
-  <div class="flex relative h-screen">
-    <div v-if="!authToken">
+  <div class="min-h-screen">
+    <!-- NAVBAR -->
+    <Navbar />
+
+    <ListBox />
+    <Sidebar active="Home" />
+    <!-- <Sidebar active="Home"  /> -->
+
+    <!-- SIDEBAR -->
+
+    <!-- <div v-if="!authToken">
       <div className="w-full h-full absolute z-[100] bg-black/10 flex items-center justify-center text-5xl text-[#1899FF]">
         <Modal v-bind="modalAuth">
           <template #footer>
@@ -83,14 +92,11 @@ watch(width,() => {
         <p>Anda tidak dapat masuk karena belum login</p>
         </Modal>
         </div>
-    </div>
-    <div class="fixed h-full left-0 z-[9999] top-0">
-      <Sidebar active="Home"  />
-    </div>
-    <div class="h-full w-full relative">
+    </div> -->
+    
+    <!-- <div class="h-full w-full relative">
     <div class="h-full flex-1 flex flex-col" :class="width >= 1000 ? 'ml-16' : ''">
       <div :class="['fixed top-0 z-999 w-full', width >= 1000 ? 'pr-16' : '']">
-        <Navbar />
       </div>
       <div class="relative w-full h-full mt-[50px]">
         <div class="absolute w-full h-full z-[2]">
@@ -98,9 +104,9 @@ watch(width,() => {
                 <ListBox />
           </div>        
         </div>
-          <MiniSideBar />
+        
       </div>
     </div>
-  </div>
+  </div> -->
   </div>
 </template>

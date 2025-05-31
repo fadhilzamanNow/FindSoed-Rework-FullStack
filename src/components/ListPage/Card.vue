@@ -50,7 +50,7 @@ console.log("item category : ", itemCategory)
 </script>
 
 <template>
-  <div class="w-[220px] transition-all duration-300 border-black/20 border rounded-md hover:shadow-md hover:shadow-gray-400/30">
+  <div class="w-[350px] transition-all duration-300 border-black/20 border rounded-md hover:shadow-md hover:shadow-gray-400/30">
     <RouterLink :to="linkRef" >
       <div class="flex flex-col gap-y-2">
         <div class="relative">

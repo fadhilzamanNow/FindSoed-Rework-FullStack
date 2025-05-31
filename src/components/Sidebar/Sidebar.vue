@@ -21,6 +21,7 @@ import { vi } from "intl-tel-input/i18n";
 import { useAuthStore } from "../../stores/authStore";
 import { useSideStore } from "../../stores/sideStore";
 import { useViewStore } from "../../stores/viewStore";
+import logo from "../../assets/icon.png"
 
 
 const sidebar = useSideStore();
@@ -68,23 +69,29 @@ watchEffect(() => {
 </script>
 
 <template>
-  <aside class="h-[100vh]" v-if="width >= 1000" ref="sidebarRef">
+  <aside :class="`fixed top-0 left-0 z-51 h-[100vh] hidden md:block`"  ref="sidebarRef">
     <nav class="h-full flex flex-col bg-white border-r border-r-gray-200 shadow-sm">
-      <div class="p-3 pb-2 flex justify-between items-center ">
-        <div class="ml-2 overflow-hidden transition-all duration-300" :class="[isExpand ? 'w-34' : 'w-0']">
-          <div class="flex items-center gap-x-2">
-            <CodeSandboxOutlined class="!text-black text-xl   "/>
-            <div class="flex items-center text-xl font-semibold">
-              <span>Find</span><span class="text-[#1890FF]">Soed</span>
-            </div>
-          </div>
+      <div class="p-3 pb-2 flex items-center justify-between  border-b-gray-300  h-16">
+       
+
+        <div :class="`overflow-hidden transition-all duration-300 ${isExpand ? 'w-34' : 'w-0'}`">
+          <div class="flex items-center gap-2">
+                     <div class="size-10">
+                         <img :src="logo" alt="" class="h-full w-full object-contain" />
+                     </div>
+                     <div class="flex items-center text-xl font-bold">
+                         <span class="text-black">Find</span>
+                         <span class="text-blue-600">Soed</span>
+                     </div>
+                 </div>
         </div>
-        <div @click="() => sidebar.toggleSidebar()" class="hover:bg-gray-300 p-2 transition-color bg-white hover:text-white text-black rounded-md flex justify-center items-center">
+        <div @click="() => sidebar.toggleSidebar()" class="text-xl hover:bg-blue-600 p-2 transition-color bg-white hover:text-white text-black rounded-md flex justify-center items-center">
           <MenuFoldOutlined v-if="isExpand"/>
           <MenuUnfoldOutlined v-else />
         </div>
+        
       </div>
-      <ul class="flex-1 px-3">
+      <ul class="flex-1 px-3 pt-4">
         <Iconitem v-for="(v,i) of listMenu" :key="i" :name="v.name" :link="v.link" :active="active">
           <template v-slot:icon>
             <component :is="v.icon"></component>

@@ -1,6 +1,6 @@
 <script setup lang="ts">
+import Navbar from "../components/LandingPage/Navbar.vue";
 import Sidebar from "../components/Sidebar/Sidebar.vue";
-import Navbar from "../components/Navbar/Navbar.vue";
 import SettingsBox from "../components/SettingPage/SettingsBox.vue";
 import { useSidebarStore } from "../stores/sidebarInfo";
 import { onMounted, onUnmounted, watch } from "vue";
@@ -12,6 +12,7 @@ import { useSideStore } from "../stores/sideStore";
 import { useAuthStore } from "../stores/authStore";
 import { jwtDecode } from "jwt-decode";
 import { useRouter } from "vue-router";
+
 
 
 const {view, handleViewport} = useViewPortStore();
@@ -67,6 +68,8 @@ watch(authToken,() => {
       </div>
   </div> -->
   <div class="flex relative h-screen">
+    <Navbar />
+
     <div v-if="!authToken">
       <div className="w-full h-full absolute z-[100] bg-black/10 flex items-center justify-center text-5xl text-[#1899FF]">
        <!--  <Modal v-bind="modalAuth">
@@ -82,16 +85,13 @@ watch(authToken,() => {
     </div>
     <div class="h-full w-full relative">
     <div class="h-full flex-1 flex flex-col" :class="width >= 1000 ? 'ml-16' : ''">
-      <div :class="['fixed top-0 z-999 w-full', width >= 1000 ? 'pr-16' : '']">
-        <Navbar />
-      </div>
+     
       <div class="relative w-full h-full mt-[50px]">
         <div class="absolute w-full h-full z-[2]">
           <div class="flex flex-col h-full gap-6 p-3.5">
                 <SettingsBox />
           </div>        
         </div>
-          <MiniSideBar />
       </div>
     </div>
   </div>

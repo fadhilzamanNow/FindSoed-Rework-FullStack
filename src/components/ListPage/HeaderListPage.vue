@@ -22,7 +22,7 @@ const card = useCardStore();
     <div class="flex justify-between">
       <BreadCrumbComp title="" />
       <div
-        class="max-w-max bg-[#1890FF] rounded-md flex justify-center items-center text-white p-1.5 px-5 hover:bg-[#188fffad] transition-all duration-500 "
+        class="max-w-max bg-blue-600 rounded-md flex justify-center items-center text-white p-1.5 px-5 hover:bg-[#188fffad] transition-all duration-500 "
         @click="() => (showSearchFilter = !showSearchFilter)"
       >
         <SearchOutlined class="text-white" />
@@ -41,7 +41,7 @@ const card = useCardStore();
       <div class="flex gap-3 transition-all duration-200"  >
         <Input.Search placeholder="Cari Barang" enter-button class="w-full" v-model:value="searchItem" />
         <Flex
-          class="py-2 px-3 bg-[#1890FF] max-w-[40px] text-white rounded-md"
+          class="py-2 px-3 bg-blue-600 max-w-[40px] text-white rounded-md"
           justify="center"
           align="center"
         >
