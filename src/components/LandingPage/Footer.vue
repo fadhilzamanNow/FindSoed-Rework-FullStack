@@ -1,6 +1,11 @@
 <script setup lang="ts">
 
+import { useRoute } from "vue-router";
 import logo from "../../assets/icon.png"
+import { computed } from "vue";
+import { FacebookOutlined, LinkedinOutlined, YoutubeOutlined } from "@ant-design/icons-vue";
+
+
 
 type linkType = {
   name: string;
@@ -8,10 +13,12 @@ type linkType = {
 };
 
 type FooterLinkType = {
-  company: linkType[];
-  support: linkType[];
-  contact: linkType[];
+  company?: linkType[];
+  support?: linkType[] ;  
+  contact?: linkType[] ;
 };
+
+const path = useRoute();
 
 const footerLinks: FooterLinkType = {
   company: [
@@ -27,6 +34,24 @@ const footerLinks: FooterLinkType = {
   ],
   contact: [{ name: "WhatsApp", href: "#" }],
 };
+
+const footerFilter = computed<FooterLinkType>(() => {
+    if(path.path === "/"){
+        return {
+            ...footerLinks
+        }
+    }else{
+        let newFooter = {...footerLinks}
+        delete newFooter.support
+        delete newFooter.company
+        delete newFooter.contact
+        return newFooter
+    }
+})
+
+const isInLanding = path.path === "/" 
+console.log(isInLanding)
+
 </script>
 
 <template>
@@ -49,17 +74,16 @@ const footerLinks: FooterLinkType = {
             <!-- {/* SOCIAL MEDIA */} -->
                 <p class="text-gray-600 mb-6">Platform Pencarian Barang Sekitar Unsoed</p>
                 <div class="flex gap-2 items-center">
-                    <a href="" class="size-10 flex justify-center items-center text-gray-600 hover:bg-gray-600 hover:text-white rounded-xl transition-all duration-300 text-2xl "><TikTokOutlined /></a>
-                    <a href="" class="size-10 flex justify-center items-center text-gray-600 hover:bg-gray-600 hover:text-white rounded-xl transition-all duration-300 text-2xl "><FacebookOutlined /></a>
-                    <a href="" class="size-10 flex justify-center items-center text-gray-600 hover:bg-gray-600 hover:text-white rounded-xl transition-all duration-300 text-2xl "><YoutubeOutlined /></a>
-
+                    <a href="" class="size-10 flex justify-center items-center !text-gray-600 hover:!bg-gray-600 hover:!text-white rounded-xl transition-all duration-300 text-2xl "><LinkedinOutlined /></a>
+                    <a href="" class="size-10 flex justify-center items-center !text-gray-600 hover:!bg-gray-600 hover:!text-white rounded-xl transition-all duration-300 text-2xl "><FacebookOutlined /></a>
+                    <a href="" class="size-10 flex justify-center items-center !text-gray-600 hover:!bg-gray-600 hover:!text-white rounded-xl transition-all duration-300 text-2xl "><YoutubeOutlined /></a>
                 </div>
             </div>
 
             <!-- {/* SECOND COLUMN */} -->
             <div class="lg:col-span-8">
                 <div class="grid grid-cols-2 md:grid-cols-3 gap-8 " >
-                        <div v-for="(list,i) in footerLinks" :key="i">
+                        <div v-for="(list,i) in footerFilter" :key="i">
                             <h3 class="text-lg font-medium mb-4 uppercase">{{ i }}</h3>
                             <ul class="space-y-2">
                                 <li v-for="(l,ii) in list" :key="`child-${ii}`">

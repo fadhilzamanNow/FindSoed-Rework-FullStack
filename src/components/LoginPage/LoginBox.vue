@@ -16,6 +16,8 @@ const passShow = ref(false);
 const auth = useAuthStore();
 const router = useRouter();
 
+const emit = defineEmits<{toggleLoading : []}>();
+
 const togglePass = () => {
   passShow.value = !passShow.value
 }
@@ -46,6 +48,7 @@ const passProps : InputProps = {
 
 const handleLogin = async () => {
   try{
+    emit('toggleLoading')
     const response = await loginUser({
       email : emailVal.value,
       password : passVal.value
@@ -54,6 +57,7 @@ const handleLogin = async () => {
       localStorage.setItem("authToken", response.data.token)
       auth.setAuthToken(response.data.token as string)
       if(response.data){
+        emit('toggleLoading')
         const findUser = await findUserInfo();
         if(findUser){
           auth.setUserInfo({
@@ -65,6 +69,9 @@ const handleLogin = async () => {
           })
         }
       }
+      else{
+        console.log("kesini")
+      }
       Modal.success({
         title : "Berhasil untuk login",
         ///@ts-ignore
@@ -75,10 +82,12 @@ const handleLogin = async () => {
       })
     }
   }catch(e){
+    emit('toggleLoading')
+    console.log("kesini")
     Modal.error({
       title : "Gagal untuk Login",
       //@ts-ignore
-      message : e.message,
+      message : "Data yang anda masukkan tidak benar",
       centered : true,
       zIndex : 99999
 
@@ -89,48 +98,53 @@ const handleLogin = async () => {
 </script>
 
 <template>
-  <div class="flex w-full items-center justify-center  ">
-    <div class="flex flex-col h-full gap-4 w-full lg:rounded-md lg:border lg:max-w-[640px] lg:border-gray-200 lg:mx-20 lg:py-20 lg:shadow-md">
-      <div class="text-center text-[#1890FF] font-semibold text-xl">LOGIN</div>
+
+  <div class="container mx-auto items-center justify-center mt-16 pt-10  px-4 sm:px-6 md:px-8 h-full mb-10">
+    <div class="flex flex-col h-full gap-4 w-full lg:w-3xl lg:mx-auto  lg:px-4  rounded-md py-4">
+      <div class="text-center text-blue-600 font-semibold text-xl ">LOGIN</div>
+      <!-- EMAIL -->
       <div class="flex flex-col gap-2 items-center justify-center" >
-          <label for="email" class="text-xs w-[90%] ">Alamat Email</label>
-            <div class="w-[90%] flex flex-col " >
+          <label for="email" class="text-xs w-full font-semibold">Alamat Email</label>
+            <div class="w-full flex flex-col " >
               <Input v-bind="emailProps"  />
-              <span class="w-[90%] text-red-500 transition-all duration-300" :class="isEmailValid ? 'invisible opacity-0' : emailVal.length > 0 ? 'visible opacity-100' : 'invisible opacity-0'"  >Email yang kamu masukkan tidak valid</span>
+              <span class=" text-red-500 transition-all duration-300" :class="isEmailValid ? 'invisible opacity-0' : emailVal.length > 0 ? 'visible opacity-100' : 'invisible opacity-0'"  >Email yang kamu masukkan tidak valid</span>
             </div>
       </div>
-      <div class="flex flex-col gap-2 items-center justify-center">
-          <label for="password" class="text-xs w-[90%] ">Password</label>
-            <div class="w-[90%] " >
+      <!-- PASSWORD -->
+      <div class="flex flex-col gap-2 items-center justify-center w-full">
+          <label for="password" class="text-xs w-full font-semibold">Password</label>
+            <div class="w-full relative" >
               <Input v-bind="passProps" >
-                <template #suffix>
-                  <div v-on:click="togglePass">
-                    <EyeInvisibleOutlined v-if="passShow"  />
-                    <EyeOutlined v-if="!passShow"  />
-                  </div>
-                </template>
               </Input>
+              <div v-on:click="togglePass" class="absolute top-0 bottom-0 right-2 ">
+                <EyeInvisibleOutlined v-if="passShow"  />
+                <EyeOutlined v-if="!passShow"  />
+              </div>
             </div>
       </div>
+
+      <!-- BUTTON -->
       <div class="flex gap-2 items-center justify-center ">
-        <div class="w-[90%] justify-end flex">
-          <div @click="() => login.login(emailVal)">
-            <RouterLink to="/home">
-                <Button type="primary" :disabled="isEmailValid && passVal.length > 1 ? false : true ">
+        <div class="w-full justify-end flex">
+          <div>
+                <Button type="primary" :disabled="isEmailValid && passVal.length > 1 ? false : true " @click="handleLogin">
                   <span>Login</span>
                 </Button>
-              </RouterLink>
           </div>
         </div>
       </div>
+      <!-- BELUM PUNYA AKUN -->
       <div class="flex gap-2 items-center justify-center">
-        <div class="w-[90%] flex gap-x-1">
+        <div class="w-full flex gap-x-1">
           <span>Belum memiliki akun?</span>
           <RouterLink to="/register">
-              <span class="text-[#1890FF]">Daftar</span>
+              <span class="text-blue-600">Daftar</span>
           </RouterLink>
         </div>
       </div>
     </div>
   </div>
+ <!--  <div class="flex w-full items-center justify-center mt-16 pt-10  ">
+    
+  </div> -->
 </template>

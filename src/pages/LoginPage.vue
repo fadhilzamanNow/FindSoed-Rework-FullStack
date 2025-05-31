@@ -1,14 +1,16 @@
 <script setup lang="ts">
 import { Flex } from 'ant-design-vue';
 import LoginBox from '../components/LoginPage/LoginBox.vue';
-import Navbar from '../components/Navbar/Navbar.vue';
+/* import Navbar from '../components/Navbar/Navbar.vue'; */
 import { motion } from 'motion-v';
 import FooterWave from '../components/Footer/FooterWave.vue';
-import { watch } from 'vue';
+import { ref, watch } from 'vue';
 import { useAuthStore } from '../stores/authStore';
 import { useRouter } from 'vue-router';
 import { storeToRefs } from 'pinia';
 import { useHead } from '@unhead/vue';
+import Navbar from '../components/LandingPage/Navbar.vue';
+import Footer from '../components/LandingPage/Footer.vue';
 
 useHead({
     title : "LoginPage",
@@ -20,7 +22,7 @@ useHead({
 
 const auth = useAuthStore();
 const {authToken} = storeToRefs(auth);
-
+const loginLoading = ref(false);
 
 const navigate = useRouter();
 
@@ -30,6 +32,9 @@ const navigate = useRouter();
     }
 },{immediate : true}) */
 
+const toggleLoading = () => {
+    loginLoading.value = !loginLoading.value
+}
 
 
 
@@ -40,11 +45,9 @@ const navigate = useRouter();
 <template>
         <Flex vertical gap="2" class="h-[100vh] ">
             <Navbar />
-            <div class="h-full flex pt-10">
-                <LoginBox class="h-max" />
-            </div>
-            <div>
-                <FooterWave />
+            <div class="flex flex-col justify-between h-full ">
+                <LoginBox  @toggle-loading="toggleLoading" />
+                <Footer />
             </div>
         </Flex>
 </template>
