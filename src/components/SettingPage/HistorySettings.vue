@@ -1,13 +1,11 @@
 <script setup lang="ts">
-import { Flex, Modal, Pagination, Table} from 'ant-design-vue';
-import { computed, h, onMounted, onUnmounted, ref, watchEffect } from 'vue';
+import { Flex, Modal, Pagination, Table, TableProps} from 'ant-design-vue';
+import {  computed, h,  ref, watchEffect } from 'vue';
 import { myLostItem } from '../../dummy/historyLost';
 import HistoryAction from './HistoryAction.vue';
 import StatusButton from './StatusButton.vue';
-import { useViewPortStore } from '../../stores/viewportStore';
 import { deletePost, editPost, getAllUserPosts, getUserPostDetailData } from '../../api/Post/Post';
 
-const { handleViewport} = useViewPortStore()
 
 type UserPostTable = {
     id : number
@@ -26,7 +24,6 @@ type UserPostTable = {
 };
 const tableDataSource = ref(myLostItem);
 const currentPage = ref<number>(1);
-const dataPerPage = ref<number>(10);
 const postData = ref<UserPostTable[]>([]);
 const postDetail = ref<PostDetailData | null>(null);
 const isSent = ref(false);
@@ -150,7 +147,7 @@ const columns =[
                 }
             },
           {
-            title : 'Actions',
+            title : 'Aksi',
             customRender : ({record} : {_? : string, record : UserPostTable}) => {
                 return h(HistoryAction, {
                     record : record,
@@ -163,13 +160,20 @@ const columns =[
           }
 ]
 
-onMounted(() => {
-  window.addEventListener('resize', handleViewport)
-})
+const tablesProps = computed<TableProps>(() => ({
+  columns : columns,
+  dataSource : postData.value,
+  loading : false,
+  bordered : true,
+  pagination : {
+    current : currentPage.value,
+    onChange : (page) => currentPage.value = page,
+    total : postData.value.length ,
+    pageSize : 7,
+    
+  }
+})) 
 
-onUnmounted(() => {
-  window.removeEventListener('resize', handleViewport)
-})
 
 </script>
 
@@ -178,11 +182,9 @@ onUnmounted(() => {
         <h1>Terdapat {{ tableDataSource.length }} barang yang ditemukan</h1>
         <div class="w-full p-2 ">
           <Flex class="min-w-0  lg:w-full overflow-auto h-[800px]" vertical >
-              <Table :columns="columns" :data-source="postData" :pagination="false" bordered :loading="tableLoading" />
+              <Table v-bind="tablesProps"/>
           </Flex>
-          <Flex class="w-full pt-3" justify="center" align="center">
-              <Pagination class="w-full  text-center" v-model:current="currentPage" :page-size="dataPerPage" :total="tableDataSource.length" :show-less-item="true"  :show-size-changer="false" />
-          </Flex>
+        
         </div>
     </Flex>
 </template>

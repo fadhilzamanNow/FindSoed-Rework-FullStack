@@ -49,23 +49,11 @@ const isDeleteOpen = ref<boolean>(false);
 const editDate = ref("");
 const editStatus = ref("");
 const editDetail = ref("");
-const editModalRef = ref<HTMLElement | null>(null)
 
 watchEffect(() => {
     if(isModalOpen.value || isEditOpen.value || isDeleteOpen.value){
         onDetail(record.postId)
     }
-})
-
-onMounted(() => {
-    editModalRef.value = document.getElementById("editModal")
-})
-
-
-watchEffect(() => {
-    console.log("status edit : ", editStatus.value)
-    console.log("date edit : ", editDate.value)
-    console.log("detail edit : ", editDetail.value)
 })
 
 const option = ["Handphone","Laptop","Dompet","Lain Lain"].map((d) => {
@@ -91,8 +79,6 @@ const modalDetailProps = computed<ModalProps>(() => ({
     onCancel : () => isModalOpen.value = !isModalOpen.value
 
 }))
-
-
 
 const modalEditProps = computed<ModalProps>(() => ({
     open : isEditOpen.value,
@@ -143,7 +129,6 @@ const optionProps = computed<SelectProps>(() => ({
     ...(postData?.itemStatus && {    placeholder : postData?.itemStatus
     }),
     ...(editStatus.value && { value : editStatus.value}),
-    getPopupContainer : () => editModalRef.value as HTMLElement
 }))
 
 const descProps = computed<TextAreaProps>(() => ({
@@ -163,6 +148,7 @@ const dateProps = computed<DatePickerProps>(() => ({
 const deleteButtonProps = computed<ButtonProps>(() => ({
     onClick : () => {
         onDelete(record.postId as string)
+        isDeleteOpen.value = !isDeleteOpen.value
     },
     danger : true,
     type : 'primary'
