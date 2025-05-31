@@ -9,15 +9,12 @@ import {
   watch,
 } from "vue";
 import { Input, Select, Textarea, DatePicker, Button } from "ant-design-vue";
-
 import type { DatePickerProps, UploadProps } from "ant-design-vue";
 import { Upload } from "ant-design-vue";
-
-import { isEmpty } from "underscore";
+import lodash from "lodash";
 import { createPost, itemLocationType } from "../../api/Post/Post";
 import { useRouter } from "vue-router";
 import BreadCrumbComp from "../BreadCrumb/BreadCrumbComp.vue";
-
 
 //@ts-ignore
 
@@ -74,7 +71,7 @@ const beforeUpload: UploadProps["beforeUpload"] = (file) => {
 
 
 const isDisabled = computed(() => {
-  return !isEmpty(itemName.value && itemCategory.value);
+  return !lodash.isEmpty(itemName.value && itemCategory.value);
 });
 
 

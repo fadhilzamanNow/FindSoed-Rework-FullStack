@@ -16,12 +16,12 @@ import {
   AvatarProps,
 } from "ant-design-vue";
 import { storeToRefs } from "pinia";
-import { computed, h, ref, watchEffect } from "vue";
+import { computed, h, ref } from "vue";
 import { useAuthStore } from "../../stores/authStore";
 import parsePhoneNumber from "libphonenumber-js";
 import zxcvbn from "zxcvbn";
 import { editDataProfile, editPhotoProfile } from "../../api/Auth/Auth";
-import { isEmpty } from "lodash";
+import lodash from "lodash";
 import { FileType } from "ant-design-vue/es/upload/interface";
  
 const auth = useAuthStore()
@@ -71,6 +71,7 @@ const phoneProps = computed<InputProps>(() => ({
       e.preventDefault();
     }
   },
+  status : phoneVal.value.length < 1 ? '' : isPhoneValid.value.success ? '' : 'error'
 }));
 
 const isPhoneValid = computed(() => {
@@ -86,7 +87,6 @@ const isPhoneValid = computed(() => {
     };
   }
 });
-console.log("is phone valid", isPhoneValid.value);
 
 const handleReset = () => {
   phoneVal.value = "";
@@ -107,14 +107,16 @@ const passProps = computed<InputProps>(() => ({
   type: showPassword.value ? "password" : "text",
   onInput: (e) => (password.value = (e.target as HTMLInputElement).value),
   value: password.value,
+  status : password.value.length < 1 ? '' : passwordIndicator.value.number < 2 ? 'error' : '' 
 }));
 
-const cPasswordProps = computed<InputProps>(() => ({
+const cPasswordProps = computed<InputProps | {class? : string}>(() => ({
   id: "cPassword",
   placeholder: "******",
   type: showCPassword.value ? "password" : "text",
   onInput: (e) => (cPassword.value = (e.target as HTMLInputElement).value),
   value: cPassword.value,
+  status : cPassword.value.length < 1 ? '' : cPasswordIndicator.value.number < 2 ? 'error' : ''
 }));
 
 const upProps = computed<UploadProps>(() => ({
@@ -298,19 +300,6 @@ const handleChangeProfile = async (photo : FileType) => {
     }
 }
 
-const isDisabled = computed(() => {
-    if(!isEmpty(password.value) && !isEmpty(cPassword.value) && !isEmpty(oPassword.value) && isPasswordSame.value && passwordStrength.value.score > 2 && cPasswordStrength.value.score > 2 ){
-        console.log("password dis")
-        return true;
-    }
-    else if(!isEmpty(phoneVal.value) && isPhoneValid.value.success){
-        console.log('phone dis : ', !isEmpty(phoneVal.value) , isPhoneValid.value.success)
-        return true
-    }else{
-        return false
-    }
-})
-
 const avatarExistProps = computed<AvatarProps>(() => ({
     size : 100,
     src : `http://localhost:3500/static/images/${userInfo.value?.imageUrl}`
@@ -321,13 +310,35 @@ const avatarNotExistProps = computed<AvatarProps>(() => ({
     icon : userInfo.value?.username.slice(0,2)
     
 }))
-watchEffect(()=> {
-    console.log("val : ", isDisabled.value)
+
+const isDisabled = computed(() => {
+  if(isPasswordSame.value && cPasswordStrength.value.score > 1 && oPassword.value.length > 5 && (isPhoneValid.value.success)){
+    console.log("password & phone")  
+    return true;
+  }else if((isPhoneValid.value.success) && (lodash.isEmpty(password.value) && lodash.isEmpty(oPassword.value) && lodash.isEmpty(cPassword.value))){
+    return true;
+  }else if(!lodash.isEmpty(password.value) && !lodash.isEmpty(oPassword.value) && !lodash.isEmpty(cPassword.value) && isPasswordSame.value &&  lodash.isEmpty(phoneVal.value)){
+    return true;
+  }
+    else if(!(isPasswordSame.value && cPasswordStrength.value.score > 1 && oPassword.value.length > 5) && (isPhoneValid.value.success)){
+      console.log("phone")
+      return false;
+    }
+    else if((isPasswordSame.value && cPasswordStrength.value.score > 1 && oPassword.value.length > 5) && !(isPhoneValid.value.success)){
+      return false;
+    }
+    else {
+      return false;
+    }
+
 })
+
+
+
 </script>
 
 <template>
-  <div class="flex h-full">
+  <div class="flex h-full  w-full">
     <Flex
       vertical
       gap="20"
@@ -397,11 +408,14 @@ watchEffect(()=> {
             <div v-for="(_,i) in passwordStrength.score" :key="i" :class="[`${passwordIndicator.bgcolor} w-[20%] h-full`]">
 
             </div>
+            <div :class="`text-xs ${passwordIndicator.textcolor}`">
+              {{ passwordIndicator.text }}
+            </div>
         </div>
       </Flex>
       <Flex vertical gap="8">
         <label for="cPassword">Konfirmasi Sandi Baru</label>
-        <Input v-bind="cPasswordProps" :class="['border',  cPassword.length < 1 ? '' : isPasswordSame && cPasswordStrength.score > 2 ? '' : '!border-red-500  focus:!border-red-500 hover:!border-red-500']">
+        <Input v-bind="cPasswordProps">
           <template #suffix>
             <EyeInvisibleOutlined
               v-if="!showCPassword"
@@ -413,10 +427,11 @@ watchEffect(()=> {
             />
           </template>
         </Input>
-        <div class="h-[5px] w-[90%] flex gap-x-0.5 items-center">
+        <div class="h-[5px] w-full flex gap-x-0.5 items-center">
             <div v-for="(_,i) in cPasswordStrength.score" :key="i" :class="[`${cPasswordIndicator.bgcolor} w-[20%] h-full`]">
 
             </div>
+            <div :class="`text-xs ${cPasswordIndicator.textcolor}`">{{ cPasswordIndicator.text }}</div>
         </div>
         <div :class="['text-xs text-red-500 transition-all duration-300',  cPassword.length < 1 ? 'invisible opacity-0' : isPasswordSame && cPasswordStrength.score > 2 ? 'invisible opacity-0' : 'visible opacity-100']">
             Password yang dikonfirmasi tidak sama
