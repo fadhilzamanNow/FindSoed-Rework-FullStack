@@ -1,10 +1,17 @@
 <script setup lang="ts">
-import { computed, ref } from "vue";
+import { computed, defineAsyncComponent, ref } from "vue";
 import logo from "../../assets/icon.png";
 import { UserAddOutlined, UserOutlined } from "@ant-design/icons-vue";
 import HamburgerMenu from "../Navbar/HamburgerMenu.vue";
 import { Button, Dropdown, Menu, MenuItem } from "ant-design-vue";
-import { RouterLink, useRoute } from "vue-router";
+import { RouterLink, useRoute, useRouter } from "vue-router";
+import { useNavStore } from "../../stores/navStore";
+import { storeToRefs } from "pinia";
+import { useNavbarStore } from "../../stores/navbarInfo";
+
+const LazyHamburgerMenu = defineAsyncComponent(() => import("../Navbar/HamburgerMenu.vue"))
+const {isNavbarOpen} = storeToRefs(useNavbarStore());
+const navigate = useRouter();
 
 type navType = {
     href: string;
@@ -57,10 +64,25 @@ const navItemFilter = computed<navType[]>(() => {
         return [newPath]
     }
 })
+
+const handleChooseLanding = () => {
+    if(isNavbarOpen.value){
+        isNavbarOpen.value = !isNavbarOpen.value
+    }
+    navigate.push("/")
+}
 const handleChooseNav = (item: navType["href"]) => {
+    isNavbarOpen.value = !isNavbarOpen.value;
     activeLink.value = item;
-    isMenuOpen.value = !isMenuOpen.value;
 };
+
+const handleChooseNav2 = (item : GabungType['link']) => {
+    console.log("isi item : ", item)
+    isNavbarOpen.value = !isNavbarOpen.value
+    navigate.push(item)
+}
+
+
 </script>
 
 <template>
@@ -68,8 +90,7 @@ const handleChooseNav = (item: navType["href"]) => {
         <!--  {/* DESKTOP DESIGN */} -->
         <div class="w-full container mx-auto flex items-center justify-between px-4 sm:px-6 lg:px-8 h-16 ">
             <!-- {/* LOGO */} -->
-             <RouterLink to="/">
-                 <div class="flex items-center gap-2">
+                 <div class="flex items-center gap-2" @click="handleChooseLanding">
                      <div class="size-10">
                          <img :src="logo" alt="" class="h-full w-full object-contain" />
                      </div>
@@ -78,7 +99,6 @@ const handleChooseNav = (item: navType["href"]) => {
                          <span class="text-blue-600">Soed</span>
                      </div>
                  </div>
-             </RouterLink>
             <!-- {/* NAV ITEMS [PC] LANDING PAGE */} -->
             <ul class="hidden md:flex items-center gap-10">
                 <li v-for="(l, i) in navItemFilter" :key="i" @click="() => (activeLink = l.href)" :class="[
@@ -125,14 +145,14 @@ const handleChooseNav = (item: navType["href"]) => {
             </Dropdown>
 
             <!-- /* HAMBURGER MENU */} -->
-            <button class="md:hidden p-2" @click="() => (isMenuOpen = !isMenuOpen)">
-                <HamburgerMenu />
+            <button class="md:hidden p-2" >
+                <LazyHamburgerMenu />
             </button>
         </div>
         <!-- {/* MOBILE DESIGN */} -->
-         <div :class="['w-full opacity-20', isMenuOpen ? 'visible h-screen bg-black' : 'invisible  h-0']" @click="() => isMenuOpen = !isMenuOpen">
+         <div :class="['w-full opacity-20', isNavbarOpen ? 'visible h-screen bg-black' : 'invisible  h-0']" @click="() => isNavbarOpen = !isNavbarOpen">
         </div>
-        <div :class="['fixed top-0 left-0 right-0 mt-16 md:hidden bg-white border-t border-t-gray-400  transition-all duration-300 flex flex-col justify-between px-4', isMenuOpen ? 'py-4 h-[50vh] visible opacity-100' : 'h-0 py-0 invisible opacity-0' ]" >
+        <div :class="['fixed top-0 left-0 right-0 mt-16 md:hidden bg-white border-t border-t-gray-400  transition-all duration-300 flex flex-col justify-between px-4', isNavbarOpen ? 'py-4 h-[50vh] visible opacity-100' : 'h-0 py-0 invisible opacity-0' ]" >
             <div class="container mx-auto flex flex-col justify-between ">
                 <ul class="px-4 space-y-4">
                 <li v-for="(l, i) in navItems" :key="i" :class="[
@@ -147,8 +167,8 @@ const handleChooseNav = (item: navType["href"]) => {
             </ul>
         </div> 
         <ul class="container mx-auto px-4 flex justify-between items-center ">
-            <li v-for="(v,i) in gabungOption" :key="`list-${i}`" :class="['text-gray-600 hover:text-gray-900 text-sm font-medium py-2']">
-                    <RouterLink :to="v.link">{{ v.label }}</RouterLink>
+            <li v-for="(v,i) in gabungOption" :key="`list-${i}`" :class="['text-gray-600 hover:text-gray-900 text-sm font-medium py-2']" @click="() => handleChooseNav2(v.link)">
+                   {{ v.label }}
             </li>
         </ul>
 

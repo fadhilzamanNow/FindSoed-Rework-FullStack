@@ -5,51 +5,59 @@ import {
   } from "vue-router";
 
 
-import LoginPage from "./pages/LoginPage.vue";
+/* import LoginPage from "./pages/LoginPage.vue";
 import RegisterPage from "./pages/RegisterPage.vue";
 import ListPage from "./pages/ListPage.vue";
 import AddPage from "./pages/AddPage.vue";
 import SettingsPage from "./pages/SettingsPage.vue";
 import DetailItemPage from "./pages/DetailItemPage.vue";
-import LandingPage from "./pages/LandingPage.vue";
+import LandingPage from "./pages/LandingPage.vue"; */
+import { defineAsyncComponent } from "vue";
 
+  const LazyLandingPage = defineAsyncComponent(() => import("./pages/LandingPage.vue"))
+  const LazyLoginPage = defineAsyncComponent(() => import("./pages/LoginPage.vue"))
+  const LazyRegisterPage = defineAsyncComponent(() => import("./pages/RegisterPage.vue"))
+  const LazyListPage = defineAsyncComponent(() => import("./pages/ListPage.vue"))
+  const LazyAddPage = defineAsyncComponent(() => import("./pages/AddPage.vue"))
+  const LazySettingPage =defineAsyncComponent(() => import("./pages/SettingsPage.vue"))
+  const LazyDetailPage = defineAsyncComponent(() => import("./pages/DetailItemPage.vue"))
   
 
   const routes = [
     {
       path : "/",
       name : "landing",
-      component : LandingPage
+      component : LazyLandingPage
     },
     {
       path: "/login",
       name: "login",
-      component: LoginPage,
+      component: LazyLoginPage,
     },
     {
       path: "/register",
       name: "about",
-      component: RegisterPage,
+      component: LazyRegisterPage,
     },
     {
       path: "/home",
       name: "list",
-      component: ListPage,
+      component: LazyListPage,
     },
     {
       path : "/add",
       name : "add",
-      component : AddPage
+      component : LazyAddPage
     },
     {
       path : "/setting",
       name : "setting",
-      component : SettingsPage
+      component : LazySettingPage
     },
     {
       path : "/detail/:id",
       name : "detail",
-      component : DetailItemPage
+      component : LazyDetailPage
     }
     
   ];

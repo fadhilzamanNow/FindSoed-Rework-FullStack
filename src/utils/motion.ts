@@ -1,4 +1,4 @@
-import { Variant } from "motion-v";
+import { Variant, VariantLabels } from "motion-v";
 
 export const fadeIn = (direction, delay) => {
     return {
@@ -52,14 +52,50 @@ export const fadeIn = (direction, delay) => {
     };
   };
   
-  export const textVariant = (delay : number)  => {
+  export const textFromLeft = (delay : number) : { [k : string ] : Variant} => {
+    return {
+      hidden: {
+        x: -50,
+        opacity: 1,
+      },
+      show: {
+        x: 0,
+        opacity: 100,
+        transition: {
+          type: "spring",
+          duration: 1.25,
+          delay
+        }
+      },   
+    };
+  };
+
+  export const Middle = (delay: number): { [key: string]: Variant } => {
     return {
       hidden: {
         y: 50,
-        opacity: 0,
+        opacity: 1, // Note: Typically 'hidden' might have opacity: 0. This could be intentional.
       },
       show: {
         y: 0,
+        opacity: 1,
+        transition: {
+          type: "spring",
+          duration: 1.25,
+          delay, // Uses the 'delay' parameter from the function arguments
+        }
+      },
+    };
+  };
+
+  export const textFromRight = (delay : number) : { [k : string]: Variant } => {
+    return {
+      hidden: {
+        x: 50,
+        opacity: 1,
+      },
+      show: {
+        x: 0,
         opacity: 1,
         transition: {
           type: "spring",
@@ -70,6 +106,8 @@ export const fadeIn = (direction, delay) => {
       
     };
   };
+
+
   
   export const scale = (delay) => {
     return {
