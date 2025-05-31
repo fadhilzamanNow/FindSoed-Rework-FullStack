@@ -130,14 +130,14 @@ const dateProps: DatePickerProps = {
 </script>
 
 <template>
+  
+  <div class="md:ml-16 mt-16 pt-5.5 px-4 sm:px-6 md:px-8">
+  <BreadCrumbComp title="Tambah Barang" />
   <div class="flex flex-col h-full">
-    <BreadCrumbComp title="Tambah Barang" />
-
     <div class="flex flex-col items-center justify-center gap-6 w-full">
       <div
-        class="flex flex-col gap-4 sm:border sm:max-w-[640px] sm:border-gray-200 w-full justify-center rounded-md sm:p-4"
+        class="flex flex-col gap-4  sm:max-w-[800px] sm:border-gray-200 w-full justify-center rounded-md pt-4"
       >
-        <!--  <Steps :current="0" :items="myItems.reverse()" size="small"  label-placement="vertical" direction="horizontal" type="navigation" progress-dot /> -->
         <Flex vertical class="w-full" gap="8">
           <label for="item" @click="() => console.log('file list : ', fileList)"
             >Nama Barang</label
@@ -196,6 +196,8 @@ const dateProps: DatePickerProps = {
       </div>
     </div>
   </div>
+</div>
+
 </template>
 
 

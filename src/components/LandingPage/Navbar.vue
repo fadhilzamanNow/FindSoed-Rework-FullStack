@@ -126,7 +126,7 @@ const handleSetting = () => {
 </script>
 
 <template>
-    <nav :class="`fixed top-0 left-0 right-0 ${authNav ? 'md:ml-16 bg-white/30 ' : ' bg-white/30'} backdrop-blur-md  z-50 border-b border-b-gray-100 shadow-sm `">
+    <nav :class="`fixed top-0 left-0 right-0 ${authNav ? 'md:ml-16 bg-white ' : ' bg-white/30'} backdrop-blur-md  z-50 border-b border-b-gray-100 shadow-sm `">
         <!--  {/* DESKTOP DESIGN */} -->
         <div :class="`w-full ${authNav ? '' : 'container mx-auto '}   flex items-center justify-between h-16 px-4 sm:px-6 md:px-8 `">
             <!-- {/* LOGO */} -->
