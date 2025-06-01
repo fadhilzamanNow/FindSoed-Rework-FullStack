@@ -128,9 +128,9 @@ const handleSetting = () => {
 <template>
     <nav :class="`fixed top-0 left-0 right-0 ${authNav ? 'md:ml-16 bg-white ' : ' bg-white/30'} backdrop-blur-md  z-50 border-b border-b-gray-100 shadow-sm `">
         <!--  {/* DESKTOP DESIGN */} -->
-        <div :class="`w-full ${authNav ? '' : 'container mx-auto '}   flex items-center justify-between h-16 px-4 sm:px-6 md:px-8 `">
+        <div :class="`w-full ${authNav ? '' : 'container'}   mx-auto flex items-center justify-between h-16 px-4 sm:px-6 md:px-8 `">
             <!-- {/* LOGO */} -->
-                 <div class="flex items-center gap-2" @click="handleChooseLanding">
+                 <div class="flex items-center gap-2 " @click="handleChooseLanding">
                      <div class="size-10">
                          <img :src="logo" alt="" class="h-full w-full object-contain" />
                      </div>
@@ -151,67 +151,75 @@ const handleSetting = () => {
                 </li>
             </ul>
 
-            <!-- {/* GABUNG SEKARANG */} -->
           
-            <Dropdown v-if="!authNav"  >
-              <template #overlay>
-                <Menu>
-                  <MenuItem>
-                    <RouterLink to="/login">
-                      <div class="flex items-center gap-2">
-                        <UserOutlined class="text-xs" />
-                        <span class="text-xs">Login</span>
-                      </div>
-                    </RouterLink>
-                  </MenuItem>
-                  <MenuItem>
-                    <RouterLink to="/register">
-                      <div class="flex items-center gap-2">
-                        <UserAddOutlined class="text-xs" />
-                        <span class="text-xs">Daftar</span>
-                      </div>
-                    </RouterLink>
-                  </MenuItem>
-                </Menu>
-              </template>
-              <div class="hidden md:block">
-                <Button
-                  type="primary"
-                  class="flex  text-white justify-center items-center h-max px-4 py-1  transition duration-300 select-none cursor-pointer rounded-md !bg-blue-600 hover:!bg-blue-700"
-                >
-                  Ayo Gabung
-              </Button>
-              </div>
-            </Dropdown>
+           
 
             <!-- /* HAMBURGER MENU */} -->
-            <button class="p-2 flex gap-2 items-center"  >
-                <Dropdown placement="bottomCenter" v-if="authToken && authNav"  >
+            <button class="p-2 flex gap-2 items-center  " >
+                            <!-- {/* GABUNG SEKARANG */} -->
+
+                    <Dropdown v-if="!authNav"  >
                 <template #overlay>
-                  <Menu>
+                    <Menu>
                     <MenuItem>
-                        <div @click="handleSetting">
-                            <Flex gap="8" align="center" >
-                              <SettingOutlined />
-                              <span>Settings</span>
-                            </Flex>
+                        <RouterLink to="/login">
+                        <div class="flex items-center gap-2">
+                            <UserOutlined class="text-xs" />
+                            <span class="text-xs">Login</span>
                         </div>
+                        </RouterLink>
                     </MenuItem>
                     <MenuItem>
-                        <div @click="handleLogout">
-                            <Flex gap="8" align="center" >
-                              <RollbackOutlined />
-                              <span >Logout</span>
-                            </Flex>
+                        <RouterLink to="/register">
+                        <div class="flex items-center gap-2">
+                            <UserAddOutlined class="text-xs" />
+                            <span class="text-xs">Daftar</span>
                         </div>
+                        </RouterLink>
                     </MenuItem>
-                  </Menu>
+                    </Menu>
                 </template>
-                <div class="flex text-2xl size-[40px] bg-white hover:bg-gray-200 justify-center items-center rounded-md">
-                  <UserOutlined  />
+                <div class="hidden md:block">
+                    <Button
+                    type="primary"
+                    class="flex  text-white justify-center items-center h-max px-4 py-1  transition duration-300 select-none cursor-pointer rounded-md !bg-blue-600 hover:!bg-blue-700"
+                    >
+                    Ayo Gabung
+                </Button>
                 </div>
-              </Dropdown>
-                <div class="md:hidden">
+                </Dropdown>
+
+            <!-- SETING / LOG OUT -->
+                <div   v-if="authNav" >
+                    <Dropdown placement="bottomCenter" >
+                    <template #overlay>
+                      <Menu>
+                        <MenuItem>
+                            <div @click="handleSetting">
+                                <Flex gap="8" align="center" >
+                                  <SettingOutlined />
+                                  <span>Settings</span>
+                                </Flex>
+                            </div>
+                        </MenuItem>
+                        <MenuItem>
+                            <div @click="handleLogout">
+                                <Flex gap="8" align="center" >
+                                  <RollbackOutlined />
+                                  <span >Logout</span>
+                                </Flex>
+                            </div>
+                        </MenuItem>
+                      </Menu>
+                    </template>
+                    <div class="flex text-2xl size-[40px] bg-white hover:bg-gray-200 justify-center items-center rounded-md">
+                      <UserOutlined  />
+                    </div>
+                  </Dropdown>
+                </div>
+
+                <!-- HAMBURGER MENU -->
+                <div class="md:hidden" >
                     <LazyHamburgerMenu />
                 </div>
             </button>

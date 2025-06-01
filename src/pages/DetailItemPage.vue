@@ -1,35 +1,19 @@
 <script setup lang="ts">
-import DetailItem from '../components/DetailPage/DetailItem.vue';
-import Sidebar from '../components/Sidebar/Sidebar.vue';
-import Navbar from '../components/Navbar/Navbar.vue';
-import { onMounted, onUnmounted, watch } from 'vue';
-import { useViewPortStore } from '../stores/viewportStore';
-import { useSidebarStore } from '../stores/sidebarInfo';
-import MiniSideBar from '../components/Sidebar/MiniSideBar.vue';
-import { useSideStore } from '../stores/sideStore';
-import { storeToRefs } from 'pinia';
-import { useViewStore } from '../stores/viewStore';
-import { useAuthStore } from '../stores/authStore';
-import { useRouter } from 'vue-router';
+import Navbar from "../components/LandingPage/Navbar.vue";
+import Sidebar from "../components/Sidebar/Sidebar.vue";
+import { watch } from "vue";
+import AddBox from "../components/AddPage/AddBox.vue";
+import { storeToRefs } from "pinia";
+import { useAuthStore } from "../stores/authStore";
+import { useRouter } from "vue-router";
 import { jwtDecode } from "jwt-decode";
+import DetailItem from "../components/DetailPage/DetailItem.vue";
 
 
-const {view, handleViewport} = useViewPortStore();
-const sidebar = useSideStore()
-const {isExpand} = storeToRefs(sidebar);
-const views = useViewStore()
-const {width, height} = storeToRefs(views);
 const auth = useAuthStore();
 const {authToken} = storeToRefs(auth)
 const navigate = useRouter();
 
-onMounted(() => {
-  window.addEventListener('resize', handleViewport)
-})
-
-onUnmounted(() => {
-  window.removeEventListener('resize', handleViewport)
-})
 
 
 watch(authToken,() => {
@@ -38,9 +22,7 @@ watch(authToken,() => {
     if(Number(Date.now()/ 1000) > Number(myToken.exp)){
       localStorage.removeItem("authToken")
       auth.setAuthToken(null)
-      if(localStorage.getItem("authToken") || !authToken){
-        navigate.push("/login")
-      }
+      navigate.push("/login")
     }
   }
 },{
@@ -50,22 +32,9 @@ watch(authToken,() => {
 </script>
 
 <template>
-    <main class="flex relative h-screen">
-        <div class="h-full fixed z-9999 top-0 left-0">
-            <Sidebar active="Home" :class="[isExpand && (width < height) ? 'z-10 ' : 'z-10']"  />
-        </div>
-        <div class="h-full flex flex-1 flex-col" :class="width > 1000 && 'ml-16'">
-          <div class="sticky top-0 z-999">
-            <Navbar/>
-          </div>
-            <div class="relative w-full h-full">
-        <div class="absolute w-full h-full z-[2]">
-          <div class="flex flex-col h-full gap-6 p-3.5">
-                <DetailItem />
-          </div>        
-        </div>
-          <MiniSideBar />
-      </div>
-        </div>
-    </main>
+  <div class="min-h-screen w-full">
+    <Navbar />  
+    <Sidebar active="Add"  />
+    <DetailItem />
+  </div>
 </template>

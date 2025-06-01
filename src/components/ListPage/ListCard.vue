@@ -43,10 +43,10 @@ watchEffect(() => {
 
 <template>
     <div class="rounded-md  transition-all duration-300  " >
-        <div class="grid grid-cols-1 xss:grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 gap-y-10 gap-x-2 justify-between mx-auto transition-all duration-300 ease-in h-[75vh] w-full   place-content-start gap-y-2 "  >
+        <div class="grid grid-cols-1 xs:grid-cols-2 sm:grid-cols-3  lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 gap-y-10 gap-x-2 justify-between mx-auto transition-all duration-300 ease-in h-[75vh] w-full   place-content-start gap-y-2 "  >
                 <div v-for="(d,i) in postData" :key="i" class="flex justify-center">
                     <!-- @vue-ignore -->
-                    <Card :itemName="d.itemName" :username="d.userName" :commentNum="d.commentNum" :id="d.id" :likeNum="d.likeNum" :status="d.statusName" :images="d.images" :userProfile="d" :itemDetail="d.itemDetail" :itemCategory="d.categoryName"  />
+                    <Card :itemName="d.itemName" :userName="d.userName" :commentNum="d.commentNum" :id="d.id" :likeNum="d.likeNum" :status="d.statusName" :images="d.images" :userProfile="d.userProfile" :itemDetail="d.itemDetail" :itemCategory="d.categoryName"  />
                 </div> 
         </div>
         <div  v-if="filteredItemList.length === 0" class="" >
