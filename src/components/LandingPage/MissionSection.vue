@@ -23,7 +23,7 @@ const features : featureType[] = [
 </script>
 
 <template>
-     <section class="w-full bg-blue-50 py-16 px-4 sm:px-6 md:px-8">
+     <section id="layanan" class="w-full bg-blue-50 py-16 px-4 sm:px-6 md:px-8">
             <div class="max-w-6xl mx-auto">
                 <div class="grid md:grid-cols-3 grid-cols-1 gap-8">
                     <!-- {/* TUJUAN */} -->

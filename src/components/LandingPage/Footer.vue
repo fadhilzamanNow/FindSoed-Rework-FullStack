@@ -22,17 +22,17 @@ const path = useRoute();
 
 const footerLinks: FooterLinkType = {
   company: [
-    { name: "Home", href: "#" },
-    { name: "Tentang Kami", href: "#" },
-    { name: "Layanan", href: "#" },
-    { name: "Testimoni", href: "#" },
+    { name: "Home", href: "#home" },
+    { name: "Layanan", href: "#layanan" },
+    { name: "Tentang Kami", href: "#about" },
+    { name: "Testimoni", href: "#testimoni" },
   ],
   support: [
     { name: "FAQ", href: "#" },
     { name: "Policy", href: "#" },
     { name: "Business", href: "#" },
   ],
-  contact: [{ name: "WhatsApp", href: "#" }],
+  contact: [{ name: "WhatsApp", href: "https://web.whatsapp.com/" }],
 };
 
 const footerFilter = computed<FooterLinkType>(() => {

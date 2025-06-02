@@ -5,7 +5,7 @@ import { textFromLeft, textFromRight } from "../../utils/motion";
 </script>
 
 <template>
-    <main class="container mx-auto flex flex-col md:flex-row justify-between items-center pt-30 b-6 px-4 sm:px-6 lg:px-8 ">
+    <main id="home" class="container mx-auto flex flex-col md:flex-row justify-between items-center pt-30 b-6 px-4 sm:px-6 lg:px-8 ">
             <!-- {/* BAGIAN KIRI */} -->
             <div class="w-full md:w-1/2 space-y-8">
                 <!-- {/* CARI BARANG */} -->

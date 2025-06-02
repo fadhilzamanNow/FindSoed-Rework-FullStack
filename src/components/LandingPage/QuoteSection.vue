@@ -4,7 +4,7 @@ import sementara from "../../assets/sementarafoto.jpg"
 </script>
 
 <template>
-     <section class="max-w-7xl mx-auto px-4 py-16 md:py-24">
+     <section id="about" class="max-w-7xl mx-auto px-4 py-16 md:py-24">
             <div class="flex flex-col md:flex-row items-center justify-between gap-12 md:gap-24">
                 <!-- {/* GAMBAR */} -->
                 <div class="w-full md:w-1/2">

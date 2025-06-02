@@ -44,7 +44,7 @@ const testimonialList: testimonialType[] = [
 </script>
 
 <template>
-  <section class="py-16 px-4 max-w-7xl mx-auto">
+  <section id="testimoni" class="py-16 px-4 max-w-7xl mx-auto">
     <!-- {/* HEADER */} -->
     <div class="text-center mb-12">
       <h2 class="text-3xl font-bold md:text-4xl mb-4">

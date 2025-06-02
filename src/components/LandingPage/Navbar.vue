@@ -9,6 +9,7 @@ import { useNavStore } from "../../stores/navStore";
 import { storeToRefs } from "pinia";
 import { useNavbarStore } from "../../stores/navbarInfo";
 import { useAuthStore } from "../../stores/authStore";
+import { activeAnimations } from "motion-v";
 
 const LazyHamburgerMenu = defineAsyncComponent(() => import("../Navbar/HamburgerMenu.vue"))
 
@@ -28,12 +29,12 @@ const navItems: navType[] = [
         label: "Home",
     },
     {
-        href: "#about",
-        label: "Tentang Kami",
+        href: "#layanan",
+        label: "Layanan",
     },
     {
-        href: "#pelayanan",
-        label: "Layanan",
+        href: "#about",
+        label: "Tentang Kami",
     },
     {
         href: "#testimoni",
@@ -74,6 +75,7 @@ const {isNavbarOpen} = storeToRefs(useNavbarStore());
 const navigate = useRouter();
 const auth = useAuthStore()
 const {authToken} = storeToRefs(auth)
+const activeLink2 = ref<GabungType['label']>();
 
 const navItemFilter = computed<navType[]>(() => {
     if(path.path === "/"){
@@ -88,7 +90,11 @@ const handleChooseLanding = () => {
     if(isNavbarOpen.value){
         isNavbarOpen.value = !isNavbarOpen.value
     }
-    navigate.push("/")
+    if(!authToken.value){
+        navigate.push("/")
+    }else{
+        navigate.push("/home")
+    }
 }
 const handleChooseNav = (item: navType["href"]) => {
     isNavbarOpen.value = !isNavbarOpen.value;
@@ -97,6 +103,7 @@ const handleChooseNav = (item: navType["href"]) => {
 
 const handleChooseNav2 = (item : GabungType['link'] | navType['href']) => {
     isNavbarOpen.value = !isNavbarOpen.value
+    activeLink2.value = item
     navigate.push(item)
 }
 
@@ -147,7 +154,7 @@ const handleSetting = () => {
                         ? 'text-blue-600 after:w-full'
                         : 'text-gray-600 hover:text-gray-900',
                 ]">
-                    {{ l.label }}
+                    <a :href="l.href">{{ l.label }}</a> 
                 </li>
             </ul>
 
@@ -231,18 +238,18 @@ const handleSetting = () => {
         </div>
         <div :class="['fixed top-0 left-0 right-0 mt-16 md:hidden bg-white border-t border-t-gray-400  transition-all duration-300 flex flex-col justify-between px-4', isNavbarOpen ? 'py-4 h-[50vh] visible opacity-100' : 'h-0 py-0 invisible opacity-0' ]" >
             <div class="container mx-auto flex flex-col justify-between ">
-                <ul v-if="!authNav" class="px-4 space-y-4">
+                <ul v-if="!authNav && path.path === '/'" class="px-4 space-y-4">
                     <li  v-for="(l, i) in navItems" :key="i" :class="[
                         'block text-sm font-medium py-2',
-                        activeLink === l.href
+                        activeLink === l.href && path.path === '/'
                             ? 'text-blue-600'
                             : 'text-gray-600 hover:text-gray-900',
                         'cursor-pointer',
-                    ]" @click="() => handleChooseNav2(l.href)">
-                        {{ l.label }}
+                    ]" @click="() => handleChooseNav(l.href)">
+                        <a :href="l.href">{{ l.label }}</a>
                     </li>
                  </ul>
-                 <ul v-else class="px-4 space-y-4">
+                 <ul v-if="authNav" class="px-4 space-y-4">
                     <li v-for="(l,i) in authNavItems" :key="i" :class="[
                         'block text-sm font-medium py-2',
                         path.path === l.href
@@ -252,8 +259,8 @@ const handleSetting = () => {
                     ]" @click="() => handleChooseNav2(l.href)" >{{ l.label }}</li>
                  </ul>
         </div> 
-        <ul class="container mx-auto px-4 flex justify-between items-center" v-if="authNav && !authToken" >
-            <li  v-for="(v,i) in gabungOption" :key="`list-${i}`" :class="['text-gray-600 hover:text-gray-900 text-sm font-medium py-2']" @click="() => handleChooseNav2(v.link)">
+        <ul class="container mx-auto px-4 flex justify-between items-center" v-if="!authNav && !authToken" >
+            <li  v-for="(v,i) in gabungOption" :key="`list-${i}`" :class="`text-sm font-medium py-2 ${(path.path === v.link ) ? 'text-blue-600' : 'text-gray-600 hover:text-gray-900'} `" @click="() => handleChooseNav2(v.link)">
                    {{ v.label }}
             </li>
         </ul>    

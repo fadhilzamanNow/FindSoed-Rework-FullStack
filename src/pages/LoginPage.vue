@@ -4,7 +4,7 @@ import LoginBox from '../components/LoginPage/LoginBox.vue';
 /* import Navbar from '../components/Navbar/Navbar.vue'; */
 import { motion } from 'motion-v';
 import FooterWave from '../components/Footer/FooterWave.vue';
-import { ref, watch } from 'vue';
+import { ref, watch, watchEffect } from 'vue';
 import { useAuthStore } from '../stores/authStore';
 import { useRouter } from 'vue-router';
 import { storeToRefs } from 'pinia';
@@ -36,7 +36,11 @@ const toggleLoading = () => {
     loginLoading.value = !loginLoading.value
 }
 
-
+watchEffect(() => {
+    if(authToken.value){
+        navigate.push("/home")
+    }
+})
 
 
 </script>

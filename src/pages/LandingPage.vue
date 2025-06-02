@@ -10,6 +10,20 @@ import StatisticSection from '../components/LandingPage/StatisticSection.vue';
 import TestimonialSection from '../components/LandingPage/TestimonialSection.vue';
 import UpdateSection from '../components/LandingPage/UpdateSection.vue';
 import Footer from '../components/LandingPage/Footer.vue';
+import { storeToRefs } from 'pinia';
+import { useAuthStore } from '../stores/authStore';
+import { watchEffect } from 'vue';
+import {  useRouter } from 'vue-router';
+
+const {authToken} = storeToRefs(useAuthStore());
+const navigate = useRouter()
+
+watchEffect(()=> {
+    if(authToken.value){
+        navigate.push("/home")
+    }
+})
+
 </script>
 
 <template>

@@ -3,7 +3,7 @@ import { Flex } from 'ant-design-vue';
 import RegisterBox from '../components/RegisterPage/RegisterBox.vue';
 import Navbar from '../components/LandingPage/Navbar.vue';
 
-import {  ref, watch } from 'vue';
+import {  ref, watch, watchEffect } from 'vue';
 import { useAuthStore } from '../stores/authStore';
 import { storeToRefs } from 'pinia';
 import { useRouter } from 'vue-router';
@@ -14,12 +14,12 @@ const auth = useAuthStore();
 const {authToken} = storeToRefs(auth)
 const navigate = useRouter();
 const registerLoading = ref(false);
-watch(authToken, () => {
+
+
+watchEffect(() => {
     if(authToken.value){
-        navigate.push("/list")
+        navigate.push("/home")
     }
-},{
-    immediate : true
 })
 
 const handleLoading = () => {
