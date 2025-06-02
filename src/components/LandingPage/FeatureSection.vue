@@ -1,5 +1,7 @@
 <script setup lang="ts">
 import { CSSProperties } from "vue";
+import {motion} from "motion-v"
+import { fadeIn } from "../../utils/motion";
 
 type featureType = {
   icon: string;
@@ -36,18 +38,18 @@ const features: featureType[] = [
 </script>
 
 <template>
-  <section class="max-w-7xl mx-auto px-4 py-16">
+  <motion.section class="max-w-7xl mx-auto px-4 py-16" initial="hidden" while-in-view="show" :variants="fadeIn('up',0.4)">
     <!-- {/* JUDUL FEATURES */} -->
-    <div class="text-center mb-12">
+    <motion.div class="text-center mb-12" initial="hidden" while-in-view="show" :variants="fadeIn('up',0.5)">
       <h2 class="text-3xl font-bold mb-4">Apa saja fitur pada FindSoed ?</h2>
       <p class="text-gray-600">
         Kami menyediakan beberapa fitur yang dapat digunakan untuk mempermudah
         komunikasi antar setiap pengguna dalam mengetahui detail barang
       </p>
-    </div>
+    </motion.div>
 
     <!-- {/* BOX FEATURES */} -->
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
+    <motion.div class="grid grid-cols-1 md:grid-cols-3 gap-5" initial="hidden" while-in-view="show" :variants="fadeIn('up',0.5)" >
       <div v-for="(f,i) in features" key="{i}" class="flex flex-col items-center p-6 text-center">
         <div
           class="w-24 h-24 rounded-full mb-6 flex items-center justify-center"
@@ -59,9 +61,9 @@ const features: featureType[] = [
         <h3 class="text-2xl font-medium mb-3">{{f.title}}</h3>
         <p class="text-gray-500 text-center">{{f.description}}</p>
       </div>
-    </div>
+    </motion.div>
     <!-- {/* TOMBOL FEATURES */} -->
-    <div class="text-center mt-2">
+    <motion.div class="text-center mt-2" initial="hidden" while-in-view="show" :variants="fadeIn('up',0.6)">
       <button
         class="bg-blue-600 text-white cursor-pointer px-6 py-2 rounded-full font-medium hover:bg-blue-700 transition-colors relative shadow-2xl backdrop-blur-2xl"
       >
@@ -70,6 +72,6 @@ const features: featureType[] = [
           class="absolute -z-10 w-full h-full rounded-full bg-blue-600/30 blur-xl top-0 left-0"
         ></div>
       </button>
-    </div>
-  </section>
+    </motion.div>
+  </motion.section>
 </template>

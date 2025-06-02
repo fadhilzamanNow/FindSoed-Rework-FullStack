@@ -2,6 +2,8 @@
 import { FileSearchOutlined, ReconciliationOutlined, UserAddOutlined } from '@ant-design/icons-vue'
 import gsap from 'gsap';
 import { h, onMounted, ref, useTemplateRef, VNode } from 'vue'
+import {motion} from "motion-v"
+import { fadeIn } from '../../utils/motion';
 
 const gridRef = ref<HTMLDivElement[]>([]);
 
@@ -118,11 +120,11 @@ const statisticList: statisticType[] = [
 
 <template>
      <section class="bg-blue-50" >
-            <div class="max-w-7xl mx-auto text-center">
+            <motion.div class="max-w-7xl mx-auto text-center" initial="hidden" while-in-view="show" :variants="fadeIn('up',0.4)">
                 <h1 class="font-bold text-2xl sm:text-3xl md:text-4xl  pt-12 mb-4">Statistik Findsoed</h1>
                 <p class="text-gray-600">Finsoed Platform Pencarian Barang Hilang Terbaik </p>
-            </div>
-            <div class="max-w-7xl mx-auto py-16 px-4 sm:px-6 md:px-8 ">
+            </motion.div>
+            <motion.div class="max-w-7xl mx-auto py-16 px-4 sm:px-6 md:px-8 " initial="hidden" while-in-view="show" :variants="fadeIn('up',0.6)">
                 <div class="grid  grid-cols-1 sm:grid-cols-3 gap-3 ">
                         <div v-for="(v,i) in statisticList" class="bg-white text-center flex flex-col gap-3 shadow-md rounded-xl py-6 sm:py-8 md:py-10 px-4  " :key="i"
                         >
@@ -140,6 +142,6 @@ const statisticList: statisticType[] = [
                             <p class="text-gray-600 text-sm ">{{v.description}}</p>
                         </div>
                 </div>
-            </div>
+            </motion.div>
         </section>
 </template>

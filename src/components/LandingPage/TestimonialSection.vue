@@ -3,9 +3,16 @@ import { Swiper, SwiperSlide } from "swiper/vue";
 import sementarafoto from "../../assets/sementarafoto.jpg";
 import { Navigation } from "swiper/modules";
 import { LeftOutlined, RightOutlined } from "@ant-design/icons-vue";
+import fadhilganteng from "../../assets/FADHILGANTENG.jpg"
+import ferdi from "../../assets/FERDITAIK.jpg";
+import imron from "../../assets/IMRONTAIK.jpg";
+import naufal from "../../assets/NOPALTAIK.jpg";
+import ade from "../../assets/ADETAIK.jpg"
+import {motion} from "motion-v"
 
 import 'swiper/css';
 import 'swiper/css/navigation';
+import { fadeIn } from "../../utils/motion";
 
 type testimonialType = {
   img: string;
@@ -15,30 +22,30 @@ type testimonialType = {
 
 const testimonialList: testimonialType[] = [
   {
-    img: sementarafoto,
-    name: "Legendary Player",
+    img: fadhilganteng,
+    name: "Muhammad Ilham Isfadhillah",
     description:
       "Findsoed Bagus Banget sihhh brooasdasdahd loreaskdnadnad nandjabdajbdajbdajbasjbdjasbdjh",
   },
   {
-    img: sementarafoto,
-    name: "Legendary Player",
-    description: "Findsoed Bagus Banget sihhh broo",
+    img: ade,
+    name: "Prasetyo Ade",
+    description: "Kalo Nyari Barang Hilang Emang enaknya disini sih",
   },
   {
-    img: sementarafoto,
-    name: "Legendary Player",
-    description: "Findsoed Bagus Banget sihhh broo",
+    img: ferdi,
+    name: "Ferdi Agus Purwanda",
+    description: "Behh gila waktu itu ada yang barangnya hilang, langsung ketemu pake platform ini",
   },
   {
-    img: sementarafoto,
-    name: "Legendary Player",
-    description: "Findsoed Bagus Banget sihhh broo",
+    img: naufal,
+    name: "Naufal Hakim",
+    description: "Gak nyangka sih platform bisa sepenting ini",
   },
   {
-    img: sementarafoto,
-    name: "Legendary Player",
-    description: "Findsoed Bagus Banget sihhh broo",
+    img: imron,
+    name: "Imron Nur Wahid",
+    description: "Wahh aku seneng malah kalo ada platform ini, bisa ikut ngeshare barang temen yang hilang",
   },
 ];
 </script>
@@ -46,17 +53,17 @@ const testimonialList: testimonialType[] = [
 <template>
   <section id="testimoni" class="py-16 px-4 max-w-7xl mx-auto">
     <!-- {/* HEADER */} -->
-    <div class="text-center mb-12">
+    <motion.div class="text-center mb-12" initial="hidden" while-in-view="show" :variants="fadeIn('up',0.4)">
       <h2 class="text-3xl font-bold md:text-4xl mb-4">
         Bagaimana FindSoed kata mereka?
       </h2>
       <p class="text-gray-400">
         FindSoed platform pencarian barang hilang terbaik
       </p>
-    </div>
+    </motion.div>
 
     <!-- {/* CARD SECTION */} -->
-    <div class="">
+    <motion.div class="" initial="hidden" while-in-view="show" :variants="fadeIn('up',0.6)">
       <!-- {/* CARDS */} -->
       <Swiper
         :slidesPerView="1"
@@ -97,7 +104,7 @@ const testimonialList: testimonialType[] = [
             </div>
 
             <h3 class="text-3xl font-semibold mb-3">{{v.name}}</h3>
-            <p class="text-sm font-normal text-gray-600">{{v.description}}</p>
+            <p class="text-[12px] font-normal text-gray-600">{{v.description}}</p>
           </div>
         </SwiperSlide>
       </Swiper>
@@ -114,6 +121,6 @@ const testimonialList: testimonialType[] = [
           <RightOutlined />
         </button>
       </div>
-    </div>
+    </motion.div>
   </section>
 </template>

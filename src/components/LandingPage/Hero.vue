@@ -1,7 +1,30 @@
 <script setup lang="ts">
-import heroImage from "../../assets/heroImage.svg"
+import heroImage from "../../assets/herobetter.png"
 import { motion } from "motion-v"
 import { textFromLeft, textFromRight } from "../../utils/motion";
+import { ArrowRightOutlined } from "@ant-design/icons-vue";
+import { Button, ButtonProps, Input, InputProps } from "ant-design-vue";
+import { computed } from "vue";
+import {  useRouter } from "vue-router";
+const navigate = useRouter()
+
+const inputHeroProps = computed<InputProps | {class : string}>(() => ({
+    placeholder : "Cari Barang Hilang",
+    onPressEnter : () => navigate.push("/login"),
+    type : 'text',
+    class : "flex-1 w-30 px-6 py-3 border border-gray-200 rounded-xl focus:outline-none focus:border-blue-600 focus:ring-2 focus:ring-blue-100 transtion-all justify-center items-center"
+}))
+
+const handleSend = () => {
+    navigate.push("/login")
+}
+
+
+const buttonHeroProps = computed<ButtonProps | {class? : string}>(() => ({
+    type : "primary",  
+    class :"absolute z-99 right-2 top-1/2 -translate-y-1/2 flex justify-center items-center h-auto bg-blue-600 text-white px-8 py-3 rounded-xl hover:bg-blue-700 cursor-pointer transition-all hover:shadow-lg hover:shadow-blue-300"
+}))
+
 </script>
 
 <template>
@@ -15,14 +38,6 @@ import { textFromLeft, textFromRight } from "../../utils/motion";
                 </div>
 
 
-                <!-- <motion.h1 class="text-4xl md:text-5xl lg:text-6xl font-bold leading-tight" :initial="{y : 100, opacity : 0}" :enter="{y: 0, opacity : 100}">
-                    Cari Barangmu Sekarang
-                    <span class="text-blue-600 relative inline-block ">
-                        dengan FindSoed
-                        <span class="absolute bottom-0 left-0 w-full h-0.5 bg-blue-600"></span>
-                    </span>
-                </motion.h1> -->
-
                 <motion.h1  class="text-4xl md:text-5xl lg:text-6xl font-bold leading-tight" initial="hidden" while-in-view="show" :variants="textFromLeft(0.1)" >
                     Cari Barangmu Sekarang
                     <span class="text-blue-600 relative inline-block ">
@@ -35,9 +50,9 @@ import { textFromLeft, textFromRight } from "../../utils/motion";
                     Platform Pencari Barang Terbaik Sekitar Fakultas Teknik Unsoed 
                 </motion.p>
 
-                <motion.div class="flex gap-3 max-w-md" initial="hidden" while-in-view="show" :variants="textFromLeft(0.3)">
-                    <input type="text" placeholder="Cari Barangmu Sekarang" class="flex-1 px-6 py-3 border border-gray-200 rounded-xl focus:outline-none focus:border-blue-600 focus:ring-2 focus:ring-blue-100 transtion-all" />
-                    <button class="bg-blue-600 text-white px-8 py-3 rounded-xl hover:bg-blue-700 cursor-pointer transition-all hover:shadow-lg hover:shadow-blue-300">→</button>
+                <motion.div class="flex gap-3 max-w-md h-10  relative" initial="hidden" while-in-view="show" :variants="textFromLeft(0.3)">
+                    <Input v-bind="inputHeroProps" />
+                    <button @click="handleSend" class="absolute right-2 top-1/2 -translate-y-1/2 flex justify-center items-center bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 cursor-pointer transition-all hover:shadow-lg hover:shadow-blue-300"><ArrowRightOutlined /></button>
                 </motion.div>
 
             </div>

@@ -137,7 +137,7 @@ const handleSetting = () => {
         <!--  {/* DESKTOP DESIGN */} -->
         <div :class="`w-full ${authNav ? '' : 'container'}   mx-auto flex items-center justify-between h-16 px-4 sm:px-6 md:px-8 `">
             <!-- {/* LOGO */} -->
-                 <div class="flex items-center gap-2 " @click="handleChooseLanding">
+                 <div class="flex items-center gap-2 cursor-pointer" @click="handleChooseLanding">
                      <div class="size-10">
                          <img :src="logo" alt="" class="h-full w-full object-contain" />
                      </div>
@@ -226,7 +226,7 @@ const handleSetting = () => {
                 </div>
 
                 <!-- HAMBURGER MENU -->
-                <div class="md:hidden" >
+                <div class="md:hidden !bg-transparent" >
                     <LazyHamburgerMenu />
                 </div>
             </button>

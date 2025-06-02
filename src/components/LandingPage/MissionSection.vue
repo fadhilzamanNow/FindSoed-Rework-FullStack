@@ -1,5 +1,6 @@
 <script setup lang="ts">
-
+import {motion} from "motion-v"
+import { textFromLeft, textFromRight } from "../../utils/motion";
 
 type featureType = {
     icon : string,
@@ -27,16 +28,16 @@ const features : featureType[] = [
             <div class="max-w-6xl mx-auto">
                 <div class="grid md:grid-cols-3 grid-cols-1 gap-8">
                     <!-- {/* TUJUAN */} -->
-                <div>
+                <motion.div initial="hidden" while-in-view="show" :variants="textFromLeft(0.3)">
                     <p class="text-sm mb-2 font-medium bg-gradient-to-r from-blue-600 to-pink-500 bg-clip-text text-transparent">
                     Tujuan
                     </p>
                     <p class="text-xl md:w-4/5 w-full md:text-2xl font-bold text-gray-900">
                     Mewadahi Sistem Informasi Kehilangan Barang Hilang
                     </p>
-                </div>
+                </motion.div>
                     <!-- {/*  FITUR */} -->
-                    <div class="col-span-2 grid grid-cols-1 md:grid-cols-2 justify-between gap-8">
+                    <motion.div  class="col-span-2 grid grid-cols-1 md:grid-cols-2 justify-between gap-8" initial="hidden" while-in-view="show" :variants="textFromRight(0.3)">
                         <div v-for="(f,i) in features" class="flex items-start space-x-4" :key="i">
                             <div class="w-12 h-12 flex items-center justify-start rounded-lg">{{f.icon}}</div>
                             <div>
@@ -44,7 +45,7 @@ const features : featureType[] = [
                                 <p class="text-gray-600">{{f.description}}</p>
                             </div>
                         </div>
-                    </div>
+                    </motion.div>
                 </div>
             </div>
         </section>
