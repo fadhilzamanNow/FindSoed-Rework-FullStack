@@ -18,7 +18,7 @@ import lodash from "lodash"
 const card = useCardStore();
 const search = ref("");
 const post = usePostStore()
-const {isLoading} = storeToRefs(post);
+const {isLoading, postData} = storeToRefs(post);
 
 
 const debounceSearch = lodash.debounce( async (searchItem : string) => {
@@ -125,7 +125,7 @@ watchEffect(() => {
       </div>
     </div> -->
     <span class="text-sm text-gray-500"
-      >Telah ditemukan {{ card.itemList.length }} barang
+      >Telah ditemukan {{ postData?.length }} barang
     </span>
   </div>
 </template>
