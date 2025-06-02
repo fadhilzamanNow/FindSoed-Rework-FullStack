@@ -3,7 +3,17 @@
 import { Avatar } from "ant-design-vue";
 import { CommentOutlined, MessageOutlined } from "@ant-design/icons-vue";
 import { RouterLink } from "vue-router";
-import { computed, onMounted, onUnmounted, ref, toRaw } from "vue";
+import { computed, onMounted, onUnmounted, ref, toRaw, watchEffect } from "vue";
+import dayjs from "dayjs";
+import relativeTime from "dayjs/plugin/relativeTime";
+import utc from 'dayjs/plugin/utc'
+
+import 'dayjs/locale/id'
+
+dayjs.extend(relativeTime);
+dayjs.extend(utc);
+dayjs.locale('id')
+
 
 
 type PostType = {
@@ -17,13 +27,23 @@ type PostType = {
     id : string,
     userProfile : string,
     statusName? : string,
-    categoryName? : string | undefined
+    categoryName? : string | undefined,
+    created_at : string | null,
+    updated_at : string | null
 }
 
-const {itemName, commentNum, id, images, userName, status, userProfile, itemDetail, itemCategory  } = defineProps<PostType>()
+const {itemName, commentNum, id, images, userName, status, userProfile, itemDetail, itemCategory, created_at, updated_at  } = defineProps<PostType>()
+
+
 
 const linkRef = computed<string>(() => {
     return `detail/${id}`
+})
+
+const formattedDayNow = ref("");
+
+watchEffect(() => {
+  formattedDayNow.value = dayjs(created_at).fromNow()
 })
 
 
@@ -46,7 +66,7 @@ const linkRef = computed<string>(() => {
           <span :class="['p-0.5 text-white rounded-md absolute top-2 right-2 text-xs', status === 'Hilang' ? 'bg-red-500' : 'bg-green-400']">{{ status }}</span>
         </div>
 
-          <div class="mx-2 flex flex-col gap-y-2 mb-2">
+          <div class="mx-2 flex flex-col gap-y-2 mb-2 border-t-1 border-gray-400">
             <!-- NAMA - KATEGORI -->
             <div class="w-full flex justify-between mt-2">
               <span class="text-xs font-medium">
@@ -68,20 +88,23 @@ const linkRef = computed<string>(() => {
             </span>
 
             <!-- PROFIL - NAMA -->
-             <div class="flex items-center gap-x-2">
-              <Avatar v-if="userProfile" size="small" :src="`http://localhost:3500/static/images/${userProfile}`" shape="square" />
-              <Avatar v-else shape="square" size="small">{{ userName.toUpperCase().slice(0,2) }}</Avatar>
-              <span class="text-gray-400 text-xs">{{ userName }}</span>
+             <div class="flex items-center justify-between ">
+              <div class="flex items-center gap-x-2">
+                <Avatar v-if="userProfile" size="small" :src="`http://localhost:3500/static/images/${userProfile}`" shape="square" />
+                  <Avatar v-else shape="square" size="small">{{ userName.toUpperCase().slice(0,2) }}</Avatar>
+                  <span class="text-gray-400 text-xs">{{ userName }}</span>
+              </div>
+              <span class="text-gray-400 text-xs">{{ formattedDayNow }}</span>
              </div>
           </div>
 
           <!-- KOMEN -->
-          <div class="w-full bg-gray-300 flex justify-between text-gray-500 py-1 rounded-b-md justify-self-end">
+         <!--  <div class="w-full bg-gray-300 flex justify-between text-gray-500 py-1 rounded-b-md justify-self-end">
             <div class="flex justify-center items-cener gap-2 ml-2 text-xs">
               <CommentOutlined />
               <span>{{ commentNum }}</span>
             </div>
-          </div>
+          </div> -->
         </div>
         <RouterLink :to="linkRef" >
 

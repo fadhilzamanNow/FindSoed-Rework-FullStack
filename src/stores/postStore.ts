@@ -13,7 +13,9 @@ type PostType = {
     id : string,
     userProfile : string,
     statusName? : string,
-    categoryName? : string
+    categoryName? : string,
+    created_at : string | null,
+    updated_at : string | null
 }
 
 type postStoreState = {

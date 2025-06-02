@@ -27,13 +27,15 @@ type PostType = {
     id : string,
     userProfile : string,
     statusName? : string,
-    categoryName? : string
+    categoryName? : string,
+    created_at : string | null,
+    updated_at : string | null
 }
 
 watchEffect(() => {
     refreshItemList(listLostItem)
+    console.log("isi post data : ", postData.value)
 })
-
 
 
 
@@ -47,7 +49,7 @@ watchEffect(() => {
         <div v-if="postData?.length as number > 0" class="grid grid-cols-1 xs:grid-cols-2 sm:grid-cols-3  lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 gap-y-10 gap-x-2 justify-between mx-auto transition-all duration-300 ease-in h-[75vh] w-full   place-content-start gap-y-2 "  >
                 <div v-for="(d,i) in postData" :key="i" class="flex justify-center">
                     <!-- @vue-ignore -->
-                    <Card :itemName="d.itemName" :userName="d.userName" :commentNum="d.commentNum" :id="d.id" :likeNum="d.likeNum" :status="d.statusName" :images="d.images" :userProfile="d.userProfile" :itemDetail="d.itemDetail" :itemCategory="d.categoryName"  />
+                    <Card :itemName="d.itemName" :userName="d.userName" :commentNum="d.commentNum" :id="d.id" :likeNum="d.likeNum" :status="d.statusName" :images="d.images" :userProfile="d.userProfile" :itemDetail="d.itemDetail" :itemCategory="d.categoryName" :created_at="d.created_at" :updated_at="d.updated_at" />
                 </div> 
         </div>
         <div  v-if="postData?.length === 0" class="" >
