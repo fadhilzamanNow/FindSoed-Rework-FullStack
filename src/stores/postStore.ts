@@ -31,7 +31,7 @@ export const usePostStore = defineStore('post', () => {
             postData.value = posts
     }
 
-    const toggleLoading = () => {
+    const togglePostLoading = () => {
         isLoading.value = !isLoading.value
     }
 
@@ -39,7 +39,7 @@ export const usePostStore = defineStore('post', () => {
         detailPost.value = detail
     }
 
-    return {postData, isLoading, detailPost, setPost, toggleLoading, setDetailPost} 
+    return {postData, isLoading, detailPost, setPost, togglePostLoading, setDetailPost} 
         
 })
 

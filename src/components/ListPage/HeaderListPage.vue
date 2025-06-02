@@ -18,6 +18,7 @@ import lodash from "lodash"
 const card = useCardStore();
 const search = ref("");
 const post = usePostStore()
+const {isLoading} = storeToRefs(post);
 
 
 const debounceSearch = lodash.debounce( async (searchItem : string) => {
@@ -29,6 +30,7 @@ const debounceSearch = lodash.debounce( async (searchItem : string) => {
    search.value = searchItem
    const response = await findPost(search.value);
    if(response){
+    isLoading.value = false
     post.setPost(response.data)
    }
   }catch(e){
@@ -50,7 +52,10 @@ const handleSearchItem = async () => {
 
 const inputSearch = computed<InputProps>(() => ({
   placeholder : "Cari Barang",
-  onInput : (e) => debounceSearch((e.target as HTMLInputElement).value),
+  onInput : (e) => {
+    isLoading.value = true
+    debounceSearch((e.target as HTMLInputElement).value)
+  },
   value : search.value,
 }))
 
@@ -64,6 +69,7 @@ watchEffect(() => {
     try{
     const response = await findPost(search.value)
     if(response){
+      isLoading.value = true
       post.setPost(response.data)
     }
   }catch(e){

@@ -1,7 +1,7 @@
 <script setup lang="ts">
 
 import { Avatar } from "ant-design-vue";
-import { CommentOutlined } from "@ant-design/icons-vue";
+import { CommentOutlined, MessageOutlined } from "@ant-design/icons-vue";
 import { RouterLink } from "vue-router";
 import { computed, onMounted, onUnmounted, ref, toRaw } from "vue";
 
@@ -37,8 +37,7 @@ const linkRef = computed<string>(() => {
 </script>
 
 <template>
-  <div class="w-[350px] transition-all duration-300 border-black/20 border rounded-md hover:shadow-md hover:shadow-gray-400/30">
-    <RouterLink :to="linkRef" >
+  <div class="w-[350px] transition-all duration-300 border-black/20 border rounded-md hover:shadow-2xl hover:shadow-gray-400/30 relative">
       <div class="flex flex-col gap-y-2">
 
         <!-- GAMBAR -->
@@ -61,7 +60,7 @@ const linkRef = computed<string>(() => {
             <!-- DETAIL -->
             <span class="text-[10px] font-normal text-black/40">
               <span v-if="itemDetail.length > 30">
-                {{ itemDetail.slice(0,35) }}
+                {{ itemDetail.slice(0,35) }} ...
               </span>
               <span v-else>
                 {{ itemDetail }}
@@ -77,14 +76,21 @@ const linkRef = computed<string>(() => {
           </div>
 
           <!-- KOMEN -->
-          <div class="w-full bg-gray-300 flex justify-between text-gray-500 py-1">
+          <div class="w-full bg-gray-300 flex justify-between text-gray-500 py-1 rounded-b-md justify-self-end">
             <div class="flex justify-center items-cener gap-2 ml-2 text-xs">
               <CommentOutlined />
               <span>{{ commentNum }}</span>
             </div>
           </div>
         </div>
-    </RouterLink>
+        <RouterLink :to="linkRef" >
 
+    <div class="absolute h-full w-full top-0 bg-black/80 rounded-md transition duration-300 opacity-0 hover:visible hover:opacity-100 flex justify-center gap-3 items-center text-white text-xl">
+        <MessageOutlined />
+        {{ commentNum }}
+    </div>
+  </RouterLink>
+
+    
   </div>
 </template>
