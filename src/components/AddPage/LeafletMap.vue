@@ -75,7 +75,7 @@ const findMap = async (location: string) => {
   showSearhResult.value = true;
   searchResult.value = null;
   const response = await axios.get(
-    `https://api.geoapify.com/v1/geocode/autocomplete?text=${location}&apiKey=55d95c9e97af4327b7ce93cabfdc35bd&format=json&limit=10&lang=id`
+    `https://api.geoapify.com/v1/geocode/autocomplete?text=${location}&apiKey=55d95c9e97af4327b7ce93cabfdc35bd&format=json&limit=20&lang=id`
   );
   console.log(response.data.results);
   searchResult.value = response.data.results.map((v: any, i: number) => {

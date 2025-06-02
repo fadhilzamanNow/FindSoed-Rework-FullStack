@@ -179,7 +179,7 @@ const tablesProps = computed<TableProps>(() => ({
 
 <template>
     <Flex vertical gap="20" class="w-full ">
-        <h1>Terdapat {{ tableDataSource.length }} barang yang ditemukan</h1>
+        <h1>Terdapat {{ postData.length }} barang yang ditemukan</h1>
         <div class="w-full p-2 ">
           <Flex class="min-w-0  lg:w-full overflow-auto h-[800px]" vertical >
               <Table v-bind="tablesProps"/>

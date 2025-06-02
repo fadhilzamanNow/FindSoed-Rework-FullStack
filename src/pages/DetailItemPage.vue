@@ -8,6 +8,7 @@ import { useAuthStore } from "../stores/authStore";
 import { useRouter } from "vue-router";
 import { jwtDecode } from "jwt-decode";
 import DetailItem from "../components/DetailPage/DetailItem.vue";
+import DetailItemEdit from "../components/DetailPage/DetailItemEdit.vue";
 
 
 const auth = useAuthStore();

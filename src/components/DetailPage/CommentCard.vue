@@ -14,22 +14,22 @@ const {userName,userProfile, message, created_at } = defineProps<CommentType>();
 </script>
 
 <template>
-  <div  class="h-full flex flex-col gap-2 p-1">
-    <div class="flex  gap-2.5">
-      <div class="text-xs self-start">
+  <div  class="h-full flex flex-col gap-2 p-1 hover:bg-gray-50 cursor-pointer ">
+    <div class="flex gap-2.5 ">
+      <div class="text-xs self-start ">
         <Avatar v-if="userProfile" :src="`http://localhost:3500/static/images/${userProfile}`" shape="square" class="select-none " />
         <Avatar v-else shape="square">{{ userName }}</Avatar>
       </div>
       <Flex vertical gap="8">
         <Flex align="start" gap="6" class="">
-          <span class="text-[8px] text-black/40 font-normal ">
+          <span class="text-[8px] text-black/40  font-semibold lg:font-bold lg:text-xs ">
           {{userName}}
               </span>
-              <span className="text-[8px] text-black/40 font-normal   ">
+              <span className="text-[8px] text-black/40 font-normal lg:text-xs  ">
                 {{created_at}}
               </span>
         </Flex>
-        <p class="text-[10px] font-light w-full text-black/80 text-wrap wrap-break-word">
+        <p class="text-[10px] font-normal w-full text-black text-wrap wrap-break-word lg:text-xs">
           {{ message }}
         </p>
       </Flex>

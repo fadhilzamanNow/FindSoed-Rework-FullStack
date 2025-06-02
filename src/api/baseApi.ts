@@ -3,7 +3,7 @@ import axios from "axios";
 
 const basePath = axios.create({
     baseURL: "http://localhost:3500",
-    timeout:1000,
+    timeout: 5000,
 })
 
 basePath.interceptors.request.use((config) => {
