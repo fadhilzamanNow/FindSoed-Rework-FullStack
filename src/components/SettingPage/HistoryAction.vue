@@ -1,16 +1,14 @@
 <script lang="ts" setup>
-import { DeleteOutlined, EditOutlined, EyeOutlined, InboxOutlined, WarningFilled, WarningOutlined } from '@ant-design/icons-vue';
-import { Button, ButtonProps, DatePicker, DatePickerProps, Dropdown, Flex, Input, InputProps, Menu, Modal, ModalProps, Select, Textarea, TextAreaProps, UploadDragger } from 'ant-design-vue';
-import { computed, h, isReactive, onMounted, reactive, ref, toRaw, toRef, toRefs, useTemplateRef, watch, watchEffect } from 'vue';
-import { myItem } from '../../dummy/historyLost';
+import { DeleteOutlined, EditOutlined, EyeOutlined, WarningFilled } from '@ant-design/icons-vue';
+import { Button, ButtonProps, DatePicker, DatePickerProps, Flex, Input, InputProps, Modal, ModalProps, Select, Textarea, TextAreaProps } from 'ant-design-vue';
+import { computed , ref, watchEffect } from 'vue';
+
 import { storeToRefs } from 'pinia';
 import { useAuthStore } from '../../stores/authStore';
 import dayjs from "dayjs";
 import localizedFormat from "dayjs/plugin/localizedFormat"
 import { SelectProps } from 'ant-design-vue/es/vc-select';
-import { datePickerProps } from 'ant-design-vue/es/date-picker/generatePicker/props';
 import { isEmpty } from 'lodash';
-
 dayjs.extend(localizedFormat);
 
 type UserPostTable = {
@@ -220,7 +218,7 @@ const deleteButtonProps = computed<ButtonProps>(() => ({
                 <Button v-bind="deleteButtonProps">Delete</Button>
             </Flex>
             </Flex>
-           
+
     </Modal>
 
     <Modal v-bind="modalEditProps" ref="editModal" id="editModal">
@@ -248,6 +246,6 @@ const deleteButtonProps = computed<ButtonProps>(() => ({
                 <!-- @vue-ignore -->
                 <DatePicker v-bind="dateProps" placement="bottomRight"  />
             </Flex>
-        </Flex> 
+        </Flex>
     </Modal>
 </template>
