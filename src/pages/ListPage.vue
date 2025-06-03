@@ -29,7 +29,7 @@ const { authToken } = storeToRefs(auth);
 const navigate = useRouter();
 
 watch(
-  authToken,
+  [authToken.value, navigate],
   () => {
     if (authToken.value && localStorage.getItem("authToken")) {
       const myToken = jwtDecode(authToken.value);
@@ -39,6 +39,7 @@ watch(
         navigate.push("/login");
       }
     } else {
+      auth.setAuthToken(null);
       navigate.push("/login");
     }
   },

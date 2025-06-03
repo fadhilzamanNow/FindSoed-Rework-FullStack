@@ -1,15 +1,20 @@
 <script setup lang="ts">
 import { LeafletMouseEvent, Map, Marker } from "leaflet";
-import { computed, onMounted, ref, toRaw, toRefs, useTemplateRef } from "vue";
+import { computed, onMounted, ref, useTemplateRef } from "vue";
 import leaflet from "leaflet";
 import MarkerPic from "../../assets/marker.png";
 import { Input, InputProps } from "ant-design-vue";
 import { ChangeEvent } from "ant-design-vue/es/_util/EventInterface";
 import { debounce } from "lodash";
-import axios from "axios";
+import { LoadingOutlined } from "@ant-design/icons-vue";
+import { getMatchLocation } from "../../api/Location/Location";
 
 //@ts-ignore
 import("leaflet/dist/leaflet.css");
+
+const emit = defineEmits<{
+  (e: "handlePickLocation", info: itemLocationType): void;
+}>();
 
 type itemLocationType = {
   latitude: number | null;
@@ -17,16 +22,12 @@ type itemLocationType = {
   locationName: string | null;
 };
 
-
-
 const { mapInfo } = defineProps<{ mapInfo: itemLocationType }>();
 
-/* const mapInfo = toRefs(map);
- */
 const myMap = ref<Map | null>(null);
 const myMarker = ref<Marker | null>(null);
 const searchMap = ref("");
-const searchResult = ref<any[] | null >([])
+const searchResult = ref<itemLocationType[] | null>([]);
 const showSearhResult = ref(false);
 
 const mapRef = useTemplateRef("leafletMap");
@@ -62,42 +63,34 @@ onMounted(() => {
           lat: e.latlng.lat,
           lng: e.latlng.lng,
         });
-        mapInfo.latitude = e.latlng.lat
-        mapInfo.longitude = e.latlng.lng
-        mapInfo.locationName = null
+        emit("handlePickLocation", {
+          latitude: e.latlng.lat,
+          longitude: e.latlng.lng,
+          locationName: null,
+        });
       }
     });
   }
 });
 
-const findMap = async (location: string) => {
-  console.log("Lokasi yang sedang dicari : ", location);
+const findMap = async () => {
   showSearhResult.value = true;
   searchResult.value = null;
-  const response = await axios.get(
-    `https://api.geoapify.com/v1/geocode/autocomplete?text=${location}&apiKey=55d95c9e97af4327b7ce93cabfdc35bd&format=json&limit=20&lang=id`
-  );
-  console.log(response.data.results);
-  searchResult.value = response.data.results.map((v: any, i: number) => {
-    return {
-      id: i,
-      lat: v.lat,
-      lon: v.lon,
-      formatted: v.formatted,
-    };
-  });
-  console.log(searchResult.value);
+  const response = await getMatchLocation(searchMap.value);
+  if (response) {
+    searchResult.value = response.data;
+  }
 };
 
-const debounceSearch = debounce((search: string) => {
+const debounceSearch = debounce(() => {
   if (searchMap.value.length > 0) {
-    findMap(searchMap.value);
+    findMap();
   }
 }, 1000);
 
 const handleSearch = (search: string) => {
   searchMap.value = search;
-  debounceSearch(search);
+  debounceSearch();
 };
 
 //@ts-ignore
@@ -112,22 +105,22 @@ const inputMapProps = computed<InputProps>(() => ({
   value: searchMap.value,
 }));
 
-const handleChooseMap = (data: any) => {
-  console.log("isi data : ", toRaw(data));
-    mapInfo.latitude = data.lat;
-    mapInfo.longitude = data.lon;
-    mapInfo.locationName = data.formatted;
-  
+const handleChooseMap = (data: itemLocationType) => {
+  emit("handlePickLocation", {
+    latitude: data.latitude,
+    longitude: data.longitude,
+    locationName: data.locationName,
+  });
 
   myMarker.value?.setLatLng({
-    lat: data.lat,
-    lng: data.lon,
+    lat: data.latitude as number,
+    lng: data.longitude as number,
   });
 
   myMap.value
     ?.setView({
-      lat: data.lat,
-      lng: data.lon,
+      lat: data.latitude as number,
+      lng: data.longitude as number,
     })
     .getZoom();
   searchMap.value = "";
@@ -136,56 +129,58 @@ const handleChooseMap = (data: any) => {
 </script>
 
 <template>
-   <Flex vertical class="w-full" gap="8">
-          <label for="item">Lokasi Kehilangan</label>
-          <div class="w-full h-[20vh] relative">
-            <div class="absolute z-[2] top-0 left-0 mt-1 ml-2">
-              <div class="w-[250px] md:w-[350px]">
-                <div class="relative h-max">
-                  <div>
-                    <Input.Search
-                      class="relative z-[2]"
-                      enter-button
-                      v-bind="inputMapProps"
-                    />
-                  </div>
-                  <div
-                    class="max-h-[10vh] bg-white rounded-md p-2 flex flex-col overflow-auto text-xs"
-                    v-if="searchMap.length > 0 && showSearhResult"
-                  >
-                    <div v-if="searchResult">
-                      <div v-if="searchResult.length > 0">
-                        <div
-                          v-for="(v, i) of searchResult"
-                          class="hover:bg-slate-100 bg-white transition-all duration-100 ease-in p-1 rounded-md cursor-pointer"
-                          :key="i"
-                          @click="handleChooseMap(v)"
-                        >
-                          {{ v.formatted }}
-                        </div>
-                      </div>
-                      <div v-else>
-                        <div class="flex flex-col justify-center items-center">
-                          Lokasi yang kamu cari tidak tersedia
-                        </div>
-                      </div>
-                    </div>
-                    <div v-else class="flex justify-center">
-                      <LoadingOutlined />
-                    </div>
-                  </div>
-                </div>
-                <div
-                  v-if="false"
-                  class="h-[120px] bg-white overflow-y-scroll p-2"
-                ></div>
-              </div>
+  <Flex vertical class="w-full" gap="8">
+    <label for="item" class="text-sm font-semibold w-full"
+      >Lokasi Kehilangan <span class="text-red-500">*</span></label
+    >
+    <div class="w-full h-[20vh] relative">
+      <div class="absolute z-[2] top-0 left-0 mt-1 ml-2">
+        <div class="w-[250px] md:w-[350px]">
+          <div class="relative h-max">
+            <div>
+              <Input.Search
+                class="relative z-[2]"
+                enter-button
+                v-bind="inputMapProps"
+              />
             </div>
             <div
-              ref="leafletMap"
-              id="map"
-              class="w-full h-full rounded-md z-[1]"
-            ></div>
+              class="max-h-[10vh] bg-white rounded-md p-2 flex flex-col overflow-auto text-xs"
+              v-if="searchMap.length > 0 && showSearhResult"
+            >
+              <div v-if="searchResult">
+                <div v-if="searchResult.length > 0">
+                  <div
+                    v-for="(v, i) of searchResult"
+                    class="hover:bg-slate-100 bg-white transition-all duration-100 ease-in p-1 rounded-md cursor-pointer"
+                    :key="i"
+                    @click="handleChooseMap(v)"
+                  >
+                    {{ v.locationName }}
+                  </div>
+                </div>
+                <div v-else>
+                  <div class="flex flex-col justify-center items-center">
+                    Lokasi yang kamu cari tidak tersedia
+                  </div>
+                </div>
+              </div>
+              <div v-else class="flex justify-center">
+                <LoadingOutlined />
+              </div>
+            </div>
           </div>
-        </Flex>
+          <div
+            v-if="false"
+            class="h-[120px] bg-white overflow-y-scroll p-2"
+          ></div>
+        </div>
+      </div>
+      <div
+        ref="leafletMap"
+        id="map"
+        class="w-full h-full rounded-md z-[1]"
+      ></div>
+    </div>
+  </Flex>
 </template>

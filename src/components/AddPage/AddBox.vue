@@ -1,13 +1,6 @@
 <script setup lang="ts">
 import { Flex, message, Modal } from "ant-design-vue";
-import {
-  computed,
-  defineAsyncComponent,
-  reactive,
-  ref,
-  Suspense,
-  watch,
-} from "vue";
+import { computed, defineAsyncComponent, reactive, ref, Suspense } from "vue";
 import { Input, Select, Textarea, DatePicker, Button } from "ant-design-vue";
 import type { DatePickerProps, UploadProps } from "ant-design-vue";
 import { Upload } from "ant-design-vue";
@@ -15,8 +8,7 @@ import lodash from "lodash";
 import { createPost, itemLocationType } from "../../api/Post/Post";
 import { useRouter } from "vue-router";
 import BreadCrumbComp from "../BreadCrumb/BreadCrumbComp.vue";
-
-//@ts-ignore
+import { CustomErrorResponse } from "../../api/baseApi";
 
 const mapInfo = reactive<itemLocationType>({
   latitude: null,
@@ -28,15 +20,7 @@ const itemCategory = ref<string>();
 const itemDescription = ref<string>("");
 const itemDate = ref<string | string[]>();
 
-
-
-
-
 const LazyLeafletMap = defineAsyncComponent(() => import("./LeafletMap.vue"));
-
-watch(mapInfo, (newValue) => {
-  console.log('Parent mapInfo changed:', JSON.stringify(newValue));
-}, { deep: true });
 
 const navigate = useRouter();
 
@@ -58,8 +42,6 @@ const handleRemove: UploadProps["onRemove"] = (file) => {
 const beforeUpload: UploadProps["beforeUpload"] = (file) => {
   const isPNG = file.type === "image/png" || file.type === "image/jpeg";
   if (isPNG) {
-    console.log("masuk");
-    console.log("isi file : ", file);
     fileList.value = [...(fileList.value || []), file];
     return false;
   } else {
@@ -68,12 +50,18 @@ const beforeUpload: UploadProps["beforeUpload"] = (file) => {
   }
 };
 
-
-
 const isDisabled = computed(() => {
-  return !lodash.isEmpty(itemName.value && itemCategory.value);
+  return (
+    !lodash.isEmpty(
+      itemName.value &&
+        itemCategory.value &&
+        itemDescription.value &&
+        itemDate.value
+    ) &&
+    mapInfo.latitude &&
+    (fileList.value?.length as number) > 0
+  );
 });
-
 
 const handleSubmit = async () => {
   try {
@@ -88,9 +76,7 @@ const handleSubmit = async () => {
     if (fileList.value) {
       fileList.value.forEach((v) => {
         //@ts-ignore
-        console.log("isi file list : ", v.originFileObj);
-        //@ts-ignore
-        newPost.append("postImage", v.originFileObj);
+        newPost.append("postImage", v);
       });
     }
 
@@ -107,94 +93,107 @@ const handleSubmit = async () => {
       });
     }
   } catch (err: any) {
-    console.log("isi err : ", err);
     Modal.error({
       title: "Barang Gagal Ditambahkan",
       //@ts-ignore
-      content: err.message.message,
+      content: (err as CustomErrorResponse).message,
       centered: true,
       zIndex: 999999,
     });
   }
 };
 
-const dateProps: DatePickerProps = {
+const dateProps = computed<DatePickerProps | { placement?: string }>(() => ({
   format: "YYYY-MM-DD",
   onChange: (_, date) => (itemDate.value = date),
+  placement: "bottomRight",
+}));
+
+const uploadProps = computed<UploadProps>(() => ({
+  listType: "picture",
+  beforeUpload: beforeUpload,
+  onRemove: handleRemove,
+  defaultFileList: fileList.value,
+  accept: ".png,.jpeg,.jpg",
+}));
+
+const handlePickLocation = (info: itemLocationType) => {
+  mapInfo.latitude = info.latitude;
+  mapInfo.longitude = info.longitude;
+  mapInfo.locationName = info.locationName;
 };
-
-
 </script>
 
 <template>
-  
   <div class="md:ml-16 mt-16 pt-5.5 px-4 sm:px-6 md:px-8">
-  <BreadCrumbComp title="Tambah Barang" />
-  <div class="flex flex-col h-full">
-    <div class="flex flex-col items-center justify-center gap-6 w-full">
-      <div
-        class="flex flex-col gap-4  sm:max-w-[800px] sm:border-gray-200 w-full justify-center rounded-md pt-4"
-      >
-        <Flex vertical class="w-full" gap="8">
-          <label for="item" @click="() => console.log('file list : ', fileList)"
-            >Nama Barang</label
-          >
-          <Input placeholder="Nama Barang" v-model:value="itemName" />
-        </Flex>
-        <Flex vertical class="w-full" gap="8">
-          <label for="item">Kategori Barang</label>
-          <Select
-            placeholder="Pilih Kategori Barang"
-            :options="option"
-            v-model:value="itemCategory"
-          />
-        </Flex>
-        <Flex vertical class="w-full" gap="8">
-          <label for="item">Deskripsi Barang</label>
-          <Textarea
-            placeholder="Deskripsi Barang"
-            v-model:value="itemDescription"
-          />
-        </Flex>
-        <Flex vertical class="w-full" gap="8">
-          <label for="item">Tanggal Kehilangan</label>
-          <DatePicker
-            placement="bottomRight"
-            @change="(_, e) => (itemDate = e)"
-            format="YYYY-MM-DD"
-          />
-        </Flex>
-        <Flex vertical class="w-full" gap="8">
-          <label for="item">Foto Barang</label>
-          <div class="h-[10vh] overflow-auto">
-            <Upload
-              v-model:file-list="fileList"
-              list-type="picture"
-              :before-upload="beforeUpload"
-              @remove="handleRemove"
-              :default-file-list="fileList"
-              accept=".png,.jpeg,.jpg"
+    <BreadCrumbComp title="Tambah Barang" />
+    <div class="flex flex-col h-full">
+      <div class="flex flex-col items-center justify-center gap-6 w-full">
+        <div
+          class="flex flex-col gap-4 sm:max-w-[800px] sm:border-gray-200 w-full justify-center rounded-md pt-4"
+        >
+          <Flex vertical class="w-full" gap="8">
+            <label for="item" class="text-sm w-full font-semibold"
+              >Nama Barang <span class="text-red-500">*</span></label
             >
-              <Button>Upload Gambar</Button>
-            </Upload>
-          </div>
-        </Flex>
-       
-           <Suspense>
-            <LazyLeafletMap :mapInfo="mapInfo"/>
-           </Suspense>
-         
+            <Input placeholder="Nama Barang" v-model:value="itemName" />
+          </Flex>
+          <Flex vertical class="w-full" gap="8">
+            <label for="item" class="text-sm font-semibold w-full"
+              >Kategori Barang <span class="text-red-500">*</span></label
+            >
+            <Select
+              placeholder="Pilih Kategori Barang"
+              :options="option"
+              v-model:value="itemCategory"
+            />
+          </Flex>
+          <Flex vertical class="w-full" gap="8">
+            <label for="item" class="text-sm font-semibold w-full"
+              >Deskripsi Barang <span class="text-red-500">*</span></label
+            >
+            <Textarea
+              placeholder="Deskripsi Barang"
+              v-model:value="itemDescription"
+            />
+          </Flex>
+          <Flex vertical class="w-full" gap="8">
+            <label for="item" class="text-sm font-semibold w-full"
+              >Tanggal Kehilangan <span class="text-red-500">*</span>
+            </label>
+            <!-- @vue-ignore -->
+            <DatePicker v-bind="dateProps" />
+          </Flex>
+          <Flex vertical class="w-full" gap="8">
+            <label for="item" class="text-sm font-semibold w-full"
+              >Foto Barang <span class="text-red-500">*</span></label
+            >
+            <div class="h-[10vh] overflow-auto">
+              <Upload v-bind="uploadProps" multiple>
+                <Button>Upload Gambar</Button>
+              </Upload>
+            </div>
+          </Flex>
 
-        <Flex justify="end">
-          <div class="w-max">
-            <Button type="primary" @click="handleSubmit" :disabled="false" >Submit</Button>
-          </div>
-        </Flex>
+          <Suspense>
+            <LazyLeafletMap
+              :mapInfo="mapInfo"
+              @handle-pick-location="handlePickLocation"
+            />
+          </Suspense>
+
+          <Flex justify="end">
+            <div class="w-max">
+              <Button
+                type="primary"
+                @click="handleSubmit"
+                :disabled="!isDisabled"
+                >Submit</Button
+              >
+            </div>
+          </Flex>
+        </div>
       </div>
     </div>
   </div>
-</div>
-
 </template>
-
-
