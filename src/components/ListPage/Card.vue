@@ -47,7 +47,11 @@ watchEffect(() => {
 })
 
 
-
+const imageProps = computed<{src : string, class : string}>(() => ({
+  /* @ts-ignore */
+  src : `${BACKEND_URL}static/images/${images[0]}`,
+  class : "w-full h-[120px] object-cover rounded-t-md bg-gray-300"
+}))
 
 
 
@@ -62,7 +66,8 @@ watchEffect(() => {
 
         <!-- GAMBAR -->
         <div class="relative">
-          <img :src="`http://localhost:3500/static/images/${images[0]}`" class="w-full h-[120px] object-cover rounded-t-md bg-gray-300">
+          <!-- @vue-ignore -->
+          <img v-bind="imageProps">
           <span :class="['p-0.5 text-white rounded-md absolute top-2 right-2 text-xs', status === 'Hilang' ? 'bg-red-500' : 'bg-green-400']">{{ status }}</span>
         </div>
 

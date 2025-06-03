@@ -1,110 +1,115 @@
 <script setup lang="ts">
 import {
-  CodeSandboxOutlined,
   HomeFilled,
   MenuFoldOutlined,
   MenuUnfoldOutlined,
   MoreOutlined,
   PlusCircleOutlined,
   SettingFilled,
-  SettingOutlined,
 } from "@ant-design/icons-vue";
-import { Avatar, AvatarProps, Flex } from "ant-design-vue";
+import { Avatar, AvatarProps } from "ant-design-vue";
 const { active = "" } = defineProps<{ active: string }>();
-import { RouterLink } from "vue-router";
 import Iconitem from "./Iconitem.vue";
-import { computed, ref, useTemplateRef, watchEffect } from "vue";
-import { useSidebarStore } from "../../stores/sidebarInfo";
+import { computed, watchEffect } from "vue";
 import { storeToRefs } from "pinia";
-import { useViewPortStore } from "../../stores/viewportStore";
-import { vi } from "intl-tel-input/i18n";
 import { useAuthStore } from "../../stores/authStore";
 import { useSideStore } from "../../stores/sideStore";
-import { useViewStore } from "../../stores/viewStore";
-import logo from "../../assets/icon.png"
+import logo from "../../assets/icon.png";
+import { ref } from "vue";
 
-
-const sidebar = useSideStore();
-const {isExpand} = storeToRefs(sidebar)
-const {width} = storeToRefs(useViewStore())
 const listMenu = [
   {
-    name : 'Home',
-    icon : HomeFilled,
-    link : '/home',
+    name: "Home",
+    icon: HomeFilled,
+    link: "/home",
   },
   {
-    name : 'Add',
-    icon : PlusCircleOutlined,
-    link : '/add'
+    name: "Add",
+    icon: PlusCircleOutlined,
+    link: "/add",
   },
   {
-    name : 'Setting',
-    icon : SettingFilled,
-    link : '/setting'
-  }
-]
+    name: "Setting",
+    icon: SettingFilled,
+    link: "/setting",
+  },
+];
 const auth = useAuthStore();
-const {userInfo} = storeToRefs(auth);
-
-const sidebarRef = useTemplateRef('sidebarRef')
-
+const { userInfo } = storeToRefs(auth);
+const isExpand = ref(false);
 
 const profileProps = computed<AvatarProps>(() => ({
-  src : `http://localhost:3500/static/images/${userInfo.value?.imageUrl}`,
-  size : 36,
-  shape : "square"
-}))
+  /* @ts-ignore */
+  src: `${BACKEND_URL}static/images/${userInfo.value?.imageUrl}`,
+  size: 36,
+  shape: "square",
+}));
 
-
-
-watchEffect(() => {
-  console.log("user info in sidebar is changing : ", userInfo.value)
-})
-
-
-
-
-
+const toggleSidebar = () => {
+  isExpand.value = !isExpand.value;
+};
 </script>
 
 <template>
-  <aside :class="`fixed top-0 left-0 z-51 h-[100vh] hidden md:block`"  ref="sidebarRef">
-    <nav class="h-full flex flex-col bg-white border-r border-r-gray-200 shadow-sm">
-      <div class="p-3 pb-2 flex items-center justify-between  border-b-gray-300  h-16">
-       
-
-        <div :class="`overflow-hidden transition-all duration-300 ${isExpand ? 'w-34' : 'w-0'}`">
+  <aside
+    :class="`fixed top-0 left-0 z-51 h-[100vh] hidden md:block`"
+    ref="sidebarRef"
+  >
+    <nav
+      class="h-full flex flex-col bg-white border-r border-r-gray-200 shadow-sm"
+    >
+      <div
+        class="p-3 pb-2 flex items-center justify-between border-b-gray-300 h-16"
+      >
+        <div
+          :class="`overflow-hidden transition-all duration-300 ${
+            isExpand ? 'w-34' : 'w-0'
+          }`"
+        >
           <div class="flex items-center gap-2">
-                     <div class="size-10">
-                         <img :src="logo" alt="" class="h-full w-full object-contain" />
-                     </div>
-                     <div class="flex items-center text-xl font-bold">
-                         <span class="text-black">Find</span>
-                         <span class="text-blue-600">Soed</span>
-                     </div>
-                 </div>
+            <div class="size-10">
+              <img :src="logo" alt="" class="h-full w-full object-contain" />
+            </div>
+            <div class="flex items-center text-xl font-bold">
+              <span class="text-black">Find</span>
+              <span class="text-blue-600">Soed</span>
+            </div>
+          </div>
         </div>
-        <div @click="() => sidebar.toggleSidebar()" class="text-xl hover:bg-blue-600 p-2 transition-color bg-white hover:text-white text-black rounded-md flex justify-center items-center">
-          <MenuFoldOutlined v-if="isExpand"/>
+        <div
+          @click="toggleSidebar"
+          class="text-xl hover:bg-blue-600 p-2 transition-color bg-white hover:text-white text-black rounded-md flex justify-center items-center"
+        >
+          <MenuFoldOutlined v-if="isExpand" />
           <MenuUnfoldOutlined v-else />
         </div>
-        
       </div>
       <ul class="flex-1 px-3 pt-4">
-        <Iconitem v-for="(v,i) of listMenu" :key="i" :name="v.name" :link="v.link" :active="active">
+        <Iconitem
+          v-for="(v, i) of listMenu"
+          :key="i"
+          :name="v.name"
+          :link="v.link"
+          :active="active"
+          :isExpand="isExpand"
+        >
           <template v-slot:icon>
             <component :is="v.icon"></component>
           </template>
         </Iconitem>
       </ul>
-      <div class="border-t border-t-gray-200 flex p-3" :class="[isExpand ? '' : 'justify-center']"> 
-          <Avatar v-if="userInfo?.imageUrl"  v-bind="profileProps"  />
-          <Avatar v-else :size="36" shape="square" >{{ userInfo?.username.slice(0,2) }}</Avatar>
-      <div >
-        </div>
-        
-        <div class="flex justify-between items-center overflow-hidden transition-all duration-300" :class="[isExpand ? 'w-52 ml-3' : 'w-0']">
+      <div
+        class="border-t border-t-gray-200 flex p-3"
+        :class="[isExpand ? '' : 'justify-center']"
+      >
+        <Avatar v-if="userInfo?.imageUrl" v-bind="profileProps" />
+        <Avatar v-else :size="36" shape="square">{{
+          userInfo?.username.slice(0, 2)
+        }}</Avatar>
+        <div
+          class="flex justify-between items-center overflow-hidden transition-all duration-300"
+          :class="[isExpand ? 'w-52 ml-3' : 'w-0']"
+        >
           <div class="leading-4">
             <h1 class="font-semibold text-sm">
               {{ userInfo?.username }}
@@ -116,34 +121,4 @@ watchEffect(() => {
       </div>
     </nav>
   </aside>
-<!--   <Flex class="h-[100vh] w-max px-1 bg-black py-2" vertical>
-    <Flex vertical gap="8" justify="space-between" align="center">
-      <Avatar :style="{ backgroundColor: 'gray', color: 'white' }"
-        >Fa</Avatar
-      >
-      <Iconitem v-for="(v,i) in listMenu" :key="i" :link="v.link" :active="active" >
-        <template v-slot:name>
-         <span class="text-black">{{ v.name }}</span> 
-        </template>
-        <template v-slot:icon>
-          <component :is="v.icon" class="!text-white"></component>
-        </template>
-      </Iconitem> -->
-      <!-- <RouterLink to="/add">
-        <PlusCircleOutlined
-          :class="[active === 'Add' ? '!text-[#1890FF]' : '!text-white' ,'text-2xl']"
-        />
-      </RouterLink> -->
-   <!--  </Flex>
-      <Flex flex="1" vertical justify="end" align="center">
-        <RouterLink to="/setting">
-
-        <SettingOutlined
-       
-          :class="[active === 'Settings' ? '!text-[#1890FF]' : '!text-white' ,'text-2xl']"
-        />
-      </RouterLink>
-
-      </Flex>
-  </Flex> -->
 </template>

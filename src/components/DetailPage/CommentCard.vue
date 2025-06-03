@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import { Avatar, Flex } from "ant-design-vue";
+import { Avatar, AvatarProps, Flex } from "ant-design-vue";
+import { computed } from "vue";
 
 type CommentType = {
   userName: string;
@@ -10,6 +11,12 @@ type CommentType = {
 
 const {userName,userProfile, message, created_at } = defineProps<CommentType>();
 
+const commentAvatarProps = computed<AvatarProps>(() => ({
+  /* @ts-ignore */
+  src : `${BACKEND_URL}static/images/${userProfile}`,
+  shape : "square",
+  class : "select-none"
+}))
 
 </script>
 
@@ -17,7 +24,7 @@ const {userName,userProfile, message, created_at } = defineProps<CommentType>();
   <div  class="h-full flex flex-col gap-2 p-1 hover:bg-gray-50 cursor-pointer ">
     <div class="flex gap-2.5 ">
       <div class="text-xs self-start ">
-        <Avatar v-if="userProfile" :src="`http://localhost:3500/static/images/${userProfile}`" shape="square" class="select-none " />
+        <Avatar v-if="userProfile" v-bind="commentAvatarProps" />
         <Avatar v-else shape="square">{{ userName }}</Avatar>
       </div>
       <Flex vertical gap="8">

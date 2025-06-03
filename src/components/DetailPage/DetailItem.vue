@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Avatar, Empty, Flex, Image, InputProps, message, Modal, Skeleton, SkeletonInput } from "ant-design-vue";
+import { Avatar, Empty, Flex, Image, ImageProps, InputProps, message, Modal, Skeleton, SkeletonInput } from "ant-design-vue";
 import {
   computed,
   defineAsyncComponent,
@@ -12,7 +12,7 @@ import {
   watchEffect,
 } from "vue";
 import { Input, Select, Textarea, DatePicker, Button } from "ant-design-vue";
-import type { DatePickerProps, UploadProps } from "ant-design-vue";
+import type { AvatarProps, DatePickerProps, UploadProps } from "ant-design-vue";
 import { Upload } from "ant-design-vue";
 import lodash from "lodash";
 import { createPost, getDetailPost, itemLocationType } from "../../api/Post/Post";
@@ -169,6 +169,26 @@ const handleAddComment = async () => {
   }
 }
 
+const imageDetailProps = computed(() => {
+
+  return (imageName: string): ImageProps => {
+   
+    return {
+      /* @ts-ignore */
+      src: `${BACKEND_URL}static/images/${imageName}`,
+      width: "100%",
+      height: "100%",
+      class: "object-cover h-full w-full border-2 border-gray-300 rounded-md object-center",
+      alt : `Gambar Detail ${imageName}`
+    };
+  };
+});
+
+const detailCreateProps = computed<AvatarProps>(() => ({
+  src: `http://localhost:3500/static/images/${postDetail.value?.userProfile}`,
+  shape : "square"
+}))
+
 </script>
 
 <template>
@@ -196,7 +216,8 @@ const handleAddComment = async () => {
        
            <!-- SLIDE -->
            <SwiperSlide v-for="(v,i) in postDetail?.images" :key="i" class="  ">
-             <Image :src="`http://localhost:3500/static/images/${v}`" width="100%" height="100%" class="object-cover h-full w-full border-2 border-gray-300  rounded-md object-center"/>
+            <!-- @vue-ignore -->
+             <Image v-bind="imageDetailProps(v)"  />
            </SwiperSlide>
 
              <!-- NAVIGAITON -->
@@ -222,7 +243,7 @@ const handleAddComment = async () => {
                  align="center"
                  class="w-full sm:min-w-[400px] pb-2"
                >
-                 <Avatar v-if="postDetail?.userProfile" :src="`http://localhost:3500/static/images/${postDetail.userProfile}`" shape="square" />
+                 <Avatar v-if="postDetail?.userProfile" v-bind="detailCreateProps" />
                  <Avatar v-else>{{ postDetail?.userName.slice(0,2) }}</Avatar>
                  <span class="text-[#6b6969] text-xs font-semibold">{{ postDetail?.userName}}</span>
                </Flex>
