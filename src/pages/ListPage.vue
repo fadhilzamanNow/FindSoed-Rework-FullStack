@@ -1,40 +1,32 @@
 <script setup lang="ts">
-import { h, onMounted, onUnmounted, watch, watchEffect } from "vue";
+import { watch} from "vue";
 import ListBox from "../components/ListPage/ListBox.vue";
 import Sidebar from "../components/Sidebar/Sidebar.vue";
-import { useSidebarStore } from "../stores/sidebarInfo";
-import { useViewPortStore } from "../stores/viewportStore";
-import { useNavbarStore } from "../stores/navbarInfo";
 import { storeToRefs } from "pinia";
-import MiniSideBar from "../components/Sidebar/MiniSideBar.vue";
 import { useAuthStore } from "../stores/authStore";
 import { jwtDecode } from "jwt-decode";
 import { useRouter } from "vue-router";
-import { Modal, ModalProps } from "ant-design-vue";
-import { Button } from "ant-design-vue";
-import { useViewStore } from "../stores/viewStore";
-import { useSideStore } from "../stores/sideStore";
-import BreadCrumbComp from "../components/BreadCrumb/BreadCrumbComp.vue";
 import Navbar from "../components/LandingPage/Navbar.vue";
-import AddBox from "../components/AddPage/AddBox.vue";
+import { useSeoMeta  } from '@unhead/vue';
 
-const sidebar = useSideStore();
-const {isExpand} = storeToRefs(sidebar);
-const {view, handleViewport} = useViewPortStore();
-const {isNavbarOpen} = storeToRefs(useNavbarStore());
+useSeoMeta({
+    title : "SSR RSbuild Home Page - Findsoed Rework",
+    description : "SSR Rsbuild Halaman Home Page untuk Findsoed Rework yang dapat digunakan untuk melihat seluruh barang hilang yang tersedia",
+    ogTitle : "SSR Rsbuild Home Page - Findsoed Rework",
+    ogDescription : "SSR Rsbuild Halaman Home Page untuk Findsoed Rework yang dapat digunakan untuk melihat seluruh barang hilang yang tersedia ",
+    ogUrl : "http://localhost:3500/home",
+    ogSiteName : "Findsoed Rework",
+    ogType : "website",
+    author : "Muhammad Ilham Isfadhillah",
+    twitterTitle : "SSR Rsbuild Home Page - Findsoed Rework",
+    robots : "index, follow"
+})
+
 const auth = useAuthStore();
 const {authToken} = storeToRefs(auth)
 const navigate = useRouter();
-const views = useViewStore();
-const {width, height} = storeToRefs(views);
 
-onMounted(() => {
-  window.addEventListener('resize', handleViewport)
-})
 
-onUnmounted(() => {
-  window.removeEventListener('resize', handleViewport)
-})
 
 
 watch(authToken,() => {
@@ -50,24 +42,6 @@ watch(authToken,() => {
   immediate : true
 })
 
-const modalAuth : ModalProps = {
- /*  open
-        centered
-        title="Gagal"
-        footer={
-            [
-                <Button color="danger" onClick={() => navigate("/login")}>Back</Button>
-            ]
-        }
-        > */
-       open : true,
-       title : "Gagal Masuk",
-       centered : true
-}
-
-watch(width,() => {
-  console.log("isi width nya : ", width.value)
-}, {immediate : true})
 </script>
 
 
@@ -76,37 +50,12 @@ watch(width,() => {
   <div class="min-h-screen">
     <!-- NAVBAR -->
     <Navbar />
-
     <ListBox />
     <Sidebar active="Home" />
-    <!-- <Sidebar active="Home"  /> -->
 
-    <!-- SIDEBAR -->
 
-    <!-- <div v-if="!authToken">
-      <div className="w-full h-full absolute z-[100] bg-black/10 flex items-center justify-center text-5xl text-[#1899FF]">
-        <Modal v-bind="modalAuth">
-          <template #footer>
-            <Button  danger @click="() => navigate.push('login')" >Back</Button>
-          </template>
-        <p>Anda tidak dapat masuk karena belum login</p>
-        </Modal>
-        </div>
-    </div> -->
+   
     
-    <!-- <div class="h-full w-full relative">
-    <div class="h-full flex-1 flex flex-col" :class="width >= 1000 ? 'ml-16' : ''">
-      <div :class="['fixed top-0 z-999 w-full', width >= 1000 ? 'pr-16' : '']">
-      </div>
-      <div class="relative w-full h-full mt-[50px]">
-        <div class="absolute w-full h-full z-[2]">
-          <div class="flex flex-col h-full gap-6 p-3.5">
-                <ListBox />
-          </div>        
-        </div>
-        
-      </div>
-    </div>
-  </div> -->
+   
   </div>
 </template>

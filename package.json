@@ -26,6 +26,7 @@
     "@types/vue-tel-input": "^2.1.7",
     "@types/vue-writer": "^1.2.0",
     "@types/zxcvbn": "^4.4.5",
+    "@unhead/schema-org": "^2.0.10",
     "@unhead/vue": "^2.0.10",
     "@vueuse/motion": "^3.0.3",
     "ant-design-vue": "^4.2.6",

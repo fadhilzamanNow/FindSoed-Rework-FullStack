@@ -8,16 +8,21 @@ import { ref, watch, watchEffect } from 'vue';
 import { useAuthStore } from '../stores/authStore';
 import { useRouter } from 'vue-router';
 import { storeToRefs } from 'pinia';
-import { useHead } from '@unhead/vue';
+import { useSeoMeta } from '@unhead/vue';
 import Navbar from '../components/LandingPage/Navbar.vue';
 import Footer from '../components/LandingPage/Footer.vue';
 
-useHead({
-    title : "LoginPage",
-    titleTemplate : "%s | FindSoed Rework",
-    meta : [
-        {name : 'description', content : "Pada aplikasi ini kamu akan melakukan autentikasi pengguna untuk melihat pengguna"}
-    ]
+useSeoMeta({
+    title : "SSR RSbuild Login Page - Findsoed Rework",
+    description : "SSR Rsbuild Halaman Login Page untuk Findsoed Rework dapat digunakan untuk autentikasi pengguna",
+    ogTitle : "SSR Rsbuild Login Page - Findsoed Rework",
+    ogDescription : "SSR Rsbuild Halaman Login Page untuk Findsoed Rework dapat digunakan untuk autentikasi pengguna",
+    ogUrl : "http://localhost:3500/login",
+    ogSiteName : "Findsoed Rework",
+    ogType : "website",
+    author : "Muhammad Ilham Isfadhillah",
+    twitterTitle : "SSR Rsbuild Login Page - Findsoed Rework",
+    robots : "index, follow"
 })
 
 const auth = useAuthStore();

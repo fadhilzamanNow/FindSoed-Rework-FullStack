@@ -11,7 +11,7 @@ import ListPage from "./pages/ListPage.vue";
 import AddPage from "./pages/AddPage.vue";
 import SettingsPage from "./pages/SettingsPage.vue";
 import DetailItemPage from "./pages/DetailItemPage.vue";
-import LandingPage from "./pages/LandingPage.vue"; */
+import LandingPage from "./pages/LandingPage.vue" */;
 import { defineAsyncComponent } from "vue";
 
   const LazyLandingPage = defineAsyncComponent(() => import("./pages/LandingPage.vue"))
@@ -24,6 +24,41 @@ import { defineAsyncComponent } from "vue";
   
 
   const routes = [
+    /* {
+      path : "/",
+      name : "landing",
+      component : LandingPage
+    },
+    {
+      path: "/login",
+      name: "login",
+      component: LoginPage,
+    },
+    {
+      path: "/register",
+      name: "about",
+      component: RegisterPage,
+    },
+    {
+      path: "/home",
+      name: "list",
+      component: ListPage,
+    },
+    {
+      path : "/add",
+      name : "add",
+      component : AddPage
+    },
+    {
+      path : "/setting",
+      name : "setting",
+      component : SettingsPage
+    },
+    {
+      path : "/detail/:id",
+      name : "detail",
+      component : DetailItemPage
+    } */
     {
       path : "/",
       name : "landing",

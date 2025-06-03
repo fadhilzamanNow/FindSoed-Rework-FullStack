@@ -2,13 +2,25 @@
 import Navbar from "../components/LandingPage/Navbar.vue";
 import Sidebar from "../components/Sidebar/Sidebar.vue";
 import { watch } from "vue";
-import AddBox from "../components/AddPage/AddBox.vue";
 import { storeToRefs } from "pinia";
 import { useAuthStore } from "../stores/authStore";
 import { useRouter } from "vue-router";
 import { jwtDecode } from "jwt-decode";
 import DetailItem from "../components/DetailPage/DetailItem.vue";
-import DetailItemEdit from "../components/DetailPage/DetailItemEdit.vue";
+import { useSeoMeta  } from '@unhead/vue';
+
+useSeoMeta({
+    title : "SSR RSbuild Detail Item Page - Findsoed Rework",
+    description : "SSR Rsbuild Halaman Detail Item Page untuk Findsoed Rework yang dapat digunakan untuk melihat detail dari barang yang dipilih",
+    ogTitle : "SSR Rsbuild Detail Item Page - Findsoed Rework",
+    ogDescription : "SSR Rsbuild Halaman Detail Item Page untuk Findsoed Rework yang dapat digunakan untuk melihat detail dari barang yang dipilih",
+    ogUrl : "http://localhost:3500/detail",
+    ogSiteName : "Findsoed Rework",
+    ogType : "website",
+    author : "Muhammad Ilham Isfadhillah",
+    twitterTitle : "SSR Rsbuild Detail Item Page - Findsoed Rework",
+    robots : "index, follow"
+})
 
 
 const auth = useAuthStore();

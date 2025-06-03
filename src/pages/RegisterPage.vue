@@ -9,6 +9,22 @@ import { storeToRefs } from 'pinia';
 import { useRouter } from 'vue-router';
 import Footer from '../components/LandingPage/Footer.vue';
 import { LoadingOutlined } from '@ant-design/icons-vue';
+import { useSeoMeta  } from '@unhead/vue';
+
+useSeoMeta({
+    title : "SSR RSbuild Register Page - Findsoed Rework",
+    description : "SSR Rsbuild Halaman Register Page untuk Findsoed Rework yang dapat digunakan untuk mendaftarkan akun mereka",
+    ogTitle : "SSR Rsbuild Register Page - Findsoed Rework",
+    ogDescription : "SSR Rsbuild Halaman Register Page untuk Findsoed Rework yang dapat digunakan untuk mendaftarkan akun mereka",
+    ogUrl : "http://localhost:3500/register",
+    ogSiteName : "Findsoed Rework",
+    ogType : "website",
+    author : "Muhammad Ilham Isfadhillah",
+    twitterTitle : "SSR Rsbuild Register Page - Findsoed Rework",
+    robots : "index, follow"
+})
+
+
 
 const auth = useAuthStore();
 const {authToken} = storeToRefs(auth)
@@ -25,6 +41,8 @@ watchEffect(() => {
 const handleLoading = () => {
     registerLoading.value = !registerLoading.value
 }
+
+
 
 </script>
 

@@ -12,6 +12,20 @@ import { useSideStore } from "../stores/sideStore";
 import { useAuthStore } from "../stores/authStore";
 import { jwtDecode } from "jwt-decode";
 import { useRouter } from "vue-router";
+import { useSeoMeta  } from '@unhead/vue';
+
+useSeoMeta({
+    title : "SSR RSbuild Setting Page - Findsoed Rework",
+    description : "SSR Rsbuild Halaman Setting Page untuk Findsoed Rework yang dapat digunakan untuk mengatur profil dan history barang pengguna",
+    ogTitle : "SSR Rsbuild Home Page - Findsoed Rework",
+    ogDescription : "SSR Rsbuild Halaman Setting Page untuk Findsoed Rework yang dapat digunakan untuk mengatur profil dan history barang pengguna",
+    ogUrl : "http://localhost:3500/setting",
+    ogSiteName : "Findsoed Rework",
+    ogType : "website",
+    author : "Muhammad Ilham Isfadhillah",
+    twitterTitle : "SSR Rsbuild Setting Page - Findsoed Rework",
+    robots : "index, follow"
+})
 
 
 const auth = useAuthStore();

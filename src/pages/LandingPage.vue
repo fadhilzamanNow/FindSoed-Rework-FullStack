@@ -14,6 +14,21 @@ import { storeToRefs } from 'pinia';
 import { useAuthStore } from '../stores/authStore';
 import { watchEffect } from 'vue';
 import {  useRouter } from 'vue-router';
+import { useSeoMeta  } from '@unhead/vue';
+
+useSeoMeta({
+    title : "SSR RSbuild Landing Page - Findsoed Rework",
+    description : "SSR Rsbuild Halaman Landing Page untuk Findsoed Rework",
+    ogTitle : "SSR Rsbuild Landing Page - Findsoed Rework",
+    ogDescription : "SSR Halaman Landing Page untuk Findsoed Rework yang berisikan informasi secara umum mengenai Findsoed",
+    ogUrl : "http://localhost:3500/",
+    ogSiteName : "Findsoed Rework",
+    ogType : "website",
+    author : "Muhammad Ilham Isfadhillah",
+    twitterTitle : "SSR Rsbuild Landing Page - Findsoed Rework",
+    robots : "index, follow"
+})
+
 
 const {authToken} = storeToRefs(useAuthStore());
 const navigate = useRouter()
@@ -23,6 +38,14 @@ watchEffect(()=> {
         navigate.push("/home")
     }
 })
+
+
+
+
+
+
+
+
 
 </script>
 
