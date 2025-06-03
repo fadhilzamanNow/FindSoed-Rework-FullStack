@@ -7,47 +7,52 @@ import { useAuthStore } from "../stores/authStore";
 import { useRouter } from "vue-router";
 import { jwtDecode } from "jwt-decode";
 import DetailItem from "../components/DetailPage/DetailItem.vue";
-import { useSeoMeta  } from '@unhead/vue';
+import { useSeoMeta } from "@unhead/vue";
 
 useSeoMeta({
-    title : "SSR RSbuild Detail Item Page - Findsoed Rework",
-    description : "SSR Rsbuild Halaman Detail Item Page untuk Findsoed Rework yang dapat digunakan untuk melihat detail dari barang yang dipilih",
-    ogTitle : "SSR Rsbuild Detail Item Page - Findsoed Rework",
-    ogDescription : "SSR Rsbuild Halaman Detail Item Page untuk Findsoed Rework yang dapat digunakan untuk melihat detail dari barang yang dipilih",
-    ogUrl : "http://localhost:3500/detail",
-    ogSiteName : "Findsoed Rework",
-    ogType : "website",
-    author : "Muhammad Ilham Isfadhillah",
-    twitterTitle : "SSR Rsbuild Detail Item Page - Findsoed Rework",
-    robots : "index, follow"
-})
-
+  title: "SSR RSbuild Detail Item Page - Findsoed Rework",
+  description:
+    "SSR Rsbuild Halaman Detail Item Page untuk Findsoed Rework yang dapat digunakan untuk melihat detail dari barang yang dipilih",
+  ogTitle: "SSR Rsbuild Detail Item Page - Findsoed Rework",
+  ogDescription:
+    "SSR Rsbuild Halaman Detail Item Page untuk Findsoed Rework yang dapat digunakan untuk melihat detail dari barang yang dipilih",
+  ogUrl: "http://localhost:3500/detail",
+  ogSiteName: "Findsoed Rework",
+  ogType: "website",
+  author: "Muhammad Ilham Isfadhillah",
+  twitterTitle: "SSR Rsbuild Detail Item Page - Findsoed Rework",
+  robots: "index, follow",
+});
 
 const auth = useAuthStore();
-const {authToken} = storeToRefs(auth)
+const { authToken } = storeToRefs(auth);
 const navigate = useRouter();
 
-
-
-watch(authToken,() => {
-  if(authToken.value){
-    const myToken = jwtDecode(authToken.value)
-    if(Number(Date.now()/ 1000) > Number(myToken.exp)){
-      localStorage.removeItem("authToken")
-      auth.setAuthToken(null)
-      navigate.push("/login")
+watch(
+  [authToken.value, navigate],
+  () => {
+    if (authToken.value && localStorage.getItem("authToken")) {
+      const myToken = jwtDecode(authToken.value);
+      if (Number(Date.now() / 1000) > Number(myToken.exp)) {
+        localStorage.removeItem("authToken");
+        auth.setAuthToken(null);
+        navigate.push("/login");
+      }
+    } else {
+      auth.setAuthToken(null);
+      navigate.push("/login");
     }
+  },
+  {
+    immediate: true,
   }
-},{
-  immediate : true
-})
-
+);
 </script>
 
 <template>
   <div class="min-h-screen w-full">
-    <Navbar />  
-    <Sidebar active="Add"  />
+    <Navbar />
+    <Sidebar active="Add" />
     <DetailItem />
   </div>
 </template>
