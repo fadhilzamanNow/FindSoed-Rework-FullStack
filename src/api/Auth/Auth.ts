@@ -15,14 +15,7 @@ export const registerUser = async (data: registerUserType) => {
     const response = await basePath.post("/auth/register", data);
     return response.data;
   } catch (e) {
-    console.log("isi error sini: ", e)
-    if (axios.isAxiosError(e)) {
-      console.log("masuknyakesini : ", e)
-      throw e.response?.data;
-    }else{
-      console.log("masuknya kesini malah :", e)
-      throw e
-    }
+    throw e;
   }
 };
 
@@ -33,10 +26,7 @@ export const loginUser = async (
     const response = await basePath.post("/auth/login", data);
     return response.data;
   } catch (e) {
-    console.log("isi e", e)
-    if (axios.isAxiosError(e)) {
-      throw e.response?.data;
-    }
+    throw e
   }
 };
 

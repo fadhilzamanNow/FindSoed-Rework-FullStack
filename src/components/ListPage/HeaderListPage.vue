@@ -27,6 +27,7 @@ const debounceSearch = lodash.debounce( async (searchItem : string) => {
     if(response){
       post.setPost(response.data)
     } */
+   console.log("isi search : ", searchItem)
    search.value = searchItem
    const response = await findPost(search.value);
    if(response){
@@ -38,18 +39,6 @@ const debounceSearch = lodash.debounce( async (searchItem : string) => {
   }
 },1000)
 
-
-const handleSearchItem = async () => {
-  try{
-    const response = await findPost(search.value)
-    if(response){
-      post.setPost(response.data)
-    }
-  }catch(e){
-
-  }
-}
-
 const inputSearch = computed<InputProps>(() => ({
   placeholder : "Cari Barang",
   onInput : (e) => {
@@ -58,24 +47,6 @@ const inputSearch = computed<InputProps>(() => ({
   },
   value : search.value,
 }))
-
-watchEffect(() => {
-  console.log("value : ", search.value)
-})
-
-
-watchEffect(() => {
-  lodash.debounce(async () => {
-    try{
-    const response = await findPost(search.value)
-    if(response){
-      isLoading.value = true
-      post.setPost(response.data)
-    }
-  }catch(e){
-  }
-  }, 1000)
-})
 
 
 

@@ -1,15 +1,13 @@
 <script setup lang="ts">
 import { EyeInvisibleOutlined, EyeOutlined } from "@ant-design/icons-vue";
 import { Button, Input, InputProps, Modal } from "ant-design-vue";
-import { computed, onMounted, ref, watchEffect } from "vue";
+import { computed, ref } from "vue";
 import { RouterLink, useRouter } from "vue-router";
-import { useLoginStore } from "../../stores/loginInfo";
 import validator from "email-validator"
 import { findUserInfo, loginUser } from "../../api/Auth/Auth";
 import { ChangeEvent } from "ant-design-vue/es/_util/EventInterface";
 import { useAuthStore } from "../../stores/authStore";
 
-const login = useLoginStore();
 const emailVal = ref("");
 const passVal = ref("");
 const passShow = ref(false);
@@ -22,32 +20,30 @@ const togglePass = () => {
   passShow.value = !passShow.value
 }
 
-
 const isEmailValid = computed(() => {
   return validator.validate(emailVal.value)
 })
 
-const emailProps : InputProps = {
-  value : emailVal.value,
-  onInput : (e : ChangeEvent) => emailVal.value = (e.target as HTMLInputElement).value,
-  status : isEmailValid.value ?  "" :emailVal.value.length > 0 ? "error" : "",
+const emailProps  = computed<InputProps>(() => ({
+  placeholder : "Email",
+  onInput : (e) => {
+    emailVal.value = (e.target as HTMLInputElement).value
+  },
   onPressEnter : () => handleLogin(),
-  placeholder : "Email"
-}
-
-const passProps : InputProps = {
+  value : emailVal.value,
+})) 
+  
+const passProps = computed<InputProps>(() => ({
   value : passVal.value,
   onInput : (e : ChangeEvent) => passVal.value = (e.target as HTMLInputElement).value,
   type : passShow.value ? "text" : "password",
   onPressEnter : () => handleLogin(),
   placeholder : "*****"
-}
-
-
- 
+})) 
 
 const handleLogin = async () => {
-  try{
+  if(isEmailValid && passVal.value.length > 1){
+    try{
     emit('toggleLoading')
     const response = await loginUser({
       email : emailVal.value,
@@ -69,9 +65,6 @@ const handleLogin = async () => {
           })
         }
       }
-      else{
-        console.log("kesini")
-      }
       Modal.success({
         title : "Berhasil untuk login",
         ///@ts-ignore
@@ -83,18 +76,19 @@ const handleLogin = async () => {
     }
   }catch(e){
     emit('toggleLoading')
-    console.log("kesini")
+    console.log("kesini masuknya dengan e  : ", e)
     Modal.error({
       title : "Gagal untuk Login",
-      //@ts-ignore
-      message : "Data yang anda masukkan tidak benar",
+      /* @ts-ignore */
+      content : e.message,
       centered : true,
       zIndex : 99999
 
     })
   }
+  }
+  
 }
-
 </script>
 
 <template>
@@ -106,7 +100,7 @@ const handleLogin = async () => {
       <div class="flex flex-col gap-2 items-center justify-center" >
           <label for="email" class="text-xs w-full font-semibold">Alamat Email</label>
             <div class="w-full flex flex-col " >
-              <Input v-bind="emailProps"  />
+              <Input v-bind="emailProps" />
               <span class=" text-red-500 transition-all duration-300" :class="isEmailValid ? 'invisible opacity-0' : emailVal.length > 0 ? 'visible opacity-100' : 'invisible opacity-0'"  >Email yang kamu masukkan tidak valid</span>
             </div>
       </div>
@@ -144,7 +138,5 @@ const handleLogin = async () => {
       </div>
     </div>
   </div>
- <!--  <div class="flex w-full items-center justify-center mt-16 pt-10  ">
-    
-  </div> -->
+
 </template>

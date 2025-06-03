@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { EyeInvisibleOutlined, EyeOutlined } from "@ant-design/icons-vue";
 import { Button, Input, InputProps, Modal } from "ant-design-vue";
-import { computed } from "vue";
+import { computed, watchEffect } from "vue";
 import { ref } from "vue";
 import { RouterLink, useRouter } from "vue-router";
 import zxcvbn from "zxcvbn";
@@ -10,6 +10,7 @@ import { debounce } from "underscore";
 import lodash from "lodash";
 import parsePhoneNumber from "libphonenumber-js";
 import { registerUser } from "../../api/Auth/Auth";
+import { CustomErrorResponse, CustomSuccessResponse } from "../../api/baseApi";
 
 type PhoneValidType = {
   success: boolean;
@@ -47,7 +48,7 @@ const isPhoneValid = computed<PhoneValidType>(() => {
 
 const debouncedEmailValidation = debounce((email: string) => {
   emailVal.value = email;
-}, 500);
+}, 100);
 
 const handleEmail = (e: Event) => {
   const email = (e.target as HTMLInputElement).value;
@@ -204,6 +205,23 @@ const isNoError = computed(() => {
   }
 });
 
+const inputUserProps = computed<InputProps | { class? : string }>(() => ({
+  value : userVal.value,
+  placeholder : "Username",
+  onInput : (e) => userVal.value = (e.target as HTMLInputElement).value,
+  class : "w-full",
+  onPressEnter : handleRegister
+}))
+
+const inputEmailProps = computed<InputProps | { class? : string}>(() => ({
+  onInput : (e : Event) => handleEmail(e),
+  placeholder :"Email",
+  id : "email",
+  status :  emailIndicator.value.status ? '' : emailIndicator.value.isEmpty ? '' : 'error',
+  class : "w-full",
+  onPressEnter : handleRegister
+}))
+
 const inputPhoneProps = computed<InputProps | { class?: string }>(() => ({
   value: phoneVal.value,
   onInput: (e) => (phoneVal.value = (e.target as HTMLInputElement).value),
@@ -215,6 +233,7 @@ const inputPhoneProps = computed<InputProps | { class?: string }>(() => ({
       : "!border-gray-200"
   }`,
   placeholder: "Nomor Telefon",
+  onPressEnter : handleRegister
 }));
 
 const spanPhoneProps = computed<{ class?: string }>(() => ({
@@ -238,6 +257,7 @@ const inputPassProps = computed<InputProps | { class?: string }>(() => ({
       ? "error"
       : "",
   placeholder: "Password",
+  onPressEnter : handleRegister
 }));
 
 const inputCPassProps = computed<InputProps | { class?: string }>(() => ({
@@ -251,10 +271,12 @@ const inputCPassProps = computed<InputProps | { class?: string }>(() => ({
       ? "error"
       : "",
   placeholder: "Konfirmasi Password",
+  onPressEnter : handleRegister
 }));
 
 const handleRegister = async () => {
-  try {
+  if(isNoError){
+    try {
     emit("toggleLoading");
     const response = await registerUser({
       username: userVal.value,
@@ -263,25 +285,27 @@ const handleRegister = async () => {
       ...(phoneVal.value.length > 0 && { phoneNumber: phoneVal.value }),
     });
 
-    if (response) {
+    if (response ) {
       emit("toggleLoading");
       Modal.success({
         title: "Berhasil Melakukan Registrasi",
-        content: "Akunmu berhasil terdaftar di FindSoed",
+        content: (response as CustomSuccessResponse).message ,
         onOk: () => navigate.push("/login"),
         centered: true,
       });
     }
   } catch (e) {
     emit("toggleLoading");
-    console.log("ada error : ", e);
     Modal.error({
       title: "Gagal Melakukan Registrasi",
-      content: "Akunmu gagal terdafar di FindSoed",
+      content: (e as CustomErrorResponse).message,
       centered: true,
     });
   }
+  }
+ 
 };
+
 </script>
 
 <template>
@@ -300,7 +324,7 @@ const handleRegister = async () => {
           >Username <span class="text-red-500">*</span></label
         >
         <div class="w-full">
-          <Input v-model:value="userVal" placeholder="Username" id="username" />
+          <Input v-bind="inputUserProps" />
         </div>
       </div>
 
@@ -310,15 +334,7 @@ const handleRegister = async () => {
           >Email <span class="text-red-500">*</span></label
         >
         <div class="w-full">
-          <Input
-            v-on:input="(e : Event) => handleEmail(e)"
-            placeholder="Email"
-            id="email"
-            class="w-full"
-            :status="
-              emailIndicator.status ? '' : emailIndicator.isEmpty ? '' : 'error'
-            "
-          />
+          <Input v-bind="inputEmailProps"/>
         </div>
         <div class="w-full text-xs" :class="[emailIndicator.textcolor]">
           {{ emailIndicator.text }}
@@ -342,7 +358,7 @@ const handleRegister = async () => {
         <div class="w-full relative">
           <Input v-bind="inputPassProps" />
           <div
-            v-on:click="() => (passShow = !passShow)"
+            @click="() => (passShow = !passShow)"
             class="absolute top-1/2 -translate-y-1/2 right-3"
           >
             <EyeInvisibleOutlined v-if="passShow" />

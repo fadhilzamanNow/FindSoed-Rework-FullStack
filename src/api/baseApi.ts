@@ -1,5 +1,15 @@
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 
+export type CustomErrorResponse = {
+    status : number,
+    message : string
+}
+
+export type CustomSuccessResponse = {
+    status : number,
+    message : string,
+    data  : any[]
+}
 
 const basePath = axios.create({
     baseURL: "http://localhost:3500",
@@ -12,10 +22,15 @@ basePath.interceptors.request.use((config) => {
     return config
 })
 
-basePath.interceptors.response.use((response) => response, (error) =>  {
-    if(error.response.status = 401){
-        localStorage.removeItem("authToken")
+basePath.interceptors.response.use((response) => response, (error : AxiosError ) =>  {
+    if(error.response){
+        if(error.response.status === 401){
+            localStorage.removeItem("authToken")
+        }
+        throw error.response.data
     }
+        
+    
 })
 
 export type ErrorFindSoed = {
