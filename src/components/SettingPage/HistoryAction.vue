@@ -8,7 +8,7 @@ import { useAuthStore } from '../../stores/authStore';
 import dayjs from "dayjs";
 import localizedFormat from "dayjs/plugin/localizedFormat"
 import { SelectProps } from 'ant-design-vue/es/vc-select';
-import { isEmpty } from 'lodash';
+import lodash from "lodash";
 dayjs.extend(localizedFormat);
 
 type UserPostTable = {
@@ -96,7 +96,7 @@ const modalEditProps = computed<ModalProps>(() => ({
         editDetail.value = ""
     },
     okButtonProps : {
-        disabled : !(!isEmpty(editStatus.value) || !isEmpty(editDate.value) || !isEmpty(editDetail.value))
+        disabled : !(!lodash.isEmpty(editStatus.value) || !lodash.isEmpty(editDate.value) || !lodash.isEmpty(editDetail.value))
     },
     mask : true,
 }))

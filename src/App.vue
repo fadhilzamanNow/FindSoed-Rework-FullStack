@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { onMounted, watchEffect } from "vue";
 import { RouterView } from "vue-router";
-import { useViewStore } from "./stores/viewStore";
 import { useAuthStore } from "./stores/authStore";
 import { findUserInfo } from "./api/Auth/Auth";
 import { storeToRefs } from "pinia";

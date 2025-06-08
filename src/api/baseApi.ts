@@ -1,8 +1,7 @@
 import axios, { AxiosError } from "axios";
 
-console.log(process.env.NODE_ENV);
 //@ts-ignore
-console.log(BACKEND_URL);
+console.log("url : ", BACKEND_URL);
 
 export type CustomErrorResponse = {
   status: number;

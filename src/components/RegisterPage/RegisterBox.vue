@@ -5,8 +5,8 @@ import { computed } from "vue";
 import { ref } from "vue";
 import { RouterLink, useRouter } from "vue-router";
 import zxcvbn from "zxcvbn";
-import { isEmail } from "validator";
-import { debounce } from "underscore";
+import validator from "validator";
+import underscore from "underscore";
 import lodash from "lodash";
 import parsePhoneNumber from "libphonenumber-js";
 import { registerUser } from "../../api/Auth/Auth";
@@ -46,7 +46,7 @@ const isPhoneValid = computed<PhoneValidType>(() => {
   }
 });
 
-const debouncedEmailValidation = debounce((email: string) => {
+const debouncedEmailValidation = underscore.debounce((email: string) => {
   emailVal.value = email;
 }, 100);
 
@@ -56,14 +56,14 @@ const handleEmail = (e: Event) => {
 };
 
 const emailIndicator = computed(() => {
-  if (isEmail(emailVal.value) && emailVal.value.length > 1) {
+  if (validator.isEmail(emailVal.value) && emailVal.value.length > 1) {
     return {
       status: true,
       text: "Email Valid",
       textcolor: "text-green-500",
       isEmpty: false,
     };
-  } else if (!isEmail(emailVal.value) && emailVal.value.length > 1) {
+  } else if (!validator.isEmail(emailVal.value) && emailVal.value.length > 1) {
     return {
       status: false,
       text: "Email Tidak Valid",
