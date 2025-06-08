@@ -3,9 +3,9 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "build": "cross-env NODE_ENV=production rsbuild build",
-    "dev": "cross-env NODE_ENV=development node ./server.mjs",
-    "preview": "node ./prod-server.mjs"
+    "build:rs-ssr": "cross-env NODE_ENV=production rsbuild build -c ./rsbuildssr.config.ts",
+    "dev:rs-ssr": "cross-env NODE_ENV=development node ./server.mjs ",
+    "preview:rs-ssr": "node ./prod-server.mjs"
   },
   "dependencies": {
     "@ant-design/icons-vue": "^7.0.1",

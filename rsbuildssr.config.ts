@@ -1,9 +1,10 @@
 import { defineConfig } from "@rsbuild/core";
 import { pluginVue } from "@rsbuild/plugin-vue";
-import { loadEnv, mergeRsbuildConfig } from "@rsbuild/core";
+import { loadEnv } from "@rsbuild/core";
 
 const { parsed } = loadEnv();
 
+console.log("ssr here");
 export default defineConfig({
   plugins: [pluginVue()],
   environments: {
@@ -37,11 +38,7 @@ export default defineConfig({
   source: {
     define: {
       /* @ts-ignore */
-      BACKEND_URL:
-        /* @ts-ignore */
-        process.env.NODE_ENV === "production"
-          ? JSON.stringify(parsed.PRODUCTION_BACKEND_URL)
-          : JSON.stringify(parsed.DEVELOPMENT_BACKEND_URL),
+      BACKEND_URL: JSON.stringify(parsed.PUBLIC_BACKEND_URL),
     },
   },
 });

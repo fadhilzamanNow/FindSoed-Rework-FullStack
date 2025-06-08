@@ -3,6 +3,7 @@ import { createRsbuild, loadConfig, logger } from "@rsbuild/core";
 import { createSSRApp } from "vue";
 import { renderToString } from "vue/server-renderer";
 import { transformHtmlTemplate } from "@unhead/vue/server";
+import path from "node:path";
 
 const serverRender = (serverAPI) => async (_req, res) => {
   console.log("isi req test : ", _req.url);
@@ -33,7 +34,9 @@ const serverRender = (serverAPI) => async (_req, res) => {
 };
 
 export async function startDevServer() {
-  const { content } = await loadConfig({});
+  const { content } = await loadConfig({
+    path: path.join(process.cwd(), "./rsbuildssr.config.ts"),
+  });
   console.log("isi content : ", content);
   const rsbuild = await createRsbuild({
     rsbuildConfig: content,

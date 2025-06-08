@@ -298,11 +298,11 @@ const handleRegister = async () => {
           centered: true,
         });
       }
-    } catch (e) {
+    } catch (err) {
       emit("toggleLoading");
       Modal.error({
         title: "Gagal Melakukan Registrasi",
-        content: (e as CustomErrorResponse).message,
+        content: (err as CustomErrorResponse).message,
         centered: true,
       });
     }

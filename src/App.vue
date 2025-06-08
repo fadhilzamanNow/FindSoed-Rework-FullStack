@@ -17,26 +17,11 @@ const { authToken } = storeToRefs(auth);
 onMounted(() => {
   const appElement = document.getElementById("root");
   if (appElement) {
-    console.log("isi appElement : ", appElement);
     appElement.classList.remove("app-loading");
     appElement.classList.add("app-loaded");
     /*     appElement.classList.add("app-loaded");
      */
   }
-
-  const view = useViewStore();
-
-  view.changeView({
-    height: window.innerHeight,
-    width: window.innerWidth,
-  });
-
-  window.addEventListener("resize", () => {
-    view.changeView({
-      height: window.innerHeight,
-      width: window.innerWidth,
-    });
-  });
 
   watchEffect(() => {
     if (authToken) {

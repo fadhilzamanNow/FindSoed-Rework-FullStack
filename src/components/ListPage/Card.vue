@@ -6,9 +6,7 @@ import { computed, onMounted, onUnmounted, ref, toRaw, watchEffect } from "vue";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
 import utc from "dayjs/plugin/utc";
-
 import "dayjs/locale/id";
-
 dayjs.extend(relativeTime);
 dayjs.extend(utc);
 dayjs.locale("id");
@@ -121,14 +119,6 @@ const imageProps = computed<{ src: string; class: string; alt: string }>(
           <span class="text-gray-400 text-xs">{{ formattedDayNow }}</span>
         </div>
       </div>
-
-      <!-- KOMEN -->
-      <!--  <div class="w-full bg-gray-300 flex justify-between text-gray-500 py-1 rounded-b-md justify-self-end">
-            <div class="flex justify-center items-cener gap-2 ml-2 text-xs">
-              <CommentOutlined />
-              <span>{{ commentNum }}</span>
-            </div>
-          </div> -->
     </div>
     <RouterLink :to="linkRef">
       <div
