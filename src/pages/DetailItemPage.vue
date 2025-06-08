@@ -50,7 +50,7 @@ watch(
 </script>
 
 <template>
-  <div class="min-h-screen w-full">
+  <div class="min-h-screen w-full overflow-hidden">
     <Navbar />
     <Sidebar active="Add" />
     <DetailItem />

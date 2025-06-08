@@ -18,7 +18,7 @@ import {
   watchEffect,
 } from "vue";
 import { Input, Button } from "ant-design-vue";
-import type { AvatarProps } from "ant-design-vue";
+import type { AvatarProps, ModalProps } from "ant-design-vue";
 import { getDetailPost, itemLocationType } from "../../api/Post/Post";
 import { useRoute } from "vue-router";
 import BreadCrumbComp from "../BreadCrumb/BreadCrumbComp.vue";
@@ -26,6 +26,7 @@ import { Swiper, SwiperSlide } from "swiper/vue";
 import { Navigation, Pagination } from "swiper/modules";
 import {
   LeftOutlined,
+  LoadingOutlined,
   RightOutlined,
   SendOutlined,
 } from "@ant-design/icons-vue";
@@ -36,6 +37,7 @@ import "swiper/css/pagination";
 
 import CommentCard from "./CommentCard.vue";
 import { createComment, getComments } from "../../api/Comment/Comment";
+import { watch } from "vue";
 
 type PostType = {
   itemName: string;
@@ -116,23 +118,24 @@ watchEffect(() => {
 
   if (isBeingSent.value) {
     isBeingSent.value = false;
-    if (commenBlock.value) {
-      commenBlock.value.scroll({
-        behavior: "smooth",
-        top: commenBlock.value.scrollHeight + 100,
-      });
-    }
   }
 });
 
-watchEffect(() => {
-  if (commenBlock.value) {
-    commenBlock.value.scroll({
-      behavior: "smooth",
-      top: commenBlock.value.scrollHeight + 100,
-    });
-  }
-});
+// onMounted(() => {
+//   watch(
+//     postComment,
+//     () => {
+//       console.log("post comment value is changing");
+//       if (commenBlock.value) {
+//         commenBlock.value.scrollIntoView({
+//           block: "end",
+//           behavior: "smooth",
+//         });
+//       }
+//     },
+//     { immediate: true }
+//   );
+// });
 
 const toggleModal = () => {
   isModalOpen.value = !isModalOpen.value;
@@ -186,6 +189,40 @@ const detailCreateProps = computed<AvatarProps>(() => ({
   src: `http://localhost:3500/static/images/${postDetail.value?.userProfile}`,
   shape: "square",
 }));
+
+const modalDetailProps = computed<ModalProps>(() => ({
+  open: isModalOpen.value,
+  title: postDetail.value?.itemName,
+  centered: true,
+  footer: null,
+  onCancel: toggleModal,
+}));
+
+const modalDetailMapProps = computed<ModalProps>(() => ({
+  open: isModalOpenMap.value,
+  title: "Lokasi Kehilangan",
+  centered: true,
+  footer: null,
+  onCancel: toggleModalMap,
+}));
+
+const pindahkeBawah = async () => {
+  await nextTick();
+  if (commenBlock.value) {
+    commenBlock.value.scrollIntoView({
+      behavior: "smooth",
+      block: "end",
+    });
+  }
+};
+
+watch(
+  postComment,
+  () => {
+    pindahkeBawah();
+  },
+  { immediate: true, deep: true }
+);
 </script>
 
 <template>
@@ -193,7 +230,7 @@ const detailCreateProps = computed<AvatarProps>(() => ({
     <BreadCrumbComp title="Detail Barang" />
 
     <!-- KOTAK -->
-    <div class="lg:max-w-7xl mx-auto p-4 rounded border border-gray-300">
+    <div class="lg:max-w-7xl mx-auto p-4 rounded border border-gray-300 mt-2">
       <!-- FOTO + DETAIL  -->
       <div class="flex flex-col lg:flex-row gap-2">
         <!-- FOTO -->
@@ -299,37 +336,42 @@ const detailCreateProps = computed<AvatarProps>(() => ({
       </div>
 
       <!-- COMMNET SECTION -->
-      <div class="my-4 py-4 border-y border-y-gray-300">
+      <div class="my-4 py-4 border-y border-y-gray-300 relative">
         <div
-          :class="`h-[200px] lg:h-[calc(100vh-600px)] overflow-auto  ${
-            postComment.length < 1 ? 'flex justify-center items-center ' : ''
-          } `"
-          ref="commentBlock"
+          v-if="isCommentLoading"
+          class="absolute z-2 w-full h-full bg-black/3 opacity-50 flex justify-center items-center text-7xl text-gray-400 rounded-md"
         >
-          <Skeleton :loading="isCommentLoading" active />
+          <LoadingOutlined />
+        </div>
+
+        <div class="h-[200px] lg:h-[calc(100vh-600px)] overflow-auto">
           <div
-            class="h-max w-full"
-            v-if="postComment.length > 0 && !isCommentLoading"
+            :class="`${
+              postComment.length < 1 ? 'flex justify-center items-center ' : ''
+            } `"
+            ref="commentBlock"
           >
-            <CommentCard
-              v-for="(v, i) in postComment"
-              :key="i"
-              :message="v.message"
-              :userName="v.userName"
-              :userProfile="v.userProfile"
-              :created_at="v.created_at"
-            >
-              <template v-slot:name>
-                {{ v.userName }}
-              </template>
-            </CommentCard>
-          </div>
-          <div v-if="postComment.length < 1 && !isCommentLoading">
-            <Empty :description="false">
-              <span class="text-gray-400"
-                >Belum terdapat komentar, yuk tanya</span
+            <div class="h-max w-full" v-if="postComment.length > 0">
+              <CommentCard
+                v-for="(v, i) in postComment"
+                :key="i"
+                :message="v.message"
+                :userName="v.userName"
+                :userProfile="v.userProfile"
+                :created_at="v.created_at"
               >
-            </Empty>
+                <template v-slot:name>
+                  {{ v.userName }}
+                </template>
+              </CommentCard>
+            </div>
+            <div v-if="postComment.length < 1 && !isCommentLoading">
+              <Empty :description="false">
+                <span class="text-gray-400"
+                  >Belum terdapat komentar, yuk tanya</span
+                >
+              </Empty>
+            </div>
           </div>
         </div>
       </div>
@@ -346,14 +388,55 @@ const detailCreateProps = computed<AvatarProps>(() => ({
       </div>
     </div>
   </div>
-  ,
-  <Modal
-    v-model:visible="isModalOpenMap"
-    @ok="toggleModal"
-    title="Lokasi Kehilangan"
-    :centered="true"
-    :footer="null"
-  >
+  <Modal v-bind="modalDetailProps">
+    <Flex vertical gap="20">
+      <div class="grid grid-cols-2">
+        <Flex vertical gap="4">
+          <h1 class="text-xs font-medium">Kategori</h1>
+          <span class="font-light text-xs">
+            {{ postDetail?.itemCategory }}
+          </span>
+        </Flex>
+        <Flex vertical gap="4">
+          <h1 class="text-xs font-medium">Kontak</h1>
+          <span class="font-light text-xs">
+            {{ postDetail?.phoneNumber }}
+          </span>
+        </Flex>
+      </div>
+      <div class="grid grid-cols-2">
+        <Flex vertical gap="4">
+          <h1 class="text-xs font-medium">Tanggal Hilang</h1>
+          <span class="font-light text-xs">
+            {{ postDetail?.itemLostDate }}
+          </span>
+        </Flex>
+        <Flex vertical gap="4">
+          <h1 class="text-xs font-medium">Status Barang</h1>
+          <span
+            :class="`px-2 py-0.5 rounded-md text-white  max-w-max text-xs',
+            ${
+              postDetail?.statusName === 'Hilang'
+                ? 'bg-red-500'
+                : 'bg-green-400'
+            }
+            `"
+          >
+            {{ postDetail?.statusName }}
+          </span>
+        </Flex>
+      </div>
+      <Flex vertical gap="4">
+        <h1 class="text-xs font-medium">Deskripsi</h1>
+        <span
+          class="max-w-[350px] overflow-x-hidden hover:overflow-y-scroll text-xs font-light"
+        >
+          {{ postDetail?.itemDetail }}
+        </span>
+      </Flex>
+    </Flex>
+  </Modal>
+  <Modal v-bind="modalDetailMapProps">
     <div class="">
       <!-- @vue-ignore -->
       <LazyDetailLeafletMap
