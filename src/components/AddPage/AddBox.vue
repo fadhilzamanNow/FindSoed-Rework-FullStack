@@ -9,6 +9,9 @@ import { createPost, itemLocationType } from "../../api/Post/Post";
 import { useRouter } from "vue-router";
 import BreadCrumbComp from "../BreadCrumb/BreadCrumbComp.vue";
 import { CustomErrorResponse } from "../../api/baseApi";
+import { watchEffect } from "vue";
+import { nextTick } from "vue";
+import { onMounted } from "vue";
 
 const mapInfo = reactive<itemLocationType>({
   latitude: null,
@@ -127,10 +130,10 @@ const handlePickLocation = (info: itemLocationType) => {
 <template>
   <div class="md:ml-16 mt-16 pt-5.5 px-4 sm:px-6 md:px-8">
     <BreadCrumbComp title="Tambah Barang" />
-    <div class="flex flex-col h-full">
+    <div class="flex flex-col h-full mt-2">
       <div class="flex flex-col items-center justify-center gap-6 w-full">
         <div
-          class="flex flex-col gap-4 sm:max-w-[800px] sm:border-gray-200 w-full justify-center rounded-md pt-4"
+          class="flex flex-col gap-4 sm:max-w-[800px] border-gray-300 w-full justify-center rounded-md pt-4 p-4 border"
         >
           <Flex vertical class="w-full" gap="8">
             <label for="item" class="text-sm w-full font-semibold"
@@ -175,12 +178,10 @@ const handlePickLocation = (info: itemLocationType) => {
             </div>
           </Flex>
 
-          <Suspense>
-            <LazyLeafletMap
-              :mapInfo="mapInfo"
-              @handle-pick-location="handlePickLocation"
-            />
-          </Suspense>
+          <LazyLeafletMap
+            :mapInfo="mapInfo"
+            @handle-pick-location="handlePickLocation"
+          />
 
           <Flex justify="end">
             <div class="w-max">

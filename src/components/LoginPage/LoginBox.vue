@@ -7,6 +7,7 @@ import validator from "email-validator";
 import { findUserInfo, loginUser } from "../../api/Auth/Auth";
 import { ChangeEvent } from "ant-design-vue/es/_util/EventInterface";
 import { useAuthStore } from "../../stores/authStore";
+import { validateTokenHandler } from "../../utils/validateToken";
 
 const emailVal = ref("");
 const passVal = ref("");
@@ -64,6 +65,10 @@ const handleLogin = async () => {
               imageUrl: findUser.data.imageUrl,
               phoneNumber: findUser.data.phoneNumber,
             });
+            setTimeout(() => {
+              auth.setAuthToken(null);
+              auth.setUserInfo(null);
+            }, validateTokenHandler(response.data.token) as number);
           }
         }
         Modal.success({

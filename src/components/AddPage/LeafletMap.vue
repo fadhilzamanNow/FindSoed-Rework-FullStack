@@ -3,7 +3,7 @@ import { LeafletMouseEvent, Map, Marker } from "leaflet";
 import { computed, onMounted, ref, useTemplateRef } from "vue";
 import leaflet from "leaflet";
 import MarkerPic from "../../assets/marker.png";
-import { Input, InputProps } from "ant-design-vue";
+import { Flex, Input, InputProps } from "ant-design-vue";
 import { ChangeEvent } from "ant-design-vue/es/_util/EventInterface";
 import { debounce } from "lodash";
 import { LoadingOutlined } from "@ant-design/icons-vue";

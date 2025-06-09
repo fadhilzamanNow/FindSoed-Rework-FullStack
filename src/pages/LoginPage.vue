@@ -31,12 +31,6 @@ const loginLoading = ref(false);
 
 const navigate = useRouter();
 
-/* watch(authToken,() => {
-    if(authToken.value){
-        navigate.push("/list")
-    }
-},{immediate : true}) */
-
 const toggleLoading = () => {
   loginLoading.value = !loginLoading.value;
 };

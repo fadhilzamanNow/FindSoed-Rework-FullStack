@@ -32,76 +32,76 @@ const LazyDetailPage = defineAsyncComponent(
 );
 
 const routes = [
-  // {
-  //   path: "/",
-  //   name: "landing",
-  //   component: LandingPage,
-  // },
-  // {
-  //   path: "/login",
-  //   name: "login",
-  //   component: LoginPage,
-  // },
-  // {
-  //   path: "/register",
-  //   name: "about",
-  //   component: RegisterPage,
-  // },
-  // {
-  //   path: "/home",
-  //   name: "list",
-  //   component: ListPage,
-  // },
-  // {
-  //   path: "/add",
-  //   name: "add",
-  //   component: AddPage,
-  // },
-  // {
-  //   path: "/setting",
-  //   name: "setting",
-  //   component: SettingsPage,
-  // },
-  // {
-  //   path: "/detail/:id",
-  //   name: "detail",
-  //   component: DetailItemPage,
-  // },
   {
     path: "/",
     name: "landing",
-    component: LazyLandingPage,
+    component: LandingPage,
   },
   {
     path: "/login",
     name: "login",
-    component: LazyLoginPage,
+    component: LoginPage,
   },
   {
     path: "/register",
     name: "about",
-    component: LazyRegisterPage,
+    component: RegisterPage,
   },
   {
     path: "/home",
     name: "list",
-    component: LazyListPage,
+    component: ListPage,
   },
   {
     path: "/add",
     name: "add",
-    component: LazyAddPage,
+    component: AddPage,
   },
   {
     path: "/setting",
     name: "setting",
-    component: LazySettingPage,
+    component: SettingsPage,
   },
   {
     path: "/detail/:id",
     name: "detail",
-    component: LazyDetailPage,
+    component: DetailItemPage,
   },
+  // {
+  //   path: "/",
+  //   name: "landing",
+  //   component: () => import("./pages/LandingPage.vue"),
+  // },
+  // {
+  //   path: "/login",
+  //   name: "login",
+  //   component: LazyLoginPage,
+  // },
+  // {
+  //   path: "/register",
+  //   name: "about",
+  //   component: LazyRegisterPage,
+  // },
+  // {
+  //   path: "/home",
+  //   name: "list",
+  //   component: LazyListPage,
+  // },
+  // {
+  //   path: "/add",
+  //   name: "add",
+  //   component: LazyAddPage,
+  // },
+  // {
+  //   path: "/setting",
+  //   name: "setting",
+  //   component: LazySettingPage,
+  // },
+  // {
+  //   path: "/detail/:id",
+  //   name: "detail",
+  //   component: LazyDetailPage,
+  // },
 ];
 
 console.log("typeof window : ", typeof window);

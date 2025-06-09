@@ -15,7 +15,6 @@ const { postData, isLoading } = storeToRefs(usePostStore());
       class="grid grid-cols-1 xs:grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 gap-x-2 justify-between mx-auto transition-all duration-300 ease-in h-[75vh] w-full place-content-start gap-5"
     >
       <div v-for="(d, i) in postData" :key="i" class="flex justify-center">
-        <!-- @vue-ignore -->
         <Card
           :itemName="d.itemName"
           :userName="d.userName"
@@ -24,7 +23,7 @@ const { postData, isLoading } = storeToRefs(usePostStore());
           :likeNum="d.likeNum"
           :status="d.statusName"
           :images="d.images"
-          :userProfile="d.userProfile"
+          :userProfile="d.userProfile || null"
           :itemDetail="d.itemDetail"
           :itemCategory="d.categoryName"
           :created_at="d.created_at"

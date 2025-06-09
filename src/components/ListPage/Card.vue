@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import { Avatar } from "ant-design-vue";
-import { CommentOutlined, MessageOutlined } from "@ant-design/icons-vue";
+import { MessageOutlined } from "@ant-design/icons-vue";
 import { RouterLink } from "vue-router";
-import { computed, onMounted, onUnmounted, ref, toRaw, watchEffect } from "vue";
+import { computed, ref, watchEffect } from "vue";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
 import utc from "dayjs/plugin/utc";
@@ -20,7 +20,7 @@ type PostType = {
   images: string[];
   commentNum: number;
   id: string;
-  userProfile: string;
+  userProfile: string | null;
   statusName?: string;
   categoryName?: string | undefined;
   created_at: string | null;

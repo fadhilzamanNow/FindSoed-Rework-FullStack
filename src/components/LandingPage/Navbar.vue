@@ -214,7 +214,7 @@ const handleSetting = () => {
 
         <!-- SETING / LOG OUT -->
         <div v-if="authNav">
-          <Dropdown placement="bottomCenter">
+          <Dropdown placement="bottom">
             <template #overlay>
               <Menu>
                 <MenuItem>

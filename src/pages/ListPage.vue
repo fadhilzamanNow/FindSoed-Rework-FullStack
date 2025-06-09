@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { watch } from "vue";
+import { onMounted, watch } from "vue";
 import ListBox from "../components/ListPage/ListBox.vue";
 import Sidebar from "../components/Sidebar/Sidebar.vue";
 import { storeToRefs } from "pinia";
@@ -8,6 +8,8 @@ import { jwtDecode } from "jwt-decode";
 import { useRouter } from "vue-router";
 import Navbar from "../components/LandingPage/Navbar.vue";
 import { useSeoMeta } from "@unhead/vue";
+import { useTemplateRef } from "vue";
+import { watchEffect } from "vue";
 
 useSeoMeta({
   title: "SSR RSbuild Home Page - Findsoed Rework",
@@ -28,25 +30,15 @@ const auth = useAuthStore();
 const { authToken } = storeToRefs(auth);
 const navigate = useRouter();
 
-watch(
-  [authToken.value, navigate],
-  () => {
-    if (authToken.value && localStorage.getItem("authToken")) {
-      const myToken = jwtDecode(authToken.value);
-      if (Number(Date.now() / 1000) > Number(myToken.exp)) {
-        localStorage.removeItem("authToken");
-        auth.setAuthToken(null);
-        navigate.push("/login");
-      }
-    } else {
-      auth.setAuthToken(null);
-      navigate.push("/login");
-    }
-  },
-  {
-    immediate: true,
+watchEffect(() => {
+  if (!authToken.value) {
+    navigate.push("/login");
   }
-);
+});
+
+onMounted(() => {
+  window.scroll(0, 0);
+});
 </script>
 
 <template>

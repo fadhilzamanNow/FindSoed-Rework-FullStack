@@ -7,7 +7,6 @@ import {
   ImageProps,
   InputProps,
   Modal,
-  Skeleton,
 } from "ant-design-vue";
 import {
   computed,
@@ -120,22 +119,6 @@ watchEffect(() => {
     isBeingSent.value = false;
   }
 });
-
-// onMounted(() => {
-//   watch(
-//     postComment,
-//     () => {
-//       console.log("post comment value is changing");
-//       if (commenBlock.value) {
-//         commenBlock.value.scrollIntoView({
-//           block: "end",
-//           behavior: "smooth",
-//         });
-//       }
-//     },
-//     { immediate: true }
-//   );
-// });
 
 const toggleModal = () => {
   isModalOpen.value = !isModalOpen.value;
