@@ -1,35 +1,17 @@
 <script setup lang="ts">
-import { onMounted, watchEffect } from "vue";
+import { watchEffect } from "vue";
 import { RouterView } from "vue-router";
-import { useViewStore } from "./stores/viewStore";
 import { useAuthStore } from "./stores/authStore";
 import { findUserInfo } from "./api/Auth/Auth";
 import { storeToRefs } from "pinia";
 import { useHead } from "@unhead/vue";
-
+import { validateTokenHandler } from "./utils/validateToken";
 useHead({
   title: "Findsoed Rework",
 });
 
 const auth = useAuthStore();
 const { authToken } = storeToRefs(auth);
-
-onMounted(() => {
-  const appElement = document.getElementById("root");
-  if (appElement) {
-    appElement.classList.remove("app-loading");
-    appElement.classList.add("app-loaded");
-    /*     appElement.classList.add("app-loaded");
-     */
-  }
-
-  watchEffect(() => {
-    if (authToken) {
-      auth.setAuthToken(localStorage.getItem("authToken"));
-      findInfo();
-    }
-  });
-});
 
 const findInfo = async () => {
   try {
@@ -48,6 +30,29 @@ const findInfo = async () => {
     auth.setUserInfo(null);
   }
 };
+
+watchEffect(() => {
+  if (typeof window !== "undefined") {
+    if (!authToken.value) {
+      const token = localStorage.getItem("authToken");
+      if (token) {
+        const timeLeft = validateTokenHandler(token);
+        if (timeLeft) {
+          auth.setAuthToken(token);
+          findInfo();
+          setTimeout(() => {
+            localStorage.removeItem("authToken");
+            auth.setAuthToken(null);
+            auth.setUserInfo(null);
+          }, timeLeft);
+        } else {
+          auth.setAuthToken(null);
+          auth.setUserInfo(null);
+        }
+      }
+    }
+  }
+});
 </script>
 
 <template>

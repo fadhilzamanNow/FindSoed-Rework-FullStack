@@ -9,5 +9,4 @@ const head = createHead();
 
 const router = createRouter();
 const pinia = createPinia();
-
 createApp(App).use(head).use(pinia).use(router).mount("#root", true);

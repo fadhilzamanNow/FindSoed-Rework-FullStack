@@ -8,12 +8,10 @@ import {
   SettingFilled,
 } from "@ant-design/icons-vue";
 import { Avatar, AvatarProps } from "ant-design-vue";
-const { active = "" } = defineProps<{ active: string }>();
 import Iconitem from "./Iconitem.vue";
-import { computed, watchEffect } from "vue";
+import { computed } from "vue";
 import { storeToRefs } from "pinia";
 import { useAuthStore } from "../../stores/authStore";
-import { useSideStore } from "../../stores/sideStore";
 import logo from "../../assets/icon.png";
 import { ref } from "vue";
 
@@ -39,7 +37,7 @@ const { userInfo } = storeToRefs(auth);
 const isExpand = ref(false);
 
 const profileProps = computed<AvatarProps>(() => ({
-  /* @ts-ignore */
+  /* @ts-expect-error Variabel didefine dari Bundler */
   src: `${BACKEND_URL}static/images/${userInfo.value?.imageUrl}`,
   size: 36,
   shape: "square",
@@ -90,7 +88,6 @@ const toggleSidebar = () => {
           :key="i"
           :name="v.name"
           :link="v.link"
-          :active="active"
           :isExpand="isExpand"
         >
           <template v-slot:icon>

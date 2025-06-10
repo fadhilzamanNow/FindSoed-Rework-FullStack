@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import { Avatar } from "ant-design-vue";
-import { CommentOutlined, MessageOutlined } from "@ant-design/icons-vue";
+import { MessageOutlined } from "@ant-design/icons-vue";
 import { RouterLink } from "vue-router";
-import { computed, onMounted, onUnmounted, ref, toRaw, watchEffect } from "vue";
+import { computed, ref, watchEffect } from "vue";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
 import utc from "dayjs/plugin/utc";
@@ -20,7 +20,7 @@ type PostType = {
   images: string[];
   commentNum: number;
   id: string;
-  userProfile: string;
+  userProfile: string | null;
   statusName?: string;
   categoryName?: string | undefined;
   created_at: string | null;
@@ -38,7 +38,6 @@ const {
   itemDetail,
   itemCategory,
   created_at,
-  updated_at,
 } = defineProps<PostType>();
 
 const linkRef = computed<string>(() => {
@@ -53,7 +52,7 @@ watchEffect(() => {
 
 const imageProps = computed<{ src: string; class: string; alt: string }>(
   () => ({
-    /* @ts-ignore */
+    // @ts-expect-error Variabel didefine dari bundler
     src: `${BACKEND_URL}static/images/${images[0]}`,
     class: "w-full h-[120px] object-cover rounded-t-md bg-gray-300",
     alt: `${images[0]}`,

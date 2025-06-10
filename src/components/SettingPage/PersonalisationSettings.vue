@@ -21,8 +21,8 @@ import { useAuthStore } from "../../stores/authStore";
 import parsePhoneNumber from "libphonenumber-js";
 import zxcvbn from "zxcvbn";
 import { editDataProfile, editPhotoProfile } from "../../api/Auth/Auth";
-import lodash from "lodash";
 import { FileType } from "ant-design-vue/es/upload/interface";
+import estoolkit from "es-toolkit/compat";
 
 const auth = useAuthStore();
 const { userInfo } = storeToRefs(auth);
@@ -250,7 +250,7 @@ const handleChangeData = async (e: MouseEvent) => {
   try {
     const response = await editDataProfile({
       ...(isPhoneValid.value && { userPhoneNumber: phoneVal.value }),
-      ...(isPasswordSame &&
+      ...(isPasswordSame.value &&
         passwordStrength.value.score > 2 && { userPassword: password.value }),
     });
 
@@ -311,7 +311,7 @@ const handleChangeProfile = async (photo: FileType) => {
 
 const avatarExistProps = computed<AvatarProps>(() => ({
   size: 100,
-  /* @ts-ignore */
+  /* @ts-expect-error Variabel didefine dari Bundler */
   src: `${BACKEND_URL}static/images/${userInfo.value?.imageUrl}`,
 }));
 
@@ -330,17 +330,17 @@ const isDisabled = computed(() => {
     return true;
   } else if (
     isPhoneValid.value.success &&
-    lodash.isEmpty(password.value) &&
-    lodash.isEmpty(oPassword.value) &&
-    lodash.isEmpty(cPassword.value)
+    estoolkit.isEmpty(password.value) &&
+    estoolkit.isEmpty(oPassword.value) &&
+    estoolkit.isEmpty(cPassword.value)
   ) {
     return true;
   } else if (
-    !lodash.isEmpty(password.value) &&
-    !lodash.isEmpty(oPassword.value) &&
-    !lodash.isEmpty(cPassword.value) &&
+    !estoolkit.isEmpty(password.value) &&
+    !estoolkit.isEmpty(oPassword.value) &&
+    !estoolkit.isEmpty(cPassword.value) &&
     isPasswordSame.value &&
-    lodash.isEmpty(phoneVal.value)
+    estoolkit.isEmpty(phoneVal.value)
   ) {
     return true;
   } else if (

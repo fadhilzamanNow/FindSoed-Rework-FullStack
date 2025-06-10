@@ -14,7 +14,6 @@ const { isLoading, postData } = storeToRefs(post);
 
 const debounceSearch = lodash.debounce(async (searchItem: string) => {
   try {
-    console.log("isi search : ", searchItem);
     search.value = searchItem;
     const response = await findPost(search.value);
     if (response) {

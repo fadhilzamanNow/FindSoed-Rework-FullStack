@@ -1,6 +1,7 @@
 import { defineConfig } from "@rsbuild/core";
 import { pluginVue } from "@rsbuild/plugin-vue";
 import { loadEnv } from "@rsbuild/core";
+import { RsdoctorRspackPlugin } from "@rsdoctor/rspack-plugin";
 
 const { parsed } = loadEnv();
 
@@ -11,6 +12,7 @@ export default defineConfig({
     web: {
       output: {
         target: "web",
+        minify: false,
       },
       source: {
         entry: {
@@ -24,6 +26,7 @@ export default defineConfig({
         distPath: {
           root: "dist/server",
         },
+        minify: false,
       },
       source: {
         entry: {
@@ -40,5 +43,8 @@ export default defineConfig({
       /* @ts-ignore */
       BACKEND_URL: JSON.stringify(parsed.PUBLIC_BACKEND_URL),
     },
+  },
+  tools: {
+    rspack: [new RsdoctorRspackPlugin({})],
   },
 });

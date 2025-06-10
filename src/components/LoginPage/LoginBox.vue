@@ -7,6 +7,7 @@ import validator from "email-validator";
 import { findUserInfo, loginUser } from "../../api/Auth/Auth";
 import { ChangeEvent } from "ant-design-vue/es/_util/EventInterface";
 import { useAuthStore } from "../../stores/authStore";
+import { validateTokenHandler } from "../../utils/validateToken";
 
 const emailVal = ref("");
 const passVal = ref("");
@@ -43,7 +44,7 @@ const passProps = computed<InputProps>(() => ({
 }));
 
 const handleLogin = async () => {
-  if (isEmailValid && passVal.value.length > 1) {
+  if (isEmailValid.value && passVal.value.length > 1) {
     try {
       emit("toggleLoading");
       const response = await loginUser({
@@ -64,11 +65,15 @@ const handleLogin = async () => {
               imageUrl: findUser.data.imageUrl,
               phoneNumber: findUser.data.phoneNumber,
             });
+            setTimeout(() => {
+              auth.setAuthToken(null);
+              auth.setUserInfo(null);
+            }, validateTokenHandler(response.data.token) as number);
           }
         }
         Modal.success({
           title: "Berhasil untuk login",
-          ///@ts-ignore
+          ///@ts-expect-error response message is still random
           message: response.data.message,
           centered: true,
           zIndex: 99999,
@@ -77,10 +82,9 @@ const handleLogin = async () => {
       }
     } catch (e) {
       emit("toggleLoading");
-      console.log("kesini masuknya dengan e  : ", e);
       Modal.error({
         title: "Gagal untuk Login",
-        /* @ts-ignore */
+        // @ts-expect-error error response message is still random
         content: e.message,
         centered: true,
         zIndex: 99999,

@@ -1,11 +1,10 @@
 <script setup lang="ts">
 import Navbar from "../components/LandingPage/Navbar.vue";
 import Sidebar from "../components/Sidebar/Sidebar.vue";
-import { watch } from "vue";
+import { watchEffect } from "vue";
 import { storeToRefs } from "pinia";
 import { useAuthStore } from "../stores/authStore";
 import { useRouter } from "vue-router";
-import { jwtDecode } from "jwt-decode";
 import DetailItem from "../components/DetailPage/DetailItem.vue";
 import { useSeoMeta } from "@unhead/vue";
 
@@ -28,31 +27,17 @@ const auth = useAuthStore();
 const { authToken } = storeToRefs(auth);
 const navigate = useRouter();
 
-watch(
-  [authToken.value, navigate],
-  () => {
-    if (authToken.value && localStorage.getItem("authToken")) {
-      const myToken = jwtDecode(authToken.value);
-      if (Number(Date.now() / 1000) > Number(myToken.exp)) {
-        localStorage.removeItem("authToken");
-        auth.setAuthToken(null);
-        navigate.push("/login");
-      }
-    } else {
-      auth.setAuthToken(null);
-      navigate.push("/login");
-    }
-  },
-  {
-    immediate: true,
+watchEffect(() => {
+  if (!authToken.value) {
+    navigate.push("/login");
   }
-);
+});
 </script>
 
 <template>
-  <div class="min-h-screen w-full">
+  <div class="min-h-screen w-full overflow-hidden">
     <Navbar />
-    <Sidebar active="Add" />
+    <Sidebar />
     <DetailItem />
   </div>
 </template>

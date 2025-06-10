@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { Flex } from "ant-design-vue";
 import LoginBox from "../components/LoginPage/LoginBox.vue";
-/* import Navbar from '../components/Navbar/Navbar.vue'; */
 import { ref, watchEffect } from "vue";
 import { useAuthStore } from "../stores/authStore";
 import { useRouter } from "vue-router";
@@ -30,12 +29,6 @@ const { authToken } = storeToRefs(auth);
 const loginLoading = ref(false);
 
 const navigate = useRouter();
-
-/* watch(authToken,() => {
-    if(authToken.value){
-        navigate.push("/list")
-    }
-},{immediate : true}) */
 
 const toggleLoading = () => {
   loginLoading.value = !loginLoading.value;

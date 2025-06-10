@@ -1,9 +1,5 @@
 import axios, { AxiosError } from "axios";
 
-console.log(process.env.NODE_ENV);
-//@ts-ignore
-console.log(BACKEND_URL);
-
 export type CustomErrorResponse = {
   status: number;
   message: string;
@@ -16,7 +12,7 @@ export type CustomSuccessResponse = {
 };
 
 const basePath = axios.create({
-  /* @ts-ignore */
+  // @ts-expect-error Variabel didefine dari bundler
   baseURL: BACKEND_URL,
   timeout: 5000,
 });
