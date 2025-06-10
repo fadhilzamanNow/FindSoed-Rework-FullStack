@@ -4,10 +4,9 @@ import Sidebar from "../components/Sidebar/Sidebar.vue";
 import SettingsBox from "../components/SettingPage/SettingsBox.vue";
 import { storeToRefs } from "pinia";
 import { useAuthStore } from "../stores/authStore";
-import { jwtDecode } from "jwt-decode";
 import { useRouter } from "vue-router";
 import { useSeoMeta } from "@unhead/vue";
-import { onMounted, watch, watchEffect } from "vue";
+import { onMounted, watchEffect } from "vue";
 
 useSeoMeta({
   title: "SSR RSbuild Setting Page - Findsoed Rework",
@@ -42,7 +41,7 @@ onMounted(() => {
 <template>
   <div class="min-h-screen overflow-auto w-full">
     <Navbar />
-    <Sidebar active="Home" />
+    <Sidebar />
     <SettingsBox />
   </div>
 </template>

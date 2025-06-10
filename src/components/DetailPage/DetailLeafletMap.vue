@@ -7,7 +7,7 @@ import { SkeletonInput } from "ant-design-vue";
 
 import { getReverseLocation } from "../../api/Location/Location";
 
-//@ts-ignore
+// @ts-expect-error Type declaration buat ini gak ada
 import("leaflet/dist/leaflet.css");
 
 type itemLocationType = {

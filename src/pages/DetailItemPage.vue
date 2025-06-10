@@ -37,7 +37,7 @@ watchEffect(() => {
 <template>
   <div class="min-h-screen w-full overflow-hidden">
     <Navbar />
-    <Sidebar active="Add" />
+    <Sidebar />
     <DetailItem />
   </div>
 </template>

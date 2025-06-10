@@ -44,7 +44,7 @@ const passProps = computed<InputProps>(() => ({
 }));
 
 const handleLogin = async () => {
-  if (isEmailValid && passVal.value.length > 1) {
+  if (isEmailValid.value && passVal.value.length > 1) {
     try {
       emit("toggleLoading");
       const response = await loginUser({
@@ -73,7 +73,7 @@ const handleLogin = async () => {
         }
         Modal.success({
           title: "Berhasil untuk login",
-          ///@ts-ignore
+          ///@ts-expect-error response message is still random
           message: response.data.message,
           centered: true,
           zIndex: 99999,
@@ -82,10 +82,9 @@ const handleLogin = async () => {
       }
     } catch (e) {
       emit("toggleLoading");
-      console.log("kesini masuknya dengan e  : ", e);
       Modal.error({
         title: "Gagal untuk Login",
-        /* @ts-ignore */
+        // @ts-expect-error error response message is still random
         content: e.message,
         centered: true,
         zIndex: 99999,

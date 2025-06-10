@@ -47,8 +47,6 @@ const inputUpdateProps = computed<InputProps | { class: string }>(() => ({
           <div
             class="flex flex-col md:flex-row h-full w-3/4 lg:w-1/2 justify-center mt-6 sm:mt-4 md:mt-0"
           >
-            <!--   <input  type="text" placeholder="Masukkan Pesanmu" class="w-full bg-white sm:w-auto md:w-80 px-4 sm:px-6 py-3 sm:py-4 rounded-xl md:rounded-r-none focus:outline-none " />
-                            <button @click="handleSend" class="w-full sm:w-auto cursor-pointer bg-green-500 text-white px- sm:px-8 py-3 sm:py-4 rounded-xl md:rounded-l-none md:rounded-r-xl mt-6 md:mt-0">Kirim</button> -->
             <div class="w-full relative">
               <Input v-bind="inputUpdateProps" />
               <button

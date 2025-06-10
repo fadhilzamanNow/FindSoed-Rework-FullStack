@@ -104,8 +104,6 @@ const routes = [
   // },
 ];
 
-console.log("typeof window : ", typeof window);
-
 const isServer = typeof window === "undefined";
 
 const createRouter = () =>

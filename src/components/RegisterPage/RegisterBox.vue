@@ -29,15 +29,12 @@ const phoneVal = ref<string>("");
 const navigate = useRouter();
 
 const isPhoneValid = computed<PhoneValidType>(() => {
-  console.log("phoneVal :", phoneVal.value);
   if (parsePhoneNumber(phoneVal.value, "ID")?.isValid()) {
-    console.log("ok test :");
     return {
       success: true,
       message: "Nomor valid",
     };
   } else {
-    console.log("wrong false");
     return {
       success: false,
       message:

@@ -1,11 +1,10 @@
 <script setup lang="ts">
-import { onMounted, watchEffect } from "vue";
-import { RouterView, useRouter } from "vue-router";
+import { watchEffect } from "vue";
+import { RouterView } from "vue-router";
 import { useAuthStore } from "./stores/authStore";
 import { findUserInfo } from "./api/Auth/Auth";
 import { storeToRefs } from "pinia";
 import { useHead } from "@unhead/vue";
-import { jwtDecode } from "jwt-decode";
 import { validateTokenHandler } from "./utils/validateToken";
 useHead({
   title: "Findsoed Rework",
@@ -37,13 +36,11 @@ watchEffect(() => {
     if (!authToken.value) {
       const token = localStorage.getItem("authToken");
       if (token) {
-        console.log("ada token :", token);
         const timeLeft = validateTokenHandler(token);
         if (timeLeft) {
           auth.setAuthToken(token);
           findInfo();
           setTimeout(() => {
-            console.log("it will be remove automatically");
             localStorage.removeItem("authToken");
             auth.setAuthToken(null);
             auth.setUserInfo(null);
@@ -56,8 +53,6 @@ watchEffect(() => {
     }
   }
 });
-
-console.log("Date Now  : ", Date.now());
 </script>
 
 <template>

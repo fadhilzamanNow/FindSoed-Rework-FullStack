@@ -35,7 +35,6 @@ const navigate = useRouter();
 
 watchEffect(() => {
   if (authToken.value) {
-    console.log("there is authToken", authToken.value);
     navigate.push("/home");
   }
 });

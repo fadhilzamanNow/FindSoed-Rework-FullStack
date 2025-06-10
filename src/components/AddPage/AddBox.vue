@@ -1,17 +1,14 @@
 <script setup lang="ts">
 import { Flex, message, Modal } from "ant-design-vue";
-import { computed, defineAsyncComponent, reactive, ref, Suspense } from "vue";
+import { computed, defineAsyncComponent, reactive, ref } from "vue";
 import { Input, Select, Textarea, DatePicker, Button } from "ant-design-vue";
 import type { DatePickerProps, UploadProps } from "ant-design-vue";
 import { Upload } from "ant-design-vue";
-import lodash from "lodash";
+import { isEmpty } from "ramda";
 import { createPost, itemLocationType } from "../../api/Post/Post";
 import { useRouter } from "vue-router";
 import BreadCrumbComp from "../BreadCrumb/BreadCrumbComp.vue";
 import { CustomErrorResponse } from "../../api/baseApi";
-import { watchEffect } from "vue";
-import { nextTick } from "vue";
-import { onMounted } from "vue";
 
 const mapInfo = reactive<itemLocationType>({
   latitude: null,
@@ -55,7 +52,7 @@ const beforeUpload: UploadProps["beforeUpload"] = (file) => {
 
 const isDisabled = computed(() => {
   return (
-    !lodash.isEmpty(
+    !isEmpty(
       itemName.value &&
         itemCategory.value &&
         itemDescription.value &&
@@ -78,7 +75,7 @@ const handleSubmit = async () => {
     newPost.append("locationName", mapInfo?.locationName as string);
     if (fileList.value) {
       fileList.value.forEach((v) => {
-        //@ts-ignore
+        // @ts-expect-error V soalnya any
         newPost.append("postImage", v);
       });
     }
@@ -98,7 +95,6 @@ const handleSubmit = async () => {
   } catch (err: any) {
     Modal.error({
       title: "Barang Gagal Ditambahkan",
-      //@ts-ignore
       content: (err as CustomErrorResponse).message,
       centered: true,
       zIndex: 999999,

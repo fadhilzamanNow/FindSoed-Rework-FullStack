@@ -1,14 +1,12 @@
 <script setup lang="ts">
-import { onMounted, watch } from "vue";
+import { onMounted } from "vue";
 import ListBox from "../components/ListPage/ListBox.vue";
 import Sidebar from "../components/Sidebar/Sidebar.vue";
 import { storeToRefs } from "pinia";
 import { useAuthStore } from "../stores/authStore";
-import { jwtDecode } from "jwt-decode";
 import { useRouter } from "vue-router";
 import Navbar from "../components/LandingPage/Navbar.vue";
 import { useSeoMeta } from "@unhead/vue";
-import { useTemplateRef } from "vue";
 import { watchEffect } from "vue";
 
 useSeoMeta({
@@ -46,6 +44,6 @@ onMounted(() => {
     <!-- NAVBAR -->
     <Navbar />
     <ListBox />
-    <Sidebar active="Home" />
+    <Sidebar />
   </div>
 </template>

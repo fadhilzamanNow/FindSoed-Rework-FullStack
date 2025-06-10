@@ -9,7 +9,7 @@ import { debounce } from "lodash";
 import { LoadingOutlined } from "@ant-design/icons-vue";
 import { getMatchLocation } from "../../api/Location/Location";
 
-//@ts-ignore
+// @ts-expect-error Type declaration belum ada untuk ini
 import("leaflet/dist/leaflet.css");
 
 const emit = defineEmits<{

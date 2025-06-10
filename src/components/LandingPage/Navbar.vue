@@ -1,4 +1,3 @@
-f
 <script setup lang="ts">
 import { computed, defineAsyncComponent, ref } from "vue";
 import logo from "../../assets/icon.png";
@@ -8,14 +7,11 @@ import {
   UserAddOutlined,
   UserOutlined,
 } from "@ant-design/icons-vue";
-import HamburgerMenu from "../Navbar/HamburgerMenu.vue";
-import { Button, Dropdown, Flex, Menu, MenuItem } from "ant-design-vue";
+import { Dropdown, Flex, Menu, MenuItem } from "ant-design-vue";
 import { RouterLink, useRoute, useRouter } from "vue-router";
-import { useNavStore } from "../../stores/navStore";
 import { storeToRefs } from "pinia";
 import { useNavbarStore } from "../../stores/navbarInfo";
 import { useAuthStore } from "../../stores/authStore";
-import { activeAnimations } from "motion-v";
 
 const LazyHamburgerMenu = defineAsyncComponent(
   () => import("../Navbar/HamburgerMenu.vue")
@@ -75,7 +71,6 @@ const authNavItems: navType[] = [
   },
 ];
 
-const isMenuOpen = ref(false);
 const activeLink = ref<navType["href"]>("#home");
 const path = useRoute();
 const { isNavbarOpen } = storeToRefs(useNavbarStore());
@@ -203,12 +198,11 @@ const handleSetting = () => {
             </Menu>
           </template>
           <div class="hidden md:block">
-            <Button
-              type="primary"
-              class="flex text-white justify-center items-center h-max px-4 py-1 transition duration-300 select-none cursor-pointer rounded-md !bg-blue-600 hover:!bg-blue-700"
+            <div
+              className="hidden md:flex  text-white justify-center items-center  text-xs h-max px-4 py-2  transition duration-300 select-none cursor-pointer rounded-md !bg-blue-600 hover:!bg-blue-700"
             >
               Ayo Gabung
-            </Button>
+            </div>
           </div>
         </Dropdown>
 

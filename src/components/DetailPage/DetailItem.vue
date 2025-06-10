@@ -65,8 +65,6 @@ type CommentType = {
   created_at: string;
 };
 
-//@ts-ignore
-
 const LazyDetailLeafletMap = defineAsyncComponent(
   () => import("./DetailLeafletMap.vue")
 );
@@ -80,6 +78,7 @@ const isCommentLoading = ref(true);
 const postComment = ref<CommentType[]>([]);
 const commenBlock = useTemplateRef("commentBlock");
 const isModalOpenMap = ref(false);
+const firstSent = ref(false);
 
 const findDetailUserPost = async (id: string) => {
   try {
@@ -89,7 +88,6 @@ const findDetailUserPost = async (id: string) => {
       postDetail.value = response.data;
       isBeingSent.value = true;
     }
-    console.log("isi response : ", response.data);
   } catch (e) {}
 };
 
@@ -146,6 +144,7 @@ const handleAddComment = async () => {
     if (response) {
       isBeingSent.value = true;
       commentVal.value = "";
+      firstSent.value = true;
       await nextTick();
       return true;
     }
@@ -196,13 +195,16 @@ const pindahkeBawah = async () => {
       behavior: "smooth",
       block: "end",
     });
+    window.scrollTo(0, 100000);
   }
 };
 
 watch(
   postComment,
   () => {
-    pindahkeBawah();
+    if (firstSent.value) {
+      pindahkeBawah();
+    }
   },
   { immediate: true, deep: true }
 );
@@ -238,7 +240,6 @@ watch(
           <!-- PREV -->
           <button
             class="detail-prev-custom size-8 absolute z-1 top-1/2 left-2 -translate-y-1/2 rounded-full border bg-white border-gray-200 flex items-center justify-center hover:bg-blue-600 hover:text-white transition-all cursor-pointer"
-            @click="() => console.log('prev')"
           >
             <LeftOutlined />
           </button>
