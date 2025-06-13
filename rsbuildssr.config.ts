@@ -19,6 +19,23 @@ export default defineConfig({
           index: "./src/index",
         },
       },
+      performance: {
+        chunkSplit: {
+          maxSize: 500000,
+          strategy: "split-by-size",
+        },
+      },
+      tools: {
+        rspack: {
+          plugins: [
+            new RsdoctorRspackPlugin({
+              supports: {
+                generateTileGraph: true,
+              },
+            }),
+          ],
+        },
+      },
     },
     ssr: {
       output: {
@@ -40,7 +57,6 @@ export default defineConfig({
   },
   source: {
     define: {
-      /* @ts-ignore */
       BACKEND_URL: JSON.stringify(parsed.PUBLIC_BACKEND_URL),
     },
   },

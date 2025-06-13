@@ -14,7 +14,7 @@ export type CustomSuccessResponse = {
 const basePath = axios.create({
   // @ts-expect-error Variabel didefine dari bundler
   baseURL: BACKEND_URL,
-  timeout: 5000,
+  timeout: 10000,
 });
 
 basePath.interceptors.request.use((config) => {
