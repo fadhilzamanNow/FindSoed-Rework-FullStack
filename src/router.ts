@@ -28,37 +28,37 @@ const routes = [
   {
     path: "/",
     name: "landing",
-    component: LazyLandingPage,
+    component: defineAsyncComponent(() => import("./pages/LandingPage.vue")),
   },
   {
     path: "/login",
     name: "login",
-    component: LazyLoginPage,
+    component: defineAsyncComponent(() => import("./pages/LoginPage.vue")),
   },
   {
     path: "/register",
     name: "about",
-    component: LazyRegisterPage,
+    component: defineAsyncComponent(() => import("./pages/RegisterPage.vue")),
   },
   {
     path: "/home",
     name: "list",
-    component: LazyListPage,
+    component: defineAsyncComponent(() => import("./pages/ListPage.vue")),
   },
   {
     path: "/add",
     name: "add",
-    component: LazyAddPage,
+    component: defineAsyncComponent(() => import("./pages/AddPage.vue")),
   },
   {
     path: "/setting",
     name: "setting",
-    component: LazySettingPage,
+    component: defineAsyncComponent(() => import("./pages/SettingsPage.vue")),
   },
   {
     path: "/detail/:id",
     name: "detail",
-    component: LazyDetailPage,
+    component: defineAsyncComponent(() => import("./pages/DetailItemPage.vue")),
   },
 ];
 
