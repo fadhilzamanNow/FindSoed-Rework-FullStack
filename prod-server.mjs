@@ -61,7 +61,6 @@ export async function preview() {
   app.use(compression());
   app.use(base, sirv("./dist/static", { extensions: [] }));
   app.use(express.static("dist"));
-  app.use(express.static("dist"));
 
   app.listen(port, () => {
     console.log(`Server started at http://localhost:${port}`);
