@@ -13,6 +13,7 @@ export default defineConfig({
       output: {
         target: "web",
         minify: false,
+        inlineStyles: true,
       },
       source: {
         entry: {
