@@ -61,7 +61,7 @@ export default defineConfig({
       BACKEND_URL: JSON.stringify(parsed.PUBLIC_BACKEND_URL),
     },
   },
-  tools: {
+  /* tools: {
     rspack: [new RsdoctorRspackPlugin({})],
-  },
+  }, */
 });

@@ -5,60 +5,65 @@ import {
 } from "vue-router";
 
 import { defineAsyncComponent } from "vue";
+import Loading from "./components/Loading/Loading.vue";
 
-const LazyLandingPage = defineAsyncComponent(
-  () => import("./pages/LandingPage.vue")
-);
-const LazyLoginPage = defineAsyncComponent(
-  () => import("./pages/LoginPage.vue")
-);
-const LazyRegisterPage = defineAsyncComponent(
-  () => import("./pages/RegisterPage.vue")
-);
-const LazyListPage = defineAsyncComponent(() => import("./pages/ListPage.vue"));
-const LazyAddPage = defineAsyncComponent(() => import("./pages/AddPage.vue"));
-const LazySettingPage = defineAsyncComponent(
-  () => import("./pages/SettingsPage.vue")
-);
-const LazyDetailPage = defineAsyncComponent(
-  () => import("./pages/DetailItemPage.vue")
-);
 
 const routes = [
   {
     path: "/",
     name: "landing",
-    component: defineAsyncComponent(() => import("./pages/LandingPage.vue")),
+    component: defineAsyncComponent({
+      loader : () => import("./pages/LandingPage.vue"),
+      loadingComponent : Loading
+    }),
   },
   {
     path: "/login",
     name: "login",
-    component: defineAsyncComponent(() => import("./pages/LoginPage.vue")),
+    component: defineAsyncComponent({
+      loader : () => import("./pages/LoginPage.vue"),
+      loadingComponent : Loading
+    })
   },
   {
     path: "/register",
     name: "about",
-    component: defineAsyncComponent(() => import("./pages/RegisterPage.vue")),
+    component: defineAsyncComponent({
+      loader : () => import("./pages/RegisterPage.vue"),
+      loadingComponent : Loading
+    }),
   },
   {
     path: "/home",
     name: "list",
-    component: defineAsyncComponent(() => import("./pages/ListPage.vue")),
+    component: defineAsyncComponent({
+      loader : () => import("./pages/ListPage.vue"),
+      loadingComponent : Loading
+    }),
   },
   {
     path: "/add",
     name: "add",
-    component: defineAsyncComponent(() => import("./pages/AddPage.vue")),
+    component: defineAsyncComponent({
+      loader : () => import("./pages/AddPage.vue"),
+      loadingComponent : Loading
+    }),
   },
   {
     path: "/setting",
     name: "setting",
-    component: defineAsyncComponent(() => import("./pages/SettingsPage.vue")),
+    component: defineAsyncComponent({
+      loader : () => import("./pages/SettingsPage.vue"),
+      loadingComponent : Loading
+    }),
   },
   {
     path: "/detail/:id",
     name: "detail",
-    component: defineAsyncComponent(() => import("./pages/DetailItemPage.vue")),
+    component: defineAsyncComponent({
+      loader : () => import("./pages/DetailItemPage.vue"),
+      loadingComponent : Loading
+    }),
   },
 ];
 

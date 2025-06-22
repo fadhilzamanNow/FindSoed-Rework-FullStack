@@ -23,7 +23,7 @@ export default defineConfig({
       strategy: "split-by-size",
     },
   },
-  tools: {
+  /* tools: {
     rspack: {
       plugins: [
         new RsdoctorRspackPlugin({
@@ -33,5 +33,5 @@ export default defineConfig({
         }),
       ],
     },
-  },
+  }, */
 });
