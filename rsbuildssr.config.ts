@@ -1,7 +1,6 @@
 import { defineConfig } from "@rsbuild/core";
 import { pluginVue } from "@rsbuild/plugin-vue";
 import { loadEnv } from "@rsbuild/core";
-import { RsdoctorRspackPlugin } from "@rsdoctor/rspack-plugin";
 
 const { parsed } = loadEnv();
 
@@ -26,7 +25,7 @@ export default defineConfig({
           strategy: "split-by-size",
         },
       },
-      tools: {
+    /*   tools: {
         rspack: {
           plugins: [
             new RsdoctorRspackPlugin({
@@ -36,7 +35,7 @@ export default defineConfig({
             }),
           ],
         },
-      },
+      }, */
     },
     ssr: {
       output: {

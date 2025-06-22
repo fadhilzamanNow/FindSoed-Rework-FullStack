@@ -1,6 +1,5 @@
 import { defineConfig, loadEnv } from "@rsbuild/core";
 import { pluginVue } from "@rsbuild/plugin-vue";
-import { RsdoctorRspackPlugin } from "@rsdoctor/rspack-plugin";
 
 const { parsed } = loadEnv();
 
