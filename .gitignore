@@ -11,3 +11,13 @@ uploads
 #/src/public
 #src/public
 #/src/public
+
+# PM2
+logs/
+.pm2/
+pids/
+ecosystem.config.js.backup
+
+# PM2 logs
+*.log
+dist/
