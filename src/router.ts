@@ -4,104 +4,67 @@ import {
   createWebHistory,
 } from "vue-router";
 
-import LoginPage from "./pages/LoginPage.vue";
-import RegisterPage from "./pages/RegisterPage.vue";
-import ListPage from "./pages/ListPage.vue";
-import AddPage from "./pages/AddPage.vue";
-import SettingsPage from "./pages/SettingsPage.vue";
-import DetailItemPage from "./pages/DetailItemPage.vue";
-import LandingPage from "./pages/LandingPage.vue";
 import { defineAsyncComponent } from "vue";
+import Loading from "./components/Loading/Loading.vue";
 
-const LazyLandingPage = defineAsyncComponent(
-  () => import("./pages/LandingPage.vue")
-);
-const LazyLoginPage = defineAsyncComponent(
-  () => import("./pages/LoginPage.vue")
-);
-const LazyRegisterPage = defineAsyncComponent(
-  () => import("./pages/RegisterPage.vue")
-);
-const LazyListPage = defineAsyncComponent(() => import("./pages/ListPage.vue"));
-const LazyAddPage = defineAsyncComponent(() => import("./pages/AddPage.vue"));
-const LazySettingPage = defineAsyncComponent(
-  () => import("./pages/SettingsPage.vue")
-);
-const LazyDetailPage = defineAsyncComponent(
-  () => import("./pages/DetailItemPage.vue")
-);
 
 const routes = [
   {
     path: "/",
     name: "landing",
-    component: LandingPage,
+    component: defineAsyncComponent({
+      loader : () => import("./pages/LandingPage.vue"),
+      loadingComponent : Loading
+    }),
   },
   {
     path: "/login",
     name: "login",
-    component: LoginPage,
+    component: defineAsyncComponent({
+      loader : () => import("./pages/LoginPage.vue"),
+      loadingComponent : Loading
+    })
   },
   {
     path: "/register",
     name: "about",
-    component: RegisterPage,
+    component: defineAsyncComponent({
+      loader : () => import("./pages/RegisterPage.vue"),
+      loadingComponent : Loading
+    }),
   },
   {
     path: "/home",
     name: "list",
-    component: ListPage,
+    component: defineAsyncComponent({
+      loader : () => import("./pages/ListPage.vue"),
+      loadingComponent : Loading
+    }),
   },
   {
     path: "/add",
     name: "add",
-    component: AddPage,
+    component: defineAsyncComponent({
+      loader : () => import("./pages/AddPage.vue"),
+      loadingComponent : Loading
+    }),
   },
   {
     path: "/setting",
     name: "setting",
-    component: SettingsPage,
+    component: defineAsyncComponent({
+      loader : () => import("./pages/SettingsPage.vue"),
+      loadingComponent : Loading
+    }),
   },
   {
     path: "/detail/:id",
     name: "detail",
-    component: DetailItemPage,
+    component: defineAsyncComponent({
+      loader : () => import("./pages/DetailItemPage.vue"),
+      loadingComponent : Loading
+    }),
   },
-  // {
-  //   path: "/",
-  //   name: "landing",
-  //   component: () => import("./pages/LandingPage.vue"),
-  // },
-  // {
-  //   path: "/login",
-  //   name: "login",
-  //   component: LazyLoginPage,
-  // },
-  // {
-  //   path: "/register",
-  //   name: "about",
-  //   component: LazyRegisterPage,
-  // },
-  // {
-  //   path: "/home",
-  //   name: "list",
-  //   component: LazyListPage,
-  // },
-  // {
-  //   path: "/add",
-  //   name: "add",
-  //   component: LazyAddPage,
-  // },
-  // {
-  //   path: "/setting",
-  //   name: "setting",
-  //   component: LazySettingPage,
-  // },
-  // {
-  //   path: "/detail/:id",
-  //   name: "detail",
-  //   component: LazyDetailPage,
-  // },
 ];
 
 const isServer = typeof window === "undefined";

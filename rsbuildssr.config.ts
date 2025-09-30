@@ -1,7 +1,6 @@
 import { defineConfig } from "@rsbuild/core";
 import { pluginVue } from "@rsbuild/plugin-vue";
 import { loadEnv } from "@rsbuild/core";
-import { RsdoctorRspackPlugin } from "@rsdoctor/rspack-plugin";
 
 const { parsed } = loadEnv();
 
@@ -13,12 +12,30 @@ export default defineConfig({
       output: {
         target: "web",
         minify: false,
+        inlineStyles: true,
       },
       source: {
         entry: {
           index: "./src/index",
         },
       },
+      performance: {
+        chunkSplit: {
+          maxSize: 500000,
+          strategy: "split-by-size",
+        },
+      },
+    /*   tools: {
+        rspack: {
+          plugins: [
+            new RsdoctorRspackPlugin({
+              supports: {
+                generateTileGraph: true,
+              },
+            }),
+          ],
+        },
+      }, */
     },
     ssr: {
       output: {
@@ -40,11 +57,10 @@ export default defineConfig({
   },
   source: {
     define: {
-      /* @ts-ignore */
       BACKEND_URL: JSON.stringify(parsed.PUBLIC_BACKEND_URL),
     },
   },
-  tools: {
+  /* tools: {
     rspack: [new RsdoctorRspackPlugin({})],
-  },
+  }, */
 });
