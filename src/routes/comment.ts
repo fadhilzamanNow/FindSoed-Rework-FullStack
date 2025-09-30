@@ -4,6 +4,7 @@ import { PrismaClient } from "../../generated/prisma";
 import { z } from "zod";
 import dayjs from "dayjs";
 import localizedFormat from "dayjs/plugin/localizedFormat";
+import { getS3Url } from "../services/s3Upload";
 
 const router = express.Router();
 const prisma = new PrismaClient();
@@ -66,7 +67,7 @@ router.get("/:id", verifyToken, async (req: Request, res: Response) => {
           return {
             userName: v.user.username,
             userProfile: v.user.profile?.imageUrl
-              ? v.user.profile.imageUrl
+              ? getS3Url(v.user.profile.imageUrl)
               : null,
             message: v.message,
             created_at: dayjs(v.created_at, "YYYY-MM-DD").format("lll"),

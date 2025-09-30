@@ -2,10 +2,10 @@ import express, { NextFunction, Request, Response } from "express";
 import jwt, { JwtPayload } from "jsonwebtoken";
 import "dotenv/config";
 import { PrismaClient } from "../../generated/prisma";
-import multer from "multer";
-import path from "path";
 import dayjs from "dayjs";
 import localizedFormat from "dayjs/plugin/localizedFormat";
+import upload from "../middleware/upload";
+import { uploadMultipleToS3, getS3Url } from "../services/s3Upload";
 
 dayjs.extend(localizedFormat);
 
@@ -28,18 +28,6 @@ const verifyToken = (req: Request, res: Response, next: NextFunction) => {
     });
   }
 };
-
-const storage = multer.diskStorage({
-  destination: (_, __, cb) => {
-    cb(null, "src/public/images/");
-  },
-  filename: (_, file, cb) => {
-    const ext = path.extname(file.originalname);
-    cb(null, Date.now() + ext);
-  },
-});
-
-const upload = multer({ storage: storage });
 
 router.get("/userpost", verifyToken, async (req: Request, res: Response) => {
   try {
@@ -128,11 +116,18 @@ router.post(
           categoryName: itemCategory,
         },
       });
+
       let imageArray = [];
       if (req.files && (req.files.length as number) > 0) {
-        imageArray = (req.files as Express.Multer.File[]).map((v, i) => {
+        // Upload images to S3
+        const s3Keys = await uploadMultipleToS3(
+          req.files as Express.Multer.File[],
+          "post-images",
+        );
+
+        imageArray = s3Keys.map((key) => {
           return {
-            postImageUrl: v.filename,
+            postImageUrl: key,
           };
         });
       } else {
@@ -278,12 +273,14 @@ router.get("/detail/:id", verifyToken, async (req: Request, res: Response) => {
       const formattedPosts = {
         id: findDetailPost.id,
         userName: findDetailPost.user.username,
-        userProfile: findDetailPost.user.profile?.imageUrl,
+        userProfile: findDetailPost.user.profile?.imageUrl
+          ? getS3Url(findDetailPost.user.profile.imageUrl)
+          : null,
         itemName: findDetailPost.itemName,
         itemDetail: findDetailPost.itemDetail,
         statusName: findDetailPost.status.statusName,
         itemCategory: findDetailPost.category.categoryName,
-        images: findDetailPost.image.map((v) => v.postImageUrl),
+        images: findDetailPost.image.map((v) => getS3Url(v.postImageUrl)),
         created_at: findDetailPost.created_at,
         updated_at: findDetailPost.updated_at,
         coordinate: {
@@ -346,12 +343,14 @@ router.get("/", verifyToken, async (req: Request, res: Response) => {
     return {
       id: v.id,
       userName: v.user.username,
-      userProfile: v.user.profile?.imageUrl,
+      userProfile: v.user.profile?.imageUrl
+        ? getS3Url(v.user.profile.imageUrl)
+        : null,
       itemName: v.itemName,
       itemDetail: v.itemDetail,
       statusName: v.status.statusName,
       categoryName: v.category.categoryName,
-      images: v.image.map((v) => v.postImageUrl),
+      images: v.image.map((img) => getS3Url(img.postImageUrl)),
       created_at: v.created_at,
       updated_at: v.updated_at,
       coordinate: {
@@ -408,12 +407,14 @@ router.get("/:searchitem", async (req: Request, res: Response) => {
       return {
         id: v.id,
         userName: v.user.username,
-        userProfile: v.user.profile?.imageUrl,
+        userProfile: v.user.profile?.imageUrl
+          ? getS3Url(v.user.profile.imageUrl)
+          : null,
         itemName: v.itemName,
         itemDetail: v.itemDetail,
         statusName: v.status.statusName,
         categoryName: v.category.categoryName,
-        images: v.image.map((v) => v.postImageUrl),
+        images: v.image.map((img) => getS3Url(img.postImageUrl)),
         created_at: v.created_at,
         updated_at: v.updated_at,
         coordinate: {

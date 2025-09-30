@@ -14,6 +14,7 @@
     "seed": "ts-node seed.ts"
   },
   "dependencies": {
+    "@aws-sdk/client-s3": "^3.899.0",
     "@prisma/client": "^6.7.0",
     "@prisma/migrate": "^6.6.0",
     "@types/cors": "^2.8.18",
@@ -32,6 +33,8 @@
     "dotenv": "^16.5.0",
     "express": "^5.1.0",
     "express-fileupload": "^1.5.1",
+    "express-http-proxy": "^1.0.0",
+    "http-proxy-middleware": "^3.0.5",
     "jsonwebtoken": "^9.0.2",
     "multer": "^1.4.5-lts.2",
     "nodemon": "^3.1.9",

@@ -3,10 +3,8 @@ import { PrismaClient } from "../../generated/prisma/client";
 import jwt from "jsonwebtoken";
 import "dotenv/config";
 import { verify } from "crypto";
-import multer from "multer";
-import path from "path";
-import fs from "fs/promises";
-import { existsSync } from "fs";
+import upload from "../middleware/upload";
+import { uploadToS3, deleteFromS3, getS3Url } from "../services/s3Upload";
 const router = express.Router();
 const prisma = new PrismaClient();
 
@@ -35,18 +33,6 @@ const verifyToken = (req: Request, res: Response, next: NextFunction) => {
     });
   }
 };
-
-const storage = multer.diskStorage({
-  destination: (_, __, cb) => {
-    cb(null, "src/public/images/");
-  },
-  filename: (_, file, cb) => {
-    const ext = path.extname(file.originalname);
-    cb(null, Date.now() + ext);
-  },
-});
-
-const upload = multer({ storage: storage });
 
 router.get("/", (req: Request, res: Response) => {
   res.send("ENTERING AUTH");
@@ -155,7 +141,10 @@ router.post("/login", async (req: Request, res: Response) => {
             username: findEmail.username,
             email: findEmail.email,
             phoneNumber: findEmail.phoneNumber ? findEmail.phoneNumber : null,
-            imageUrl: findProfile ? findProfile.imageUrl : null,
+            imageUrl:
+              findProfile && findProfile.imageUrl
+                ? getS3Url(findProfile.imageUrl)
+                : null,
           },
         });
       } else {
@@ -199,7 +188,9 @@ router.get("/find", verifyToken, async (req: Request, res: Response) => {
           username: findUser?.username,
           email: findUser?.email,
           phoneNumber: findUser?.phoneNumber,
-          imageUrl: findProfile?.imageUrl ? findProfile?.imageUrl : null,
+          imageUrl: findProfile?.imageUrl
+            ? getS3Url(findProfile.imageUrl)
+            : null,
         },
       });
     }
@@ -234,9 +225,14 @@ router.patch(
       });
 
       if (!findProfile) {
+        // Upload new profile image to S3
+        const s3Key = req.file
+          ? await uploadToS3(req.file, "profile-images")
+          : null;
+
         const newProfile = await prisma.profile.create({
           data: {
-            imageUrl: req.file?.filename,
+            imageUrl: s3Key,
             //@ts-ignore
             userId: req.userId,
           },
@@ -249,26 +245,33 @@ router.patch(
             username: findUser?.username,
             email: findUser?.email,
             phoneNumber: findUser?.phoneNumber,
-            imageUrl: newProfile.imageUrl,
+            imageUrl: newProfile.imageUrl
+              ? getS3Url(newProfile.imageUrl)
+              : null,
           },
         });
       } else {
-        if (
-          existsSync(
-            path.join(__dirname, `../public/images/${findProfile.imageUrl}`),
-          )
-        ) {
-          fs.unlink(
-            path.join(__dirname, `../public/images/${findProfile.imageUrl}`),
-          );
+        // Delete old profile image from S3 if it exists
+        if (findProfile.imageUrl) {
+          try {
+            await deleteFromS3(findProfile.imageUrl);
+          } catch (error) {
+            console.error("Error deleting old profile image:", error);
+          }
         }
+
+        // Upload new profile image to S3
+        const s3Key = req.file
+          ? await uploadToS3(req.file, "profile-images")
+          : null;
+
         const updateProfile = await prisma.profile.update({
           where: {
             //@ts-ignore
             userId: req.userId,
           },
           data: {
-            imageUrl: req.file?.filename,
+            imageUrl: s3Key,
           },
         });
         res.status(201).json({
@@ -279,7 +282,9 @@ router.patch(
             username: findUser?.username,
             email: findUser?.email,
             phoneNumber: findUser?.phoneNumber,
-            imageUrl: updateProfile.imageUrl,
+            imageUrl: updateProfile.imageUrl
+              ? getS3Url(updateProfile.imageUrl)
+              : null,
           },
         });
       }
@@ -329,7 +334,9 @@ router.patch("/editdata", verifyToken, async (req: Request, res: Response) => {
               username: newUser.username,
               email: newUser.email,
               phoneNumber: newUser.phoneNumber,
-              imageUrl: findProfile.imageUrl,
+              imageUrl: findProfile.imageUrl
+                ? getS3Url(findProfile.imageUrl)
+                : null,
             },
           });
         }
