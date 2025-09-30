@@ -10,7 +10,6 @@ import { locationRouter } from "./routes/location";
 import upload from "./middleware/upload";
 import { uploadMultipleToS3, getS3Url } from "./services/s3Upload";
 import { PrismaClient } from "../generated/prisma";
-import { createProxyMiddleware } from "http-proxy-middleware";
 import url from "url";
 var proxy = require("express-http-proxy");
 const app = express();
@@ -30,7 +29,6 @@ app.get("/test3", (_, res: Response) => {
     message: "test 3",
   });
 });
-app.use(apiProxy);
 app.get("/", (_, res: Response) => {
   res.redirect("/api-docs");
 });
@@ -119,3 +117,5 @@ app.get("/category", async (req: Request, res: Response) => {
     category: category,
   });
 });
+
+export default app;
