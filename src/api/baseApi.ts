@@ -13,7 +13,7 @@ export type CustomSuccessResponse = {
 
 const basePath = axios.create({
   // @ts-expect-error Variabel didefine dari bundler
-  baseURL: BACKEND_URL,
+  baseURL: "https://findsoed-rework-express.vercel.app/",
   timeout: 10000,
 });
 
