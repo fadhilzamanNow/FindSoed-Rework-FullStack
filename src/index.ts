@@ -106,11 +106,17 @@ app.post(
 );
 
 app.get("/category", async (req: Request, res: Response) => {
-  const category = await prisma.postCategory.findMany();
-  console.log("category :", category);
-  res.json({
-    category: category,
-  });
+  try {
+    const category = await prisma.postCategory.findMany();
+    console.log("category :", category);
+    res.json({
+      category: category,
+    });
+  } catch (err) {
+    res.json({
+      message: err.message,
+    });
+  }
 });
 
 export default app;
