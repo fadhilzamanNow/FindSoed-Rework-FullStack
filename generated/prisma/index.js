@@ -195,8 +195,7 @@ const config = {
     "binaryTargets": [
       {
         "fromEnvVar": null,
-        "value": "debian-openssl-3.0.x",
-        "native": true
+        "value": "rhel-openssl-3.0.x"
       }
     ],
     "previewFeatures": [],
@@ -214,16 +213,17 @@ const config = {
     "db"
   ],
   "activeProvider": "postgresql",
+  "postinstall": false,
   "inlineDatasources": {
     "db": {
       "url": {
         "fromEnvVar": "DATABASE_URL",
-        "value": "postgresql://postgres.rccunbsxujdtxbqkjsfz:2Log32==5@aws-1-ap-southeast-1.pooler.supabase.com:5432/postgres"
+        "value": null
       }
     }
   },
-  "inlineSchema": "// This is your Prisma schema file,\n// learn more about it in the docs: https://pris.ly/d/prisma-schema\n\n// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?\n// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init\n\ngenerator client {\n  provider = \"prisma-client-js\"\n  output   = \"../generated/prisma\"\n}\n\ndatasource db {\n  provider = \"postgresql\"\n  url      = env(\"DATABASE_URL\")\n}\n\nmodel User {\n  id          String     @id @unique @default(uuid())\n  email       String     @unique\n  username    String\n  password    String\n  posts       Post[]\n  phoneNumber String?\n  profile     Profile?\n  comment     Comments[]\n}\n\nmodel Profile {\n  id       Int     @id @default(autoincrement())\n  imageUrl String?\n  user     User    @relation(fields: [userId], references: [id])\n  userId   String  @unique\n}\n\nmodel Post {\n  id           String   @id @default(uuid())\n  itemName     String\n  itemDetail   String\n  itemLostDate DateTime @db.Date()\n\n  created_at DateTime  @default(now()) @db.Timestamp()\n  updated_at DateTime?\n\n  user   User   @relation(fields: [userId], references: [id])\n  userId String\n\n  status   PostStatus @relation(fields: [statusId], references: [id])\n  statusId Int\n\n  category   PostCategory @relation(fields: [categoryId], references: [id])\n  categoryId Int\n\n  comment Comments[]\n  image   PostImages[]\n\n  coordinate Coordinates?\n}\n\nmodel PostStatus {\n  id         Int    @id @default(autoincrement())\n  statusName String @unique\n  post       Post[]\n}\n\nmodel PostCategory {\n  id           Int    @id @default(autoincrement())\n  categoryName String @unique\n  post         Post[]\n}\n\nmodel Comments {\n  id         String    @id @default(uuid())\n  message    String\n  created_at DateTime  @default(now()) @db.Timestamp()\n  updated_at DateTime?\n  post       Post      @relation(fields: [postId], references: [id])\n  postId     String\n\n  user   User   @relation(fields: [userId], references: [id])\n  userId String\n}\n\nmodel PostImages {\n  id           Int    @id @default(autoincrement())\n  postImageUrl String\n\n  post   Post   @relation(fields: [postId], references: [id])\n  postId String\n}\n\nmodel Coordinates {\n  id           String @id @default(uuid())\n  latitude     Float\n  longitude    Float\n  locationName String\n\n  post   Post   @relation(fields: [postId], references: [id])\n  postId String @unique\n}\n",
-  "inlineSchemaHash": "fd245490460309d100225846ef04add3f418af8deb0734e17ffb7520af2415f7",
+  "inlineSchema": "// This is your Prisma schema file,\n// learn more about it in the docs: https://pris.ly/d/prisma-schema\n\n// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?\n// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init\n\ngenerator client {\n  provider      = \"prisma-client-js\"\n  output        = \"../generated/prisma\"\n  binaryTargets = [\"rhel-openssl-3.0.x\"]\n}\n\ndatasource db {\n  provider = \"postgresql\"\n  url      = env(\"DATABASE_URL\")\n}\n\nmodel User {\n  id          String     @id @unique @default(uuid())\n  email       String     @unique\n  username    String\n  password    String\n  posts       Post[]\n  phoneNumber String?\n  profile     Profile?\n  comment     Comments[]\n}\n\nmodel Profile {\n  id       Int     @id @default(autoincrement())\n  imageUrl String?\n  user     User    @relation(fields: [userId], references: [id])\n  userId   String  @unique\n}\n\nmodel Post {\n  id           String   @id @default(uuid())\n  itemName     String\n  itemDetail   String\n  itemLostDate DateTime @db.Date()\n\n  created_at DateTime  @default(now()) @db.Timestamp()\n  updated_at DateTime?\n\n  user   User   @relation(fields: [userId], references: [id])\n  userId String\n\n  status   PostStatus @relation(fields: [statusId], references: [id])\n  statusId Int\n\n  category   PostCategory @relation(fields: [categoryId], references: [id])\n  categoryId Int\n\n  comment Comments[]\n  image   PostImages[]\n\n  coordinate Coordinates?\n}\n\nmodel PostStatus {\n  id         Int    @id @default(autoincrement())\n  statusName String @unique\n  post       Post[]\n}\n\nmodel PostCategory {\n  id           Int    @id @default(autoincrement())\n  categoryName String @unique\n  post         Post[]\n}\n\nmodel Comments {\n  id         String    @id @default(uuid())\n  message    String\n  created_at DateTime  @default(now()) @db.Timestamp()\n  updated_at DateTime?\n  post       Post      @relation(fields: [postId], references: [id])\n  postId     String\n\n  user   User   @relation(fields: [userId], references: [id])\n  userId String\n}\n\nmodel PostImages {\n  id           Int    @id @default(autoincrement())\n  postImageUrl String\n\n  post   Post   @relation(fields: [postId], references: [id])\n  postId String\n}\n\nmodel Coordinates {\n  id           String @id @default(uuid())\n  latitude     Float\n  longitude    Float\n  locationName String\n\n  post   Post   @relation(fields: [postId], references: [id])\n  postId String @unique\n}\n",
+  "inlineSchemaHash": "e2cab287fd7db5b8d3edd9865959ef1503dd2f90f8d133a7438de20e4f6615ae",
   "copyEngine": true
 }
 
@@ -262,8 +262,8 @@ exports.PrismaClient = PrismaClient
 Object.assign(exports, Prisma)
 
 // file annotations for bundling tools to include these files
-path.join(__dirname, "libquery_engine-debian-openssl-3.0.x.so.node");
-path.join(process.cwd(), "generated/prisma/libquery_engine-debian-openssl-3.0.x.so.node")
+path.join(__dirname, "libquery_engine-rhel-openssl-3.0.x.so.node");
+path.join(process.cwd(), "generated/prisma/libquery_engine-rhel-openssl-3.0.x.so.node")
 // file annotations for bundling tools to include these files
 path.join(__dirname, "schema.prisma");
 path.join(process.cwd(), "generated/prisma/schema.prisma")

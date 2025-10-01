@@ -5,8 +5,9 @@
 // Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
 
 generator client {
-  provider = "prisma-client-js"
-  output   = "../generated/prisma"
+  provider      = "prisma-client-js"
+  output        = "../generated/prisma"
+  binaryTargets = ["rhel-openssl-3.0.x"]
 }
 
 datasource db {
@@ -15,86 +16,85 @@ datasource db {
 }
 
 model User {
-  id    String    @id @default(uuid()) @unique
-  email String  @unique
-  username  String
-  password String
-  posts Post[]
+  id          String     @id @unique @default(uuid())
+  email       String     @unique
+  username    String
+  password    String
+  posts       Post[]
   phoneNumber String?
-  profile Profile?
-  comment Comments[]
+  profile     Profile?
+  comment     Comments[]
 }
 
-
 model Profile {
-  id Int @id @default(autoincrement())
+  id       Int     @id @default(autoincrement())
   imageUrl String?
-  user User @relation(fields: [userId], references: [id])
-  userId String @unique
+  user     User    @relation(fields: [userId], references: [id])
+  userId   String  @unique
 }
 
 model Post {
-  id String @id @default(uuid())
-  itemName String
-  itemDetail String 
+  id           String   @id @default(uuid())
+  itemName     String
+  itemDetail   String
   itemLostDate DateTime @db.Date()
 
-  created_at DateTime @default(now()) @db.Timestamp()
+  created_at DateTime  @default(now()) @db.Timestamp()
   updated_at DateTime?
 
-  user User @relation(fields: [userId], references: [id])
+  user   User   @relation(fields: [userId], references: [id])
   userId String
 
-  status PostStatus @relation(fields: [statusId], references: [id])
+  status   PostStatus @relation(fields: [statusId], references: [id])
   statusId Int
 
-  category PostCategory @relation(fields: [categoryId], references: [id])
+  category   PostCategory @relation(fields: [categoryId], references: [id])
   categoryId Int
 
   comment Comments[]
-  image PostImages[]
+  image   PostImages[]
 
-  coordinate Coordinates? 
+  coordinate Coordinates?
 }
 
 model PostStatus {
-  id Int @id @default(autoincrement())
+  id         Int    @id @default(autoincrement())
   statusName String @unique
-  post Post[]
+  post       Post[]
 }
 
 model PostCategory {
-  id Int @id @default(autoincrement())
+  id           Int    @id @default(autoincrement())
   categoryName String @unique
-  post Post[]
+  post         Post[]
 }
 
 model Comments {
-  id String @id @default(uuid())
-  message String
-  created_at DateTime @default(now()) @db.Timestamp()
+  id         String    @id @default(uuid())
+  message    String
+  created_at DateTime  @default(now()) @db.Timestamp()
   updated_at DateTime?
-  post Post @relation(fields: [postId], references: [id])
-  postId String
+  post       Post      @relation(fields: [postId], references: [id])
+  postId     String
 
-  user User @relation(fields: [userId], references: [id])
+  user   User   @relation(fields: [userId], references: [id])
   userId String
 }
 
-model PostImages{
-  id Int @id @default(autoincrement())
+model PostImages {
+  id           Int    @id @default(autoincrement())
   postImageUrl String
 
-  post Post @relation(fields: [postId], references: [id])
+  post   Post   @relation(fields: [postId], references: [id])
   postId String
 }
 
-model Coordinates{
-  id String @id @default(uuid())
-  latitude Float 
-  longitude Float
+model Coordinates {
+  id           String @id @default(uuid())
+  latitude     Float
+  longitude    Float
   locationName String
 
-  post Post @relation(fields:[postId], references:[id])
+  post   Post   @relation(fields: [postId], references: [id])
   postId String @unique
 }
