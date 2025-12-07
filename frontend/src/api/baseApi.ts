@@ -1,44 +1,36 @@
 import axios, { AxiosError } from "axios";
 
 export type CustomErrorResponse = {
-  status: number;
   message: string;
+  errors?: Record<string, string>;
 };
 
-export type CustomSuccessResponse = {
-  status: number;
+export type CustomSuccessResponse<T = any> = {
   message: string;
-  data: any[];
+  data?: T;
 };
 
 const basePath = axios.create({
-  // @ts-expect-error Variabel didefine dari bundler
-  baseURL: "https://findsoed-rework-express.vercel.app/",
+  baseURL: "http://localhost:3500",
   timeout: 10000,
 });
 
 basePath.interceptors.request.use((config) => {
   config.headers.Authorization = `Bearer ${localStorage.getItem("authToken")}`;
-
   return config;
 });
 
 basePath.interceptors.response.use(
   (response) => response,
-  (error: AxiosError) => {
+  (error: AxiosError<CustomErrorResponse>) => {
     if (error.response) {
       if (error.response.status === 401) {
         localStorage.removeItem("authToken");
       }
       throw error.response.data;
     }
+    throw { message: "Network error" };
   }
 );
-
-export type ErrorFindSoed = {
-  success: boolean;
-  message: string;
-  data: Array<any>;
-};
 
 export default basePath;
