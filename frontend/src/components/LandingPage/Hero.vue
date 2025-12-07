@@ -3,41 +3,24 @@ import heroImage from "../../assets/herobetter.png";
 import { motion } from "motion-v";
 import { textFromLeft, textFromRight } from "../../utils/motion";
 import { ArrowRightOutlined } from "@ant-design/icons-vue";
-import { Input, InputProps } from "ant-design-vue";
-import { computed } from "vue";
 import { useRouter } from "vue-router";
+
 const navigate = useRouter();
-
-const inputHeroProps = computed<InputProps | { class: string }>(() => ({
-  placeholder: "Cari Barang Hilang",
-  onPressEnter: () => navigate.push("/login"),
-  type: "text",
-  class:
-    "flex-1 w-30 px-6 py-3 border border-gray-200 rounded-xl focus:outline-none focus:border-blue-600 focus:ring-2 focus:ring-blue-100 transtion-all justify-center items-center",
-}));
-
-const handleSend = () => {
-  navigate.push("/login");
-};
 </script>
 
 <template>
   <main
     id="home"
-    class="container mx-auto flex flex-col md:flex-row justify-between items-center pt-30 b-6 px-4 sm:px-6 lg:px-8"
+    class="container mx-auto flex flex-col md:flex-row justify-between items-center pt-32 pb-16 px-4 sm:px-6 lg:px-8"
   >
-    <!-- {/* BAGIAN KIRI */} -->
+    <!-- BAGIAN KIRI -->
     <div class="w-full md:w-1/2 space-y-8">
-      <!-- {/* CARI BARANG */} -->
+      <!-- TAG -->
       <div
-        class="flex items-center gap-2 bg-gray-50 w-fit px-4 py-2 rounded-full hover:bg-gray-100 transition-colors group"
+        class="flex items-center gap-2 bg-blue-50 w-fit px-4 py-2 rounded-full hover:bg-blue-100 transition-colors group"
       >
-        <span class="text-blue-600 group-hover:scale-150 transition-transform"
-          >🔎</span
-        >
-        <span class="text-sm font-medium text-black/65"
-          >Duhhh barangku mana yahh</span
-        >
+        <span class="text-blue-600 group-hover:scale-125 transition-transform">🔎</span>
+        <span class="text-sm font-medium text-blue-700">Kehilangan sesuatu?</span>
       </div>
 
       <motion.h1
@@ -49,9 +32,7 @@ const handleSend = () => {
         Cari Barangmu Sekarang
         <span class="text-blue-600 relative inline-block">
           dengan FindSoed
-          <span
-            class="absolute bottom-0 left-0 w-full h-0.5 bg-blue-600"
-          ></span>
+          <span class="absolute bottom-0 left-0 w-full h-1 bg-blue-600/30 rounded"></span>
         </span>
       </motion.h1>
 
@@ -65,22 +46,29 @@ const handleSend = () => {
       </motion.p>
 
       <motion.div
-        class="flex gap-3 max-w-md h-10 relative"
+        class="flex flex-wrap gap-4"
         initial="hidden"
         while-in-view="show"
         :variants="textFromLeft(0.3)"
       >
-        <Input v-bind="inputHeroProps" />
         <button
-          @click="handleSend"
-          class="absolute right-2 top-1/2 -translate-y-1/2 flex justify-center items-center bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 cursor-pointer transition-all hover:shadow-lg hover:shadow-blue-300"
+          @click="navigate.push('/register')"
+          class="flex items-center gap-2 bg-blue-600 text-white text-sm font-semibold py-3 px-6 rounded-lg hover:bg-blue-700 transition-all hover:shadow-lg hover:shadow-blue-200"
         >
+          Mulai Sekarang
           <ArrowRightOutlined />
+        </button>
+        <button
+          @click="navigate.push('/login')"
+          class="flex items-center gap-2 bg-white text-gray-700 text-sm font-semibold py-3 px-6 rounded-lg border border-gray-200 hover:bg-gray-50 transition-all"
+        >
+          Sudah punya akun
         </button>
       </motion.div>
     </div>
-    <!-- {/* BAGIAN KANAN */} -->
-    <div class="w-full md:w-1/2">
+
+    <!-- BAGIAN KANAN -->
+    <div class="w-full md:w-1/2 mt-12 md:mt-0">
       <motion.div
         class="relative"
         initial="hidden"
@@ -89,8 +77,8 @@ const handleSend = () => {
       >
         <img
           :src="heroImage"
-          alt=""
-          class="rounded-lg relative z-10 hover:scale-100 lg:hover:scale-110 transition-transform duration-500"
+          alt="FindSoed Hero"
+          class="rounded-lg relative z-10 hover:scale-100 lg:hover:scale-105 transition-transform duration-500"
         />
       </motion.div>
     </div>

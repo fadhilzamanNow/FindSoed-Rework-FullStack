@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, defineAsyncComponent, ref } from "vue";
+import { computed, defineAsyncComponent, onMounted, onUnmounted, ref } from "vue";
 import logo from "../../assets/icon.png";
 import {
   RollbackOutlined,
@@ -78,6 +78,19 @@ const navigate = useRouter();
 const auth = useAuthStore();
 const { authToken } = storeToRefs(auth);
 const activeLink2 = ref<GabungType["label"]>();
+const isScrolled = ref(false);
+
+const handleScroll = () => {
+  isScrolled.value = window.scrollY > 20;
+};
+
+onMounted(() => {
+  window.addEventListener("scroll", handleScroll);
+});
+
+onUnmounted(() => {
+  window.removeEventListener("scroll", handleScroll);
+});
 
 const navItemFilter = computed<navType[]>(() => {
   if (path.path === "/") {
@@ -132,9 +145,11 @@ const handleSetting = () => {
 
 <template>
   <nav
-    :class="`fixed top-0 left-0 right-0 ${
-      authNav ? 'md:ml-16 bg-white ' : ' bg-white/30'
-    } backdrop-blur-md  z-50 border-b border-b-gray-100 shadow-sm `"
+    :class="[
+      'fixed top-0 left-0 right-0 z-50 transition-all duration-300',
+      authNav ? 'md:ml-16 bg-white border-b border-b-gray-100 shadow-sm' : 
+        isScrolled ? 'bg-white/90 backdrop-blur-md border-b border-b-gray-100 shadow-sm' : 'bg-transparent'
+    ]"
   >
     <!--  {/* DESKTOP DESIGN */} -->
     <div
@@ -181,17 +196,17 @@ const handleSetting = () => {
             <Menu>
               <MenuItem>
                 <RouterLink to="/login">
-                  <div class="flex items-center gap-2">
-                    <UserOutlined class="text-xs" />
-                    <span class="text-xs">Login</span>
+                  <div class="flex items-center gap-2 py-1">
+                    <UserOutlined class="text-sm" />
+                    <span class="text-sm font-medium">Login</span>
                   </div>
                 </RouterLink>
               </MenuItem>
               <MenuItem>
                 <RouterLink to="/register">
-                  <div class="flex items-center gap-2">
-                    <UserAddOutlined class="text-xs" />
-                    <span class="text-xs">Daftar</span>
+                  <div class="flex items-center gap-2 py-1">
+                    <UserAddOutlined class="text-sm" />
+                    <span class="text-sm font-medium">Daftar</span>
                   </div>
                 </RouterLink>
               </MenuItem>
@@ -199,7 +214,7 @@ const handleSetting = () => {
           </template>
           <div class="hidden md:block">
             <div
-              className="hidden md:flex  text-white justify-center items-center  text-xs h-max px-4 py-2  transition duration-300 select-none cursor-pointer rounded-md !bg-blue-600 hover:!bg-blue-700"
+              class="hidden md:flex text-white justify-center items-center text-sm font-semibold h-max px-5 py-2.5 transition duration-300 select-none cursor-pointer rounded-lg bg-blue-600 hover:bg-blue-700"
             >
               Ayo Gabung
             </div>
@@ -212,18 +227,18 @@ const handleSetting = () => {
             <template #overlay>
               <Menu>
                 <MenuItem>
-                  <div @click="handleSetting">
+                  <div @click="handleSetting" class="py-1">
                     <Flex gap="8" align="center">
-                      <SettingOutlined />
-                      <span>Settings</span>
+                      <SettingOutlined class="text-sm" />
+                      <span class="text-sm font-medium">Settings</span>
                     </Flex>
                   </div>
                 </MenuItem>
                 <MenuItem>
-                  <div @click="handleLogout">
+                  <div @click="handleLogout" class="py-1">
                     <Flex gap="8" align="center">
-                      <RollbackOutlined />
-                      <span>Logout</span>
+                      <RollbackOutlined class="text-sm" />
+                      <span class="text-sm font-medium">Logout</span>
                     </Flex>
                   </div>
                 </MenuItem>
