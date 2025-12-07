@@ -11,7 +11,7 @@ export type CustomSuccessResponse<T = any> = {
 };
 
 const basePath = axios.create({
-  baseURL: "http://localhost:3500",
+  baseURL: import.meta.env.VITE_BACKEND_URL || "/api",
   timeout: 10000,
 });
 

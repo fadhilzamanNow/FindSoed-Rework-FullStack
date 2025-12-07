@@ -12,6 +12,10 @@ export default defineConfig(({ mode }) => {
     define: {
       BACKEND_URL: JSON.stringify(env.VITE_BACKEND_URL),
     },
+    server: {
+      host: "0.0.0.0",
+      port: 3050,
+    },
     build: {
       minify: false,
     },
