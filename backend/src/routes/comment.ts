@@ -1,10 +1,10 @@
 import express, { NextFunction, Request, Response } from "express";
 import jwt from "jsonwebtoken";
 import { PrismaClient } from "../../generated/prisma";
-import { z } from "zod";
 import dayjs from "dayjs";
 import localizedFormat from "dayjs/plugin/localizedFormat";
 import { getS3Url } from "../services/s3Upload";
+import { success, error } from "../utils/response";
 
 const router = express.Router();
 const prisma = new PrismaClient();
@@ -12,161 +12,117 @@ dayjs.extend(localizedFormat);
 
 const verifyToken = (req: Request, res: Response, next: NextFunction) => {
   const token = req.headers.authorization?.split(" ")[1];
+  if (!token) {
+    return error(res, "Token tidak ditemukan", { token: "Token diperlukan" }, 401);
+  }
   try {
-    if (token) {
-      const decoded = jwt.verify(token, process.env.JWT_SECRET as string);
-      console.log("hasil decoded : ", decoded);
-      //@ts-ignore
-      req.userId = decoded.userId;
-      next();
-    } else {
-      throw "Token is invalid";
-    }
+    const decoded = jwt.verify(token, process.env.JWT_SECRET as string);
+    (req as any).userId = (decoded as any).userId;
+    next();
   } catch (err) {
-    console.log("err :", err);
-    res.status(401).json({
-      success: false,
-      message: err,
-    });
+    return error(res, "Token tidak valid", { token: "Token expired atau tidak valid" }, 401);
   }
 };
 
 router.get("/:id", verifyToken, async (req: Request, res: Response) => {
+  if (!req.params.id) {
+    return error(res, "ID tidak ditemukan", { id: "Post ID diperlukan" });
+  }
+
   try {
-    if (req.params.id) {
-      const findComment = await prisma.comments.findMany({
-        where: {
-          postId: req.params.id,
-        },
-        select: {
-          id: true,
-          message: true,
-          created_at: true,
-          userId: true,
-          postId: true,
-          updated_at: true,
-          user: {
-            select: {
-              username: true,
-              profile: {
-                select: {
-                  imageUrl: true,
-                },
-              },
-            },
+    const findComment = await prisma.comments.findMany({
+      where: { postId: req.params.id },
+      select: {
+        id: true,
+        message: true,
+        created_at: true,
+        userId: true,
+        postId: true,
+        updated_at: true,
+        user: {
+          select: {
+            username: true,
+            profile: { select: { imageUrl: true } },
           },
         },
-        orderBy: {
-          created_at: "asc",
-        },
-      });
-
-      if (findComment) {
-        const dateFormatted = "YYYY-MM-DD";
-        const formattedComment = findComment.map((v) => {
-          return {
-            userName: v.user.username,
-            userProfile: v.user.profile?.imageUrl
-              ? getS3Url(v.user.profile.imageUrl)
-              : null,
-            message: v.message,
-            created_at: dayjs(v.created_at, "YYYY-MM-DD").format("lll"),
-          };
-        });
-        res.status(200).json({
-          success: true,
-          message: "Berhasil mendapatkan komen dari post",
-          data: formattedComment,
-        });
-      }
-    }
-  } catch (err) {
-    res.status(500).json({
-      success: false,
-      message: err,
+      },
+      orderBy: { created_at: "asc" },
     });
+
+    const formattedComment = findComment.map((v) => ({
+      userName: v.user.username,
+      userProfile: v.user.profile?.imageUrl ? getS3Url(v.user.profile.imageUrl) : null,
+      message: v.message,
+      created_at: dayjs(v.created_at).format("lll"),
+    }));
+
+    success(res, "Berhasil mendapatkan komen dari post", formattedComment);
+  } catch (err) {
+    error(res, "Terjadi kesalahan server", undefined, 500);
   }
 });
 
 router.post("/create/:id", verifyToken, async (req: Request, res: Response) => {
+  const { message } = req.body;
+
+  if (!message) {
+    return error(res, "Validasi gagal", { message: "Pesan tidak boleh kosong" });
+  }
+  if (!req.params.id) {
+    return error(res, "Validasi gagal", { id: "Post ID diperlukan" });
+  }
+
   try {
-    const { message = null } = req.body;
-    if (message && req.params.id) {
-      //@ts-ignore
-      console.log("userId : ", req.userId);
-      console.log("params :", req.params.id);
-      const comments = await prisma.comments.create({
-        data: {
-          message: message,
-          postId: req.params.id,
-          //@ts-ignore
-          userId: req.userId,
-        },
-      });
-      res.status(200).json({
-        success: true,
-        message: comments,
-      });
-    }
-  } catch (err) {
-    console.log("err : ", err);
-    res.status(400).json({
-      success: false,
-      message: err,
+    const comments = await prisma.comments.create({
+      data: {
+        message,
+        postId: req.params.id,
+        userId: (req as any).userId,
+      },
     });
+
+    success(res, "Komen berhasil dibuat", comments, 201);
+  } catch (err) {
+    error(res, "Komen gagal dibuat", undefined, 500);
   }
 });
 
 router.patch("/edit/:id", verifyToken, async (req: Request, res: Response) => {
+  const { message } = req.body;
+
+  if (!message) {
+    return error(res, "Validasi gagal", { message: "Pesan tidak boleh kosong" });
+  }
+  if (!req.params.id) {
+    return error(res, "Validasi gagal", { id: "Comment ID diperlukan" });
+  }
+
   try {
-    const { message = null } = req.body;
-    if (message && req.params.id) {
-      const newComments = await prisma.comments.update({
-        where: {
-          //@ts-ignore
-          id: req.params.id.trim(),
-        },
-        data: {
-          message: message,
-          updated_at: new Date(),
-        },
-      });
-      res.status(201).json({
-        success: true,
-        message: newComments,
-      });
-    }
-  } catch (err) {
-    res.status(404).json({
-      success: false,
-      message: err,
+    const newComments = await prisma.comments.update({
+      where: { id: req.params.id.trim() },
+      data: { message, updated_at: new Date() },
     });
+
+    success(res, "Komen berhasil diedit", newComments);
+  } catch (err) {
+    error(res, "Komen gagal diedit", undefined, 500);
   }
 });
 
-router.delete(
-  "/delete/:id",
-  verifyToken,
-  async (req: Request, res: Response) => {
-    try {
-      const comments = await prisma.comments.delete({
-        where: {
-          //@ts-ignore
-          id: req.params.id.trim(),
-        },
-      });
-      res.status(200).json({
-        success: true,
-        message: `Komen dengan id : ${comments.id} berhasil dihapus`,
-      });
-    } catch (err) {
-      console.log("error : ", err);
-      res.status(400).json({
-        success: false,
-        message: err,
-      });
-    }
-  },
-);
+router.delete("/delete/:id", verifyToken, async (req: Request, res: Response) => {
+  if (!req.params.id) {
+    return error(res, "Validasi gagal", { id: "Comment ID diperlukan" });
+  }
+
+  try {
+    const comments = await prisma.comments.delete({
+      where: { id: req.params.id.trim() },
+    });
+
+    success(res, `Komen dengan id: ${comments.id} berhasil dihapus`);
+  } catch (err) {
+    error(res, "Komen gagal dihapus", undefined, 500);
+  }
+});
 
 export { router as commentRouter };
