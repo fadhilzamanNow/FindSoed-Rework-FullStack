@@ -11,6 +11,7 @@ import upload from "./middleware/upload";
 import { uploadMultipleToS3, getS3Url } from "./services/s3Upload";
 import { PrismaClient } from "../generated/prisma";
 import { success, error } from "./utils/response";
+import "dotenv/config";
 
 const app = express();
 const port = 3500;
@@ -18,7 +19,10 @@ const OASSpec = YAML.load(path.join(__dirname, "openapi.yaml"));
 const prisma = new PrismaClient();
 
 app.use("/api-docs", swaggerUI.serve, swaggerUI.setup(OASSpec));
-app.use(cors());
+app.use(cors({
+  origin: process.env.CORS_ORIGIN || "http://localhost:5173",
+  credentials: true
+}));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 

@@ -1,6 +1,7 @@
 import express, { NextFunction, Request, Response } from "express";
 import { PrismaClient } from "../../generated/prisma/client";
 import jwt from "jsonwebtoken";
+import bcrypt from "bcrypt";
 import "dotenv/config";
 import upload from "../middleware/upload";
 import { uploadToS3, deleteFromS3, getS3Url } from "../services/s3Upload";
@@ -46,11 +47,13 @@ router.post("/register", async (req: Request, res: Response) => {
       return error(res, "Registrasi gagal", { email: "Email sudah digunakan" });
     }
 
+    const hashedPassword = await bcrypt.hash(password, 10);
+
     const createUser = await prisma.user.create({
       data: {
         username,
         email,
-        password,
+        password: hashedPassword,
         ...(phoneNumber && { phoneNumber }),
       },
     });
@@ -82,7 +85,8 @@ router.post("/login", async (req: Request, res: Response) => {
       return error(res, "Login gagal", { email: "Email tidak tersedia" }, 404);
     }
 
-    if (findEmail.password !== password) {
+    const isPasswordValid = await bcrypt.compare(password, findEmail.password);
+    if (!isPasswordValid) {
       return error(res, "Login gagal", { password: "Password salah" }, 401);
     }
 
@@ -196,10 +200,12 @@ router.patch("/editdata", verifyToken, async (req: Request, res: Response) => {
       return error(res, "User tidak ditemukan", undefined, 404);
     }
 
+    const hashedPassword = userPassword ? await bcrypt.hash(userPassword, 10) : findUser.password;
+
     const newUser = await prisma.user.update({
       where: { id: findUser.id },
       data: {
-        password: userPassword || findUser.password,
+        password: hashedPassword,
         phoneNumber: userPhoneNumber || findUser.phoneNumber,
       },
     });
