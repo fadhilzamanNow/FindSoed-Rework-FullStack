@@ -130,9 +130,6 @@ const handleChooseMap = (data: itemLocationType) => {
 
 <template>
   <Flex vertical class="w-full" gap="8">
-    <label for="item" class="text-sm font-semibold w-full"
-      >Lokasi Kehilangan <span class="text-red-500">*</span></label
-    >
     <div class="w-full h-[20vh] relative">
       <div class="absolute z-[2] top-0 left-0 mt-1 ml-2">
         <div class="w-[250px] md:w-[350px]">

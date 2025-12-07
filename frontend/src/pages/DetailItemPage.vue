@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import Navbar from "../components/LandingPage/Navbar.vue";
 import Sidebar from "../components/Sidebar/Sidebar.vue";
+import PrivateNavbar from "../components/Navbar/PrivateNavbar.vue";
 import { watchEffect } from "vue";
 import { storeToRefs } from "pinia";
 import { useAuthStore } from "../stores/authStore";
@@ -9,17 +9,15 @@ import DetailItem from "../components/DetailPage/DetailItem.vue";
 import { useSeoMeta } from "@unhead/vue";
 
 useSeoMeta({
-  title: "SSR RSbuild Detail Item Page - Findsoed Rework",
-  description:
-    "SSR Rsbuild Halaman Detail Item Page untuk Findsoed Rework yang dapat digunakan untuk melihat detail dari barang yang dipilih",
-  ogTitle: "SSR Rsbuild Detail Item Page - Findsoed Rework",
-  ogDescription:
-    "SSR Rsbuild Halaman Detail Item Page untuk Findsoed Rework yang dapat digunakan untuk melihat detail dari barang yang dipilih",
+  title: "Detail Barang - FindSoed",
+  description: "Lihat detail barang hilang",
+  ogTitle: "Detail Barang - FindSoed",
+  ogDescription: "Lihat detail barang hilang",
   ogUrl: "http://localhost:3500/detail",
-  ogSiteName: "Findsoed Rework",
+  ogSiteName: "FindSoed",
   ogType: "website",
   author: "Muhammad Ilham Isfadhillah",
-  twitterTitle: "SSR Rsbuild Detail Item Page - Findsoed Rework",
+  twitterTitle: "Detail Barang - FindSoed",
   robots: "index, follow",
 });
 
@@ -36,7 +34,7 @@ watchEffect(() => {
 
 <template>
   <div class="min-h-screen w-full overflow-hidden">
-    <Navbar />
+    <PrivateNavbar />
     <Sidebar />
     <DetailItem />
   </div>

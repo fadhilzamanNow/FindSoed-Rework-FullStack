@@ -24,7 +24,7 @@ watchEffect(() => {
 </script>
 
 <template>
-  <div class="md:ml-16 mt-16 pt-5.5 px-4 sm:px-6 md:px-8 h-full">
+  <div class="md:ml-16 mt-16 md:mt-0 pt-5.5 px-4 sm:px-6 md:px-8 h-full">
     <div class="flex flex-col gap-6 h-full w-full">
       <HeaderListPage />
       <ListCard />

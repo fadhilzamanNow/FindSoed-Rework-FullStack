@@ -52,8 +52,7 @@ watchEffect(() => {
 
 const imageProps = computed<{ src: string; class: string; alt: string }>(
   () => ({
-    // @ts-expect-error Variabel didefine dari bundler
-    src: `${BACKEND_URL}static/images/${images[0]}`,
+    src: images[0],
     class: "w-full h-[120px] object-cover rounded-t-md bg-gray-300",
     alt: `${images[0]}`,
   })
@@ -62,7 +61,7 @@ const imageProps = computed<{ src: string; class: string; alt: string }>(
 
 <template>
   <div
-    class="w-[350px] transition-all duration-300 border-black/20 border rounded-md hover:shadow-2xl hover:shadow-gray-400/30 relative"
+    class="transition-all duration-300 border-black/20 border rounded-md hover:shadow-2xl hover:shadow-gray-400/30 relative"
   >
     <div class="flex flex-col gap-y-2">
       <!-- GAMBAR -->
@@ -102,12 +101,13 @@ const imageProps = computed<{ src: string; class: string; alt: string }>(
         </span>
 
         <!-- PROFIL - NAMA -->
+
         <div class="flex items-center justify-between">
           <div class="flex items-center gap-x-2">
             <Avatar
               v-if="userProfile"
               size="small"
-              :src="`http://localhost:3500/static/images/${userProfile}`"
+              :src="userProfile"
               shape="square"
             />
             <Avatar v-else shape="square" size="small">{{

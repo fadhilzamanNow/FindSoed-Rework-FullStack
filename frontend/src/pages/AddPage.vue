@@ -1,26 +1,23 @@
 <script setup lang="ts">
-import Navbar from "../components/LandingPage/Navbar.vue";
 import Sidebar from "../components/Sidebar/Sidebar.vue";
+import PrivateNavbar from "../components/Navbar/PrivateNavbar.vue";
 import AddBox from "../components/AddPage/AddBox.vue";
 import { storeToRefs } from "pinia";
 import { useAuthStore } from "../stores/authStore";
 import { useRouter } from "vue-router";
 import { useSeoMeta } from "@unhead/vue";
-import { watchEffect } from "vue";
-import { onMounted } from "vue";
+import { watchEffect, onMounted } from "vue";
 
 useSeoMeta({
-  title: "SSR RSbuild Add Page - Findsoed Rework",
-  description:
-    "SSR Rsbuild Halaman Add Page untuk Findsoed Rework yang dapat digunakan untuk menambahkan barang hilang",
-  ogTitle: "SSR Rsbuild Home Page - Findsoed Rework",
-  ogDescription:
-    "SSR Rsbuild Halaman Add Page untuk Findsoed Rework yang dapat digunakan untuk menambahkan barang hilang",
+  title: "Tambah Barang - FindSoed",
+  description: "Laporkan barang hilang",
+  ogTitle: "Tambah Barang - FindSoed",
+  ogDescription: "Laporkan barang hilang",
   ogUrl: "http://localhost:3500/add",
-  ogSiteName: "Findsoed Rework",
+  ogSiteName: "FindSoed",
   ogType: "website",
   author: "Muhammad Ilham Isfadhillah",
-  twitterTitle: "SSR Rsbuild Add Page - Findsoed Rework",
+  twitterTitle: "Tambah Barang - FindSoed",
   robots: "index, follow",
 });
 
@@ -41,7 +38,7 @@ onMounted(() => {
 
 <template>
   <div class="min-h-screen w-full overflow-auto">
-    <Navbar />
+    <PrivateNavbar />
     <Sidebar />
     <AddBox />
   </div>

@@ -311,8 +311,7 @@ const handleChangeProfile = async (photo: FileType) => {
 
 const avatarExistProps = computed<AvatarProps>(() => ({
   size: 100,
-  /* @ts-expect-error Variabel didefine dari Bundler */
-  src: `${BACKEND_URL}static/images/${userInfo.value?.imageUrl}`,
+  src: userInfo.value?.imageUrl || undefined,
 }));
 
 const avatarNotExistProps = computed<AvatarProps>(() => ({
@@ -366,126 +365,93 @@ const isDisabled = computed(() => {
 </script>
 
 <template>
-  <div class="flex h-full w-full">
-    <Flex
-      vertical
-      gap="20"
-      class="w-full sm:w-[640px] sm:rounded-md sm:border-gray-200"
-    >
-      <Flex gap="16" align="center">
+  <div class="py-4">
+    <div class="space-y-6 max-w-xl">
+      <!-- Profile Photo -->
+      <div class="flex items-center gap-4 pb-6 border-b border-gray-100">
         <Avatar v-if="userInfo?.imageUrl" v-bind="avatarExistProps" />
         <Avatar v-else v-bind="avatarNotExistProps" />
         <Upload v-bind="upProps">
           <Button>
-            <Flex gap="8" align="center">
-              <UploadOutlined />
-              <span>Ganti Foto Profil</span>
-            </Flex>
+            <UploadOutlined />
+            <span class="ml-2">Ganti Foto Profil</span>
           </Button>
         </Upload>
-      </Flex>
-      <Flex vertical gap="8">
-        <label for="username">Username</label>
-        <Input v-bind="nameProps" />
-      </Flex>
-      <Flex vertical gap="8">
-        <label for="username">Email</label>
-        <Input v-bind="emailProps" />
-      </Flex>
-      <Flex vertical gap="8">
-        <label for="phone" @click="() => handleReset()">Phones</label>
-        <Input v-bind="phoneProps" />
+      </div>
+
+      <!-- Username -->
+      <div class="space-y-2">
+        <label for="username" class="text-sm font-medium text-gray-700">Username</label>
+        <Input v-bind="nameProps" size="large" />
+      </div>
+
+      <!-- Email -->
+      <div class="space-y-2">
+        <label for="email" class="text-sm font-medium text-gray-700">Email</label>
+        <Input v-bind="emailProps" size="large" />
+      </div>
+
+      <!-- Phone -->
+      <div class="space-y-2">
+        <label for="phone" class="text-sm font-medium text-gray-700">Nomor Telepon</label>
+        <Input v-bind="phoneProps" size="large" />
         <span
-          :class="[
-            'text-xs transition-all duration-300',
-            isPhoneValid.success
-              ? 'visible opacity-100 text-green-500'
-              : phoneVal.length > 0
-              ? 'visible opacity-100 text-red-500'
-              : 'invisible opacity-0',
-          ]"
-          >{{ isPhoneValid.message }}</span
-        >
-      </Flex>
-      <Flex vertical gap="8">
-        <label for="oPassword">Sandi Lama</label>
-        <Input v-bind="oPasswordProps">
-          <template #suffix>
-            <EyeInvisibleOutlined
-              v-if="!showOPassword"
-              @click="() => (showOPassword = !showOPassword)"
-            />
-            <EyeOutlined
-              v-else
-              @click="() => (showOPassword = !showOPassword)"
-            />
-          </template>
-        </Input>
-      </Flex>
-      <Flex vertical gap="8">
-        <label for="password">Sandi Baru</label>
-        <Input v-bind="passProps">
-          <template #suffix>
-            <EyeInvisibleOutlined
-              v-if="!showPassword"
-              @click="() => (showPassword = !showPassword)"
-            />
-            <EyeOutlined v-else @click="() => (showPassword = !showPassword)" />
-          </template>
-        </Input>
-        <div class="h-[5px] w-[90%] flex gap-x-0.5 items-center">
-          <div
-            v-for="(_, i) in passwordStrength.score"
-            :key="i"
-            :class="[`${passwordIndicator.bgcolor} w-[20%] h-full`]"
-          ></div>
-          <div :class="`text-xs ${passwordIndicator.textcolor}`">
-            {{ passwordIndicator.text }}
+          v-if="phoneVal.length > 0"
+          :class="['text-xs', isPhoneValid.success ? 'text-green-500' : 'text-red-500']"
+        >{{ isPhoneValid.message }}</span>
+      </div>
+
+      <!-- Password Section -->
+      <div class="pt-4 border-t border-gray-100">
+        <h3 class="text-sm font-semibold text-gray-800 mb-4">Ubah Password</h3>
+        
+        <!-- Old Password -->
+        <div class="space-y-2 mb-4">
+          <label for="oPassword" class="text-sm font-medium text-gray-700">Password Lama</label>
+          <Input v-bind="oPasswordProps" size="large">
+            <template #suffix>
+              <EyeInvisibleOutlined v-if="!showOPassword" @click="showOPassword = !showOPassword" class="cursor-pointer" />
+              <EyeOutlined v-else @click="showOPassword = !showOPassword" class="cursor-pointer" />
+            </template>
+          </Input>
+        </div>
+
+        <!-- New Password -->
+        <div class="space-y-2 mb-4">
+          <label for="password" class="text-sm font-medium text-gray-700">Password Baru</label>
+          <Input v-bind="passProps" size="large">
+            <template #suffix>
+              <EyeInvisibleOutlined v-if="!showPassword" @click="showPassword = !showPassword" class="cursor-pointer" />
+              <EyeOutlined v-else @click="showPassword = !showPassword" class="cursor-pointer" />
+            </template>
+          </Input>
+          <div v-if="password.length" class="flex items-center gap-1">
+            <div class="flex gap-0.5 flex-1 max-w-[200px]">
+              <div v-for="i in 4" :key="i" class="h-1 flex-1 rounded-full" :class="i <= passwordStrength.score ? passwordIndicator.bgcolor : 'bg-gray-200'" />
+            </div>
+            <span class="text-xs" :class="passwordIndicator.textcolor">{{ passwordIndicator.text }}</span>
           </div>
         </div>
-      </Flex>
-      <Flex vertical gap="8">
-        <label for="cPassword">Konfirmasi Sandi Baru</label>
-        <Input v-bind="cPasswordProps">
-          <template #suffix>
-            <EyeInvisibleOutlined
-              v-if="!showCPassword"
-              @click="() => (showCPassword = !showCPassword)"
-            />
-            <EyeOutlined
-              v-else
-              @click="() => (showCPassword = !showCPassword)"
-            />
-          </template>
-        </Input>
-        <div class="h-[5px] w-full flex gap-x-0.5 items-center">
-          <div
-            v-for="(_, i) in cPasswordStrength.score"
-            :key="i"
-            :class="[`${cPasswordIndicator.bgcolor} w-[20%] h-full`]"
-          ></div>
-          <div :class="`text-xs ${cPasswordIndicator.textcolor}`">
-            {{ cPasswordIndicator.text }}
-          </div>
+
+        <!-- Confirm Password -->
+        <div class="space-y-2">
+          <label for="cPassword" class="text-sm font-medium text-gray-700">Konfirmasi Password Baru</label>
+          <Input v-bind="cPasswordProps" size="large">
+            <template #suffix>
+              <EyeInvisibleOutlined v-if="!showCPassword" @click="showCPassword = !showCPassword" class="cursor-pointer" />
+              <EyeOutlined v-else @click="showCPassword = !showCPassword" class="cursor-pointer" />
+            </template>
+          </Input>
+          <span v-if="cPassword.length && !isPasswordSame" class="text-xs text-red-500">Password tidak sama</span>
         </div>
-        <div
-          :class="[
-            'text-xs text-red-500 transition-all duration-300',
-            cPassword.length < 1
-              ? 'invisible opacity-0'
-              : isPasswordSame && cPasswordStrength.score > 2
-              ? 'invisible opacity-0'
-              : 'visible opacity-100',
-          ]"
-        >
-          Password yang dikonfirmasi tidak sama
-        </div>
-      </Flex>
-      <Flex>
-        <Button type="primary" :disabled="!isDisabled" @click="handleChangeData"
-          >Ubah Profil</Button
-        >
-      </Flex>
-    </Flex>
+      </div>
+
+      <!-- Submit -->
+      <div class="pt-4">
+        <Button type="primary" size="large" :disabled="!isDisabled" @click="handleChangeData" class="!rounded-lg">
+          Simpan Perubahan
+        </Button>
+      </div>
+    </div>
   </div>
 </template>

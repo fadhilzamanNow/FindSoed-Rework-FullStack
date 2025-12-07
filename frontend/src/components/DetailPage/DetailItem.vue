@@ -15,6 +15,7 @@ import {
   ref,
   useTemplateRef,
   watchEffect,
+  watch,
 } from "vue";
 import { Input, Button } from "ant-design-vue";
 import type { AvatarProps, ModalProps } from "ant-design-vue";
@@ -28,6 +29,11 @@ import {
   LoadingOutlined,
   RightOutlined,
   SendOutlined,
+  PhoneOutlined,
+  CalendarOutlined,
+  EnvironmentOutlined,
+  TagOutlined,
+  FileTextOutlined,
 } from "@ant-design/icons-vue";
 
 import "swiper/css";
@@ -36,7 +42,6 @@ import "swiper/css/pagination";
 
 import CommentCard from "./CommentCard.vue";
 import { createComment, getComments } from "../../api/Comment/Comment";
-import { watch } from "vue";
 
 type PostType = {
   itemName: string;
@@ -69,9 +74,9 @@ const LazyDetailLeafletMap = defineAsyncComponent(
   () => import("./DetailLeafletMap.vue")
 );
 
-const isModalOpen = ref<boolean>(false);
-const commentVal = ref<string>("");
-const isBeingSent = ref<boolean>(false);
+const isModalOpen = ref(false);
+const commentVal = ref("");
+const isBeingSent = ref(false);
 const route = useRoute();
 const postDetail = ref<DetailPostTypes>();
 const isCommentLoading = ref(true);
@@ -112,7 +117,6 @@ watchEffect(() => {
   if (postDetail.value?.id) {
     handleGetPostComment();
   }
-
   if (isBeingSent.value) {
     isBeingSent.value = false;
   }
@@ -128,14 +132,13 @@ const toggleModalMap = () => {
 
 const inputProps = computed<InputProps>(() => ({
   placeholder: "Masukkan komentarmu",
-  onPressEnter: async () => {
-    await handleAddComment();
-  },
+  onPressEnter: handleAddComment,
   value: commentVal.value,
   onInput: (e) => (commentVal.value = (e.target as HTMLInputElement).value),
 }));
 
 const handleAddComment = async () => {
+  if (!commentVal.value.trim()) return;
   try {
     const response = await createComment(
       commentVal.value,
@@ -146,29 +149,20 @@ const handleAddComment = async () => {
       commentVal.value = "";
       firstSent.value = true;
       await nextTick();
-      return true;
     }
-  } catch (e) {
-    return false;
-  }
+  } catch (e) {}
 };
 
-const imageDetailProps = computed(() => {
-  return (imageName: string): ImageProps => {
-    return {
-      /* @ts-ignore */
-      src: `${BACKEND_URL}static/images/${imageName}`,
-      width: "100%",
-      height: "100%",
-      class:
-        "object-cover h-full w-full border-2 border-gray-300 rounded-md object-center",
-      alt: `Gambar Detail ${imageName}`,
-    };
-  };
+const imageDetailProps = (imageName: string): ImageProps => ({
+  src: imageName,
+  width: "100%",
+  height: "100%",
+  class: "object-cover h-full w-full border-2 border-gray-300 rounded-md object-center",
+  alt: `Gambar Detail`,
 });
 
 const detailCreateProps = computed<AvatarProps>(() => ({
-  src: `http://localhost:3500/static/images/${postDetail.value?.userProfile}`,
+  src: postDetail.value?.userProfile || undefined,
   shape: "square",
 }));
 
@@ -191,31 +185,21 @@ const modalDetailMapProps = computed<ModalProps>(() => ({
 const pindahkeBawah = async () => {
   await nextTick();
   if (commenBlock.value) {
-    commenBlock.value.scrollIntoView({
-      behavior: "smooth",
-      block: "end",
-    });
+    commenBlock.value.scrollIntoView({ behavior: "smooth", block: "end" });
     window.scrollTo(0, 100000);
   }
 };
 
-watch(
-  postComment,
-  () => {
-    if (firstSent.value) {
-      pindahkeBawah();
-    }
-  },
-  { immediate: true, deep: true }
-);
+watch(postComment, () => {
+  if (firstSent.value) pindahkeBawah();
+}, { immediate: true, deep: true });
 </script>
 
 <template>
-  <div class="md:ml-16 mt-16 pt-5.5 px-4 sm:px-6 md:px-8">
+  <div class="md:ml-16 mt-16 md:mt-0 min-h-screen bg-gray-50 pt-5.5 px-4 sm:px-6 md:px-8 pb-8">
     <BreadCrumbComp title="Detail Barang" />
 
-    <!-- KOTAK -->
-    <div class="lg:max-w-7xl mx-auto p-4 rounded border border-gray-300 mt-2">
+    <div class="lg:max-w-7xl mx-auto p-4 rounded border border-gray-300 mt-2 bg-white">
       <!-- FOTO + DETAIL  -->
       <div class="flex flex-col lg:flex-row gap-2">
         <!-- FOTO -->
@@ -230,96 +214,103 @@ watch(
           :modules="[Navigation, Pagination]"
           class="w-full lg:w-3/5 h-[300px] rounded-md relative detail-swiper"
         >
-          <!-- SLIDE -->
-          <SwiperSlide v-for="(v, i) in postDetail?.images" :key="i" class="  ">
-            <!-- @vue-ignore -->
+          <SwiperSlide v-for="(v, i) in postDetail?.images" :key="i">
             <Image v-bind="imageDetailProps(v)" />
           </SwiperSlide>
 
-          <!-- NAVIGAITON -->
-          <!-- PREV -->
-          <button
-            class="detail-prev-custom size-8 absolute z-1 top-1/2 left-2 -translate-y-1/2 rounded-full border bg-white border-gray-200 flex items-center justify-center hover:bg-blue-600 hover:text-white transition-all cursor-pointer"
-          >
+          <button class="detail-prev-custom size-8 absolute z-1 top-1/2 left-2 -translate-y-1/2 rounded-full border bg-white border-gray-200 flex items-center justify-center hover:bg-blue-600 hover:text-white transition-all cursor-pointer">
             <LeftOutlined />
           </button>
-          <!-- NEXT -->
-          <button
-            class="detail-next-custom size-8 absolute z-1 top-1/2 right-2 -translate-y-1/2 rounded-full border bg-white border-gray-200 flex items-center justify-center hover:bg-blue-600 hover:text-white transition-all cursor-pointer"
-          >
+          <button class="detail-next-custom size-8 absolute z-1 top-1/2 right-2 -translate-y-1/2 rounded-full border bg-white border-gray-200 flex items-center justify-center hover:bg-blue-600 hover:text-white transition-all cursor-pointer">
             <RightOutlined />
           </button>
         </Swiper>
 
         <!-- DETAIL -->
-        <div class="flex flex-col gap-1 lg:gap-5 w-full lg:w-2/5">
-          <Flex gap="10" align="center" class="w-full sm:min-w-[400px] pb-2">
+        <div class="flex flex-col gap-3 w-full lg:w-2/5">
+          <!-- User -->
+          <Flex gap="10" align="center" class="w-full sm:min-w-[400px] pb-2 border-b border-gray-200">
             <Avatar v-if="postDetail?.userProfile" v-bind="detailCreateProps" />
-            <Avatar v-else>{{ postDetail?.userName.slice(0, 2) }}</Avatar>
-            <span class="text-[#6b6969] text-xs font-semibold">{{
-              postDetail?.userName
-            }}</span>
+            <Avatar v-else>{{ postDetail?.userName?.slice(0, 2) }}</Avatar>
+            <span class="text-gray-600 text-xs font-semibold">{{ postDetail?.userName }}</span>
           </Flex>
-          <div class="grid grid-cols-2">
-            <Flex vertical gap="4">
-              <h1 class="text-xs font-medium">Nama</h1>
-              <span class="font-light text-xs">{{ postDetail?.itemName }}</span>
-            </Flex>
-            <Flex vertical gap="4">
-              <h1 class="text-xs font-medium">Kategori</h1>
-              <span class="font-light text-xs">{{
-                postDetail?.itemCategory
-              }}</span>
-            </Flex>
-          </div>
-          <div class="lg:grid grid-cols-2 hidden">
-            <Flex vertical gap="4">
-              <h1 class="text-xs font-medium">Tanggal Hilang</h1>
-              <span class="font-light text-xs">{{
-                postDetail?.itemLostDate
-              }}</span>
-            </Flex>
-            <Flex vertical gap="4">
-              <h1 class="text-xs font-medium">Status Barang</h1>
-              <span
-                :class="[
-                  'px-2 py-0.5 rounded-md text-white  max-w-max text-xs',
-                  postDetail?.statusName === 'Hilang'
-                    ? 'bg-red-500'
-                    : 'bg-green-400',
-                ]"
-                >{{ postDetail?.statusName }}</span
-              >
-            </Flex>
-          </div>
-          <div class="grid grid-cols-2">
-            <Flex vertical gap="4" class="pb-2">
-              <h1 class="text-xs font-medium">Detail</h1>
-              <Button
-                type="primary"
-                class="font-light text-xs max-w-max px-2 py-1 rounded-sm select-none"
-                size="small"
-                :style="{ fontSize: '12px' }"
+
+          <!-- Info with Icons -->
+          <div class="space-y-3">
+            <div class="flex items-center gap-3 text-gray-600">
+              <TagOutlined class="text-blue-600" />
+              <div>
+                <p class="text-xs text-gray-400">Nama Barang</p>
+                <p class="text-sm font-medium">{{ postDetail?.itemName }}</p>
+              </div>
+            </div>
+
+            <div class="flex items-center gap-3 text-gray-600">
+              <FileTextOutlined class="text-blue-600" />
+              <div>
+                <p class="text-xs text-gray-400">Kategori</p>
+                <p class="text-sm">{{ postDetail?.itemCategory }}</p>
+              </div>
+            </div>
+
+            <div class="flex items-center gap-3 text-gray-600">
+              <CalendarOutlined class="text-blue-600" />
+              <div>
+                <p class="text-xs text-gray-400">Tanggal Hilang</p>
+                <p class="text-sm">{{ postDetail?.itemLostDate }}</p>
+              </div>
+            </div>
+
+            <div class="flex items-center gap-3 text-gray-600">
+              <div class="w-[14px] flex justify-center">
+                <span
+                  :class="[
+                    'size-3 rounded-full',
+                    postDetail?.statusName === 'Hilang' ? 'bg-red-500' : 'bg-green-500'
+                  ]"
+                ></span>
+              </div>
+              <div>
+                <p class="text-xs text-gray-400">Status Barang</p>
+                <span
+                  :class="[
+                    'px-2 py-0.5 rounded-md text-white text-xs',
+                    postDetail?.statusName === 'Hilang' ? 'bg-red-500' : 'bg-green-400'
+                  ]"
+                >{{ postDetail?.statusName }}</span>
+              </div>
+            </div>
+
+            <div v-if="postDetail?.phoneNumber" class="flex items-center gap-3 text-gray-600">
+              <PhoneOutlined class="text-blue-600" />
+              <div>
+                <p class="text-xs text-gray-400">Kontak</p>
+                <p class="text-sm">{{ postDetail?.phoneNumber }}</p>
+              </div>
+            </div>
+
+            <div class="flex flex-wrap justify-between items-center gap-2 mt-2">
+              <div 
                 @click="toggleModal"
-                >Lihat Detail</Button
+                class="flex items-center gap-2 text-blue-600 hover:bg-blue-50 p-2 rounded-lg cursor-pointer transition-colors"
               >
-            </Flex>
-            <Flex vertical gap="4" class="pb-2">
-              <h1 class="text-xs font-medium">Lokasi Map</h1>
-              <Button
-                type="primary"
-                class="font-light text-xs max-w-max px-2 py-1 rounded-sm select-none"
-                size="small"
-                :style="{ fontSize: '12px' }"
+                <FileTextOutlined />
+                <span class="text-sm font-medium">Lihat Detail Lengkap</span>
+              </div>
+
+              <div 
                 @click="toggleModalMap"
-                >Lihat Detail</Button
+                class="flex items-center gap-2 text-blue-600 hover:bg-blue-50 p-2 rounded-lg cursor-pointer transition-colors"
               >
-            </Flex>
+                <EnvironmentOutlined />
+                <span class="text-sm font-medium">Lihat Lokasi di Peta</span>
+              </div>
+            </div>
           </div>
         </div>
       </div>
 
-      <!-- COMMNET SECTION -->
+      <!-- COMMENT SECTION -->
       <div class="my-4 py-4 border-y border-y-gray-300 relative">
         <div
           v-if="isCommentLoading"
@@ -330,9 +321,7 @@ watch(
 
         <div class="h-[200px] lg:h-[calc(100vh-600px)] overflow-auto">
           <div
-            :class="`${
-              postComment.length < 1 ? 'flex justify-center items-center ' : ''
-            } `"
+            :class="postComment.length < 1 ? 'flex justify-center items-center h-full' : ''"
             ref="commentBlock"
           >
             <div class="h-max w-full" v-if="postComment.length > 0">
@@ -343,17 +332,11 @@ watch(
                 :userName="v.userName"
                 :userProfile="v.userProfile"
                 :created_at="v.created_at"
-              >
-                <template v-slot:name>
-                  {{ v.userName }}
-                </template>
-              </CommentCard>
+              />
             </div>
             <div v-if="postComment.length < 1 && !isCommentLoading">
               <Empty :description="false">
-                <span class="text-gray-400"
-                  >Belum terdapat komentar, yuk tanya</span
-                >
+                <span class="text-gray-400">Belum terdapat komentar, yuk tanya</span>
               </Empty>
             </div>
           </div>
@@ -364,7 +347,7 @@ watch(
       <div class="w-full h-full mt-4 relative">
         <Input v-bind="inputProps" />
         <div
-          class="absolute right-2 top-0 max-w-max h-full flex justify-center items-center text-gray-400"
+          class="absolute right-2 top-0 max-w-max h-full flex justify-center items-center text-gray-400 hover:text-blue-600 cursor-pointer"
           @click="handleAddComment"
         >
           <SendOutlined />
@@ -372,62 +355,50 @@ watch(
       </div>
     </div>
   </div>
+
+  <!-- Detail Modal -->
   <Modal v-bind="modalDetailProps">
     <Flex vertical gap="20">
       <div class="grid grid-cols-2">
         <Flex vertical gap="4">
           <h1 class="text-xs font-medium">Kategori</h1>
-          <span class="font-light text-xs">
-            {{ postDetail?.itemCategory }}
-          </span>
+          <span class="font-light text-xs">{{ postDetail?.itemCategory }}</span>
         </Flex>
         <Flex vertical gap="4">
           <h1 class="text-xs font-medium">Kontak</h1>
-          <span class="font-light text-xs">
-            {{ postDetail?.phoneNumber }}
-          </span>
+          <span class="font-light text-xs">{{ postDetail?.phoneNumber || '-' }}</span>
         </Flex>
       </div>
       <div class="grid grid-cols-2">
         <Flex vertical gap="4">
           <h1 class="text-xs font-medium">Tanggal Hilang</h1>
-          <span class="font-light text-xs">
-            {{ postDetail?.itemLostDate }}
-          </span>
+          <span class="font-light text-xs">{{ postDetail?.itemLostDate }}</span>
         </Flex>
         <Flex vertical gap="4">
           <h1 class="text-xs font-medium">Status Barang</h1>
           <span
-            :class="`px-2 py-0.5 rounded-md text-white  max-w-max text-xs',
-            ${
-              postDetail?.statusName === 'Hilang'
-                ? 'bg-red-500'
-                : 'bg-green-400'
-            }
-            `"
-          >
-            {{ postDetail?.statusName }}
-          </span>
+            :class="[
+              'px-2 py-0.5 rounded-md text-white max-w-max text-xs',
+              postDetail?.statusName === 'Hilang' ? 'bg-red-500' : 'bg-green-400'
+            ]"
+          >{{ postDetail?.statusName }}</span>
         </Flex>
       </div>
       <Flex vertical gap="4">
         <h1 class="text-xs font-medium">Deskripsi</h1>
-        <span
-          class="max-w-[350px] overflow-x-hidden hover:overflow-y-scroll text-xs font-light"
-        >
+        <span class="max-w-[350px] overflow-x-hidden hover:overflow-y-scroll text-xs font-light">
           {{ postDetail?.itemDetail }}
         </span>
       </Flex>
     </Flex>
   </Modal>
+
+  <!-- Map Modal -->
   <Modal v-bind="modalDetailMapProps">
-    <div class="">
-      <!-- @vue-ignore -->
-      <LazyDetailLeafletMap
-        :latitude="postDetail?.coordinate.latitude"
-        :longitude="postDetail?.coordinate.longitude"
-        :location-name="postDetail?.coordinate.locationName"
-      />
-    </div>
+    <LazyDetailLeafletMap
+      :latitude="postDetail?.coordinate?.latitude"
+      :longitude="postDetail?.coordinate?.longitude"
+      :location-name="postDetail?.coordinate?.locationName"
+    />
   </Modal>
 </template>

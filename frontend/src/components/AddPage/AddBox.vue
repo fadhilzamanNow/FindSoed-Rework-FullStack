@@ -1,13 +1,13 @@
 <script setup lang="ts">
-import { Flex, message, Modal } from "ant-design-vue";
+import { message, Modal } from "ant-design-vue";
 import { computed, defineAsyncComponent, reactive, ref } from "vue";
 import { Input, Select, Textarea, DatePicker, Button } from "ant-design-vue";
 import type { DatePickerProps, UploadProps } from "ant-design-vue";
 import { Upload } from "ant-design-vue";
+import { UploadOutlined } from "@ant-design/icons-vue";
 import { isEmpty } from "ramda";
 import { createPost, itemLocationType } from "../../api/Post/Post";
 import { useRouter } from "vue-router";
-import BreadCrumbComp from "../BreadCrumb/BreadCrumbComp.vue";
 import { CustomErrorResponse } from "../../api/baseApi";
 
 const mapInfo = reactive<itemLocationType>({
@@ -15,20 +15,21 @@ const mapInfo = reactive<itemLocationType>({
   longitude: null,
   locationName: null,
 });
-const itemName = ref<string>("");
+const itemName = ref("");
 const itemCategory = ref<string>();
-const itemDescription = ref<string>("");
+const itemDescription = ref("");
 const itemDate = ref<string | string[]>();
+const fieldErrors = ref<Record<string, string>>({});
 
 const LazyLeafletMap = defineAsyncComponent(() => import("./LeafletMap.vue"));
 
 const navigate = useRouter();
 
-const option = ["Handphone", "Laptop", "Dompet", "Lain Lain"].map((d) => {
-  return {
+const option = ["Handphone", "Laptop", "Dompet", "Kartu", "Lain Lain"].map(
+  (d) => ({
     value: d,
-  };
-});
+  })
+);
 
 const fileList = ref<UploadProps["fileList"]>([]);
 
@@ -40,8 +41,8 @@ const handleRemove: UploadProps["onRemove"] = (file) => {
 };
 
 const beforeUpload: UploadProps["beforeUpload"] = (file) => {
-  const isPNG = file.type === "image/png" || file.type === "image/jpeg";
-  if (isPNG) {
+  const isImage = file.type === "image/png" || file.type === "image/jpeg";
+  if (isImage) {
     fileList.value = [...(fileList.value || []), file];
     return false;
   } else {
@@ -64,6 +65,8 @@ const isDisabled = computed(() => {
 });
 
 const handleSubmit = async () => {
+  fieldErrors.value = {};
+
   try {
     const newPost = new FormData();
     newPost.append("itemName", itemName.value);
@@ -75,8 +78,7 @@ const handleSubmit = async () => {
     newPost.append("locationName", mapInfo?.locationName as string);
     if (fileList.value) {
       fileList.value.forEach((v) => {
-        // @ts-expect-error V soalnya any
-        newPost.append("postImage", v);
+        newPost.append("postImage", v as any);
       });
     }
 
@@ -84,37 +86,26 @@ const handleSubmit = async () => {
     if (response) {
       Modal.success({
         title: "Barang Hilang Ditambahkan",
-        content: "Barang berhasil ditambahkan",
+        content: response.message,
         centered: true,
         zIndex: 999999,
-        onOk: () => {
-          navigate.push("/home");
-        },
+        onOk: () => navigate.push("/home"),
       });
     }
-  } catch (err: any) {
-    Modal.error({
-      title: "Barang Gagal Ditambahkan",
-      content: (err as CustomErrorResponse).message,
-      centered: true,
-      zIndex: 999999,
-    });
+  } catch (err) {
+    const e = err as CustomErrorResponse;
+    if (e.errors) {
+      fieldErrors.value = e.errors;
+    } else {
+      Modal.error({
+        title: "Barang Gagal Ditambahkan",
+        content: e.message,
+        centered: true,
+        zIndex: 999999,
+      });
+    }
   }
 };
-
-const dateProps = computed<DatePickerProps | { placement?: string }>(() => ({
-  format: "YYYY-MM-DD",
-  onChange: (_, date) => (itemDate.value = date),
-  placement: "bottomRight",
-}));
-
-const uploadProps = computed<UploadProps>(() => ({
-  listType: "picture",
-  beforeUpload: beforeUpload,
-  onRemove: handleRemove,
-  defaultFileList: fileList.value,
-  accept: ".png,.jpeg,.jpg",
-}));
 
 const handlePickLocation = (info: itemLocationType) => {
   mapInfo.latitude = info.latitude;
@@ -124,71 +115,134 @@ const handlePickLocation = (info: itemLocationType) => {
 </script>
 
 <template>
-  <div class="md:ml-16 mt-16 pt-5.5 px-4 sm:px-6 md:px-8">
-    <BreadCrumbComp title="Tambah Barang" />
-    <div class="flex flex-col h-full mt-2">
-      <div class="flex flex-col items-center justify-center gap-6 w-full">
-        <div
-          class="flex flex-col gap-4 sm:max-w-[800px] border-gray-300 w-full justify-center rounded-md pt-4 p-4 border"
-        >
-          <Flex vertical class="w-full" gap="8">
-            <label for="item" class="text-sm w-full font-semibold"
-              >Nama Barang <span class="text-red-500">*</span></label
-            >
-            <Input placeholder="Nama Barang" v-model:value="itemName" />
-          </Flex>
-          <Flex vertical class="w-full" gap="8">
-            <label for="item" class="text-sm font-semibold w-full"
-              >Kategori Barang <span class="text-red-500">*</span></label
+  <div
+    class="md:ml-16 mt-16 md:mt-0 min-h-screen bg-gray-50 py-8 px-4 sm:px-6 md:px-8"
+  >
+    <div class="max-w-2xl mx-auto">
+      <!-- Card -->
+      <div class="bg-white rounded-2xl shadow-xl p-8">
+        <!-- Header -->
+        <div class="text-center mb-8">
+          <h1 class="text-xl font-bold text-gray-800">
+            Laporkan Barang Hilang
+          </h1>
+          <p class="text-gray-500 mt-2 text-lg">
+            Isi detail barang yang hilang
+          </p>
+        </div>
+
+        <!-- Form -->
+        <div class="flex flex-col gap-5">
+          <!-- Nama Barang -->
+          <div class="flex flex-col gap-1.5">
+            <label class="text-sm font-medium text-gray-700">Nama Barang</label>
+            <Input
+              v-model:value="itemName"
+              placeholder="Masukkan nama barang"
+              size="large"
+              :status="fieldErrors.itemName ? 'error' : undefined"
+            />
+            <span v-if="fieldErrors.itemName" class="text-red-500 text-xs">{{
+              fieldErrors.itemName
+            }}</span>
+          </div>
+
+          <!-- Kategori -->
+          <div class="flex flex-col gap-1.5">
+            <label class="text-sm font-medium text-gray-700"
+              >Kategori Barang</label
             >
             <Select
-              placeholder="Pilih Kategori Barang"
-              :options="option"
               v-model:value="itemCategory"
+              placeholder="Pilih kategori"
+              :options="option"
+              size="large"
+              :status="fieldErrors.itemCategory ? 'error' : undefined"
             />
-          </Flex>
-          <Flex vertical class="w-full" gap="8">
-            <label for="item" class="text-sm font-semibold w-full"
-              >Deskripsi Barang <span class="text-red-500">*</span></label
+            <span
+              v-if="fieldErrors.itemCategory"
+              class="text-red-500 text-xs"
+              >{{ fieldErrors.itemCategory }}</span
+            >
+          </div>
+
+          <!-- Deskripsi -->
+          <div class="flex flex-col gap-1.5">
+            <label class="text-sm font-medium text-gray-700"
+              >Deskripsi Barang</label
             >
             <Textarea
-              placeholder="Deskripsi Barang"
               v-model:value="itemDescription"
+              placeholder="Jelaskan ciri-ciri barang"
+              :rows="3"
+              :status="fieldErrors.itemDetail ? 'error' : undefined"
             />
-          </Flex>
-          <Flex vertical class="w-full" gap="8">
-            <label for="item" class="text-sm font-semibold w-full"
-              >Tanggal Kehilangan <span class="text-red-500">*</span>
-            </label>
-            <!-- @vue-ignore -->
-            <DatePicker v-bind="dateProps" />
-          </Flex>
-          <Flex vertical class="w-full" gap="8">
-            <label for="item" class="text-sm font-semibold w-full"
-              >Foto Barang <span class="text-red-500">*</span></label
+            <span v-if="fieldErrors.itemDetail" class="text-red-500 text-xs">{{
+              fieldErrors.itemDetail
+            }}</span>
+          </div>
+
+          <!-- Tanggal -->
+          <div class="flex flex-col gap-1.5">
+            <label class="text-sm font-medium text-gray-700"
+              >Tanggal Kehilangan</label
             >
-            <div class="h-[10vh] overflow-auto">
-              <Upload v-bind="uploadProps" multiple>
-                <Button>Upload Gambar</Button>
-              </Upload>
-            </div>
-          </Flex>
+            <DatePicker
+              format="YYYY-MM-DD"
+              @change="(_, date) => (itemDate = date)"
+              placement="bottomRight"
+              size="large"
+              class="w-full"
+            />
+          </div>
 
-          <LazyLeafletMap
-            :mapInfo="mapInfo"
-            @handle-pick-location="handlePickLocation"
-          />
+          <!-- Upload Foto -->
+          <div class="flex flex-col gap-1.5">
+            <label class="text-sm font-medium text-gray-700">Foto Barang</label>
+            <Upload
+              :before-upload="beforeUpload"
+              :on-remove="handleRemove"
+              :file-list="fileList"
+              list-type="picture"
+              accept=".png,.jpeg,.jpg"
+              multiple
+            >
+              <Button size="large">
+                <template #icon><UploadOutlined /></template>
+                Upload Gambar
+              </Button>
+            </Upload>
+            <span v-if="fieldErrors.postImage" class="text-red-500 text-xs">{{
+              fieldErrors.postImage
+            }}</span>
+          </div>
 
-          <Flex justify="end">
-            <div class="w-max">
-              <Button
-                type="primary"
-                @click="handleSubmit"
-                :disabled="!isDisabled"
-                >Submit</Button
-              >
-            </div>
-          </Flex>
+          <!-- Map -->
+          <div class="flex flex-col gap-1.5">
+            <label class="text-sm font-medium text-gray-700"
+              >Lokasi Kehilangan</label
+            >
+            <LazyLeafletMap
+              :mapInfo="mapInfo"
+              @handle-pick-location="handlePickLocation"
+            />
+            <span
+              v-if="fieldErrors.itemLatitude"
+              class="text-red-500 text-xs"
+              >{{ fieldErrors.itemLatitude }}</span
+            >
+          </div>
+
+          <!-- Submit -->
+          <Button
+            type="primary"
+            size="large"
+            @click="handleSubmit"
+            :disabled="!isDisabled"
+            class="w-full mt-2 !h-11 !rounded-lg !font-semibold"
+          >
+            Laporkan Barang
+          </Button>
         </div>
       </div>
     </div>

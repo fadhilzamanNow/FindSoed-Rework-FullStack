@@ -3,86 +3,78 @@ import {
   HomeFilled,
   MenuFoldOutlined,
   MenuUnfoldOutlined,
-  MoreOutlined,
   PlusCircleOutlined,
   SettingFilled,
+  RollbackOutlined,
+  UserOutlined,
 } from "@ant-design/icons-vue";
-import { Avatar, AvatarProps } from "ant-design-vue";
+import { Avatar, Dropdown, Menu, MenuItem, Flex } from "ant-design-vue";
 import Iconitem from "./Iconitem.vue";
-import { computed } from "vue";
-import { storeToRefs } from "pinia";
-import { useAuthStore } from "../../stores/authStore";
 import logo from "../../assets/icon.png";
 import { ref } from "vue";
+import { storeToRefs } from "pinia";
+import { useAuthStore } from "../../stores/authStore";
+import { useRouter } from "vue-router";
 
 const listMenu = [
-  {
-    name: "Home",
-    icon: HomeFilled,
-    link: "/home",
-  },
-  {
-    name: "Add",
-    icon: PlusCircleOutlined,
-    link: "/add",
-  },
-  {
-    name: "Setting",
-    icon: SettingFilled,
-    link: "/setting",
-  },
+  { name: "Home", icon: HomeFilled, link: "/home" },
+  { name: "Add", icon: PlusCircleOutlined, link: "/add" },
+  { name: "Setting", icon: SettingFilled, link: "/setting" },
 ];
+
+const isExpand = ref(false);
 const auth = useAuthStore();
 const { userInfo } = storeToRefs(auth);
-const isExpand = ref(false);
-
-const profileProps = computed<AvatarProps>(() => ({
-  /* @ts-expect-error Variabel didefine dari Bundler */
-  src: `${BACKEND_URL}static/images/${userInfo.value?.imageUrl}`,
-  size: 36,
-  shape: "square",
-}));
+const navigate = useRouter();
 
 const toggleSidebar = () => {
   isExpand.value = !isExpand.value;
 };
+
+const handleLogout = () => {
+  auth.setUserInfo(null);
+  auth.setAuthToken(null);
+  localStorage.removeItem("authToken");
+  navigate.push("/");
+};
 </script>
 
 <template>
-  <aside
-    :class="`fixed top-0 left-0 z-51 h-[100vh] hidden md:block`"
-    ref="sidebarRef"
-  >
+  <aside class="fixed top-0 left-0 z-50 h-screen hidden md:block">
     <nav
-      class="h-full flex flex-col bg-white border-r border-r-gray-200 shadow-sm"
+      :class="[
+        'h-full flex flex-col bg-white border-r border-gray-200 shadow-sm transition-all duration-300 pt-2',
+        isExpand ? 'w-64' : 'w-16',
+      ]"
     >
+      <!-- Header -->
       <div
-        class="p-3 pb-2 flex items-center justify-between border-b-gray-300 h-16"
+        class="p-3 flex items-center justify-between h-16 border-b border-gray-100"
       >
         <div
-          :class="`overflow-hidden transition-all duration-300 ${
-            isExpand ? 'w-34' : 'w-0'
-          }`"
+          :class="[
+            'overflow-hidden transition-all duration-300 ',
+            isExpand ? 'w-' : 'w-0',
+          ]"
         >
           <div class="flex items-center gap-2">
-            <div class="size-10">
-              <img :src="logo" alt="" class="h-full w-full object-contain" />
-            </div>
-            <div class="flex items-center text-xl font-bold">
-              <span class="text-black">Find</span>
-              <span class="text-blue-600">Soed</span>
-            </div>
+            <img :src="logo" alt="FindSoed" class="size-10 object-contain" />
+            <span class="text-xl font-bold whitespace-nowrap">
+              Find<span class="text-blue-600">Soed</span>
+            </span>
           </div>
         </div>
-        <div
+        <button
           @click="toggleSidebar"
-          class="text-xl hover:bg-blue-600 p-2 transition-color bg-white hover:text-white text-black rounded-md flex justify-center items-center"
+          class="p-2 rounded-lg hover:bg-blue-600 hover:text-white transition-colors flex justify-center items-center"
         >
           <MenuFoldOutlined v-if="isExpand" />
           <MenuUnfoldOutlined v-else />
-        </div>
+        </button>
       </div>
-      <ul class="flex-1 px-3 pt-4">
+
+      <!-- Menu -->
+      <ul class="flex-1 px-3 py-4 space-y-1">
         <Iconitem
           v-for="(v, i) of listMenu"
           :key="i"
@@ -90,31 +82,56 @@ const toggleSidebar = () => {
           :link="v.link"
           :isExpand="isExpand"
         >
-          <template v-slot:icon>
-            <component :is="v.icon"></component>
+          <template #icon>
+            <component :is="v.icon" />
           </template>
         </Iconitem>
       </ul>
-      <div
-        class="border-t border-t-gray-200 flex p-3"
-        :class="[isExpand ? '' : 'justify-center']"
-      >
-        <Avatar v-if="userInfo?.imageUrl" v-bind="profileProps" />
-        <Avatar v-else :size="36" shape="square">{{
-          userInfo?.username.slice(0, 2)
-        }}</Avatar>
-        <div
-          class="flex justify-between items-center overflow-hidden transition-all duration-300"
-          :class="[isExpand ? 'w-52 ml-3' : 'w-0']"
-        >
-          <div class="leading-4">
-            <h1 class="font-semibold text-sm">
-              {{ userInfo?.username }}
-            </h1>
-            <h2 class="text-gray-600 text-xs">{{ userInfo?.email }}</h2>
+
+      <!-- User Profile -->
+      <div class="border-t border-gray-200 p-3">
+        <Dropdown placement="topRight" :trigger="['click']">
+          <template #overlay>
+            <Menu>
+              <MenuItem @click="navigate.push('/setting')">
+                <Flex gap="8" align="center" class="py-1">
+                  <SettingFilled class="text-sm" />
+                  <span class="text-sm font-medium">Settings</span>
+                </Flex>
+              </MenuItem>
+              <MenuItem @click="handleLogout">
+                <Flex gap="8" align="center" class="py-1">
+                  <RollbackOutlined class="text-sm" />
+                  <span class="text-sm font-medium">Logout</span>
+                </Flex>
+              </MenuItem>
+            </Menu>
+          </template>
+          <div
+            :class="[
+              'flex items-center gap-3  rounded-lg cursor-pointer hover:bg-gray-100 transition-colors',
+              isExpand ? '' : 'justify-center',
+            ]"
+          >
+            <Avatar
+              v-if="userInfo?.imageUrl"
+              :src="userInfo.imageUrl"
+              :size="36"
+              shape="square"
+            />
+            <Avatar v-else :size="36" shape="square" class="bg-blue-600">
+              <template #icon><UserOutlined /></template>
+            </Avatar>
+            <div v-if="isExpand" class="overflow-hidden">
+              <p class="text-sm font-medium text-gray-700 truncate">
+                {{ userInfo?.username }}
+              </p>
+              <p class="text-xs text-gray-500 truncate">
+                {{ userInfo?.email }}
+              </p>
+            </div>
           </div>
-          <MoreOutlined class="text-lg" />
-        </div>
+        </Dropdown>
       </div>
     </nav>
   </aside>

@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import Navbar from "../components/LandingPage/Navbar.vue";
 import Sidebar from "../components/Sidebar/Sidebar.vue";
+import PrivateNavbar from "../components/Navbar/PrivateNavbar.vue";
 import SettingsBox from "../components/SettingPage/SettingsBox.vue";
 import { storeToRefs } from "pinia";
 import { useAuthStore } from "../stores/authStore";
@@ -9,17 +9,15 @@ import { useSeoMeta } from "@unhead/vue";
 import { onMounted, watchEffect } from "vue";
 
 useSeoMeta({
-  title: "SSR RSbuild Setting Page - Findsoed Rework",
-  description:
-    "SSR Rsbuild Halaman Setting Page untuk Findsoed Rework yang dapat digunakan untuk mengatur profil dan history barang pengguna",
-  ogTitle: "SSR Rsbuild Home Page - Findsoed Rework",
-  ogDescription:
-    "SSR Rsbuild Halaman Setting Page untuk Findsoed Rework yang dapat digunakan untuk mengatur profil dan history barang pengguna",
+  title: "Settings - FindSoed",
+  description: "Atur profil dan history barang",
+  ogTitle: "Settings - FindSoed",
+  ogDescription: "Atur profil dan history barang",
   ogUrl: "http://localhost:3500/setting",
-  ogSiteName: "Findsoed Rework",
+  ogSiteName: "FindSoed",
   ogType: "website",
   author: "Muhammad Ilham Isfadhillah",
-  twitterTitle: "SSR Rsbuild Setting Page - Findsoed Rework",
+  twitterTitle: "Settings - FindSoed",
   robots: "index, follow",
 });
 
@@ -40,7 +38,7 @@ onMounted(() => {
 
 <template>
   <div class="min-h-screen overflow-auto w-full">
-    <Navbar />
+    <PrivateNavbar />
     <Sidebar />
     <SettingsBox />
   </div>

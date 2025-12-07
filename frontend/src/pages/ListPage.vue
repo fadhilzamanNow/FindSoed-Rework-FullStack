@@ -2,25 +2,23 @@
 import { onMounted } from "vue";
 import ListBox from "../components/ListPage/ListBox.vue";
 import Sidebar from "../components/Sidebar/Sidebar.vue";
+import PrivateNavbar from "../components/Navbar/PrivateNavbar.vue";
 import { storeToRefs } from "pinia";
 import { useAuthStore } from "../stores/authStore";
 import { useRouter } from "vue-router";
-import Navbar from "../components/LandingPage/Navbar.vue";
 import { useSeoMeta } from "@unhead/vue";
 import { watchEffect } from "vue";
 
 useSeoMeta({
-  title: "SSR RSbuild Home Page - Findsoed Rework",
-  description:
-    "SSR Rsbuild Halaman Home Page untuk Findsoed Rework yang dapat digunakan untuk melihat seluruh barang hilang yang tersedia",
-  ogTitle: "SSR Rsbuild Home Page - Findsoed Rework",
-  ogDescription:
-    "SSR Rsbuild Halaman Home Page untuk Findsoed Rework yang dapat digunakan untuk melihat seluruh barang hilang yang tersedia ",
+  title: "Home - FindSoed",
+  description: "Lihat seluruh barang hilang yang tersedia",
+  ogTitle: "Home - FindSoed",
+  ogDescription: "Lihat seluruh barang hilang yang tersedia",
   ogUrl: "http://localhost:3500/home",
-  ogSiteName: "Findsoed Rework",
+  ogSiteName: "FindSoed",
   ogType: "website",
   author: "Muhammad Ilham Isfadhillah",
-  twitterTitle: "SSR Rsbuild Home Page - Findsoed Rework",
+  twitterTitle: "Home - FindSoed",
   robots: "index, follow",
 });
 
@@ -40,10 +38,9 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="min-h-screen">
-    <!-- NAVBAR -->
-    <Navbar />
-    <ListBox />
+  <div class="min-h-screen bg-gray-50">
+    <PrivateNavbar />
     <Sidebar />
+    <ListBox />
   </div>
 </template>
