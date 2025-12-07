@@ -12,6 +12,9 @@ uploads
 #src/public
 #/src/public
 
+# Prisma generated client
+generated/
+
 # PM2
 logs/
 .pm2/

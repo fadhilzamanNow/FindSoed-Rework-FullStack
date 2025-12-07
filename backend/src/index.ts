@@ -10,19 +10,9 @@ import { locationRouter } from "./routes/location";
 import upload from "./middleware/upload";
 import { uploadMultipleToS3, getS3Url } from "./services/s3Upload";
 import { PrismaClient } from "../generated/prisma";
-import url from "url";
-var proxy = require("express-http-proxy");
 const app = express();
 const port = 3500;
 const OASSpec = YAML.load(path.join(__dirname, "openapi.yaml"));
-
-const apiProxy = proxy("http://10.232.91.128:9001", {
-  proxyReqPathResolver: (req: any) => url.parse(req.baseUrl).path,
-});
-// const proxyMiddleware = createProxyMiddleware<Request, Response>({
-//   target: "http://10.232.91.128:9001",
-//   changeOrigin: true,
-// });
 
 app.get("/test3", (_, res: Response) => {
   res.json({
@@ -119,4 +109,6 @@ app.get("/category", async (req: Request, res: Response) => {
   }
 });
 
-export default app;
+app.listen(port, () => {
+  console.log(`Server running on port ${port}`);
+});
